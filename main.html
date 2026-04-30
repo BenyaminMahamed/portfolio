@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Benyamin Mahamed — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange: #F4720B;
+    --orange-dark: #C45A08;
+    --orange-glow: rgba(244,114,11,0.18);
+    --black: #0A0A0A;
+    --dark: #111111;
+    --dark2: #1A1A1A;
+    --dark3: #222222;
+    --panel: #161616;
+    --wood1: #8B4A1C;
+    --wood2: #6B3614;
+    --cream: #F5EDD6;
+    --cream2: #E8D9B8;
+    --white: #FFFFFF;
+    --gray: #888888;
+    --gray2: #444444;
+    --led-on: #FF8C00;
+    --led-off: #2A1A00;
+    --red: #E03030;
+    --green: #22C55E;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* ── COURT BACKGROUND ── */
+  .court-bg {
+    background:
+      repeating-linear-gradient(90deg, rgba(139,74,28,0.06) 0px, transparent 1px, transparent 60px, rgba(139,74,28,0.06) 61px),
+      repeating-linear-gradient(0deg, rgba(139,74,28,0.04) 0px, transparent 1px, transparent 80px, rgba(139,74,28,0.04) 81px),
+      linear-gradient(180deg, #0A0A0A 0%, #0F0A06 40%, #120C07 100%);
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(10,10,10,0.96);
+    border-bottom: 2px solid var(--orange);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2.5rem;
+    height: 56px;
+  }
+
+  .nav-logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 22px;
+    color: var(--orange);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--orange); }
+
+  /* ── HERO / SCOREBOARD ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 300px;
+    border: 3px solid rgba(244,114,11,0.12);
+    border-bottom: none;
+    border-radius: 300px 300px 0 0;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 60px;
+    border: 3px solid rgba(244,114,11,0.12);
+    border-bottom: none;
+    border-radius: 60px 60px 0 0;
+  }
+
+  .scoreboard {
+    background: var(--dark2);
+    border: 3px solid var(--orange);
+    border-radius: 6px;
+    width: 100%;
+    max-width: 860px;
+    overflow: hidden;
+    box-shadow: 0 0 60px rgba(244,114,11,0.15), 0 0 0 1px rgba(244,114,11,0.3);
+    position: relative;
+    z-index: 2;
+  }
+
+  .scoreboard-top {
+    background: var(--orange);
+    padding: 8px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .scoreboard-top span {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--black);
+  }
+
+  .scoreboard-body {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding: 32px 28px;
+    gap: 20px;
+  }
+
+  .player-side {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .player-side.right { text-align: right; }
+
+  .player-number {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 80px;
+    line-height: 1;
+    color: var(--orange);
+    text-shadow: 0 0 40px rgba(244,114,11,0.4);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .player-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 28px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  .player-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--orange);
+  }
+
+  .player-school {
+    font-size: 12px;
+    color: var(--gray);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* LED Clock */
+  .clock-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .led-clock {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 48px;
+    color: var(--led-on);
+    letter-spacing: 4px;
+    text-shadow: 0 0 20px rgba(255,140,0,0.7);
+    line-height: 1;
+    background: #050500;
+    padding: 12px 20px;
+    border-radius: 4px;
+    border: 1px solid #2A1A00;
+  }
+
+  .period-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--gray);
+    text-transform: uppercase;
+  }
+
+  .shot-clock {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 22px;
+    color: var(--red);
+    text-shadow: 0 0 12px rgba(224,48,48,0.6);
+    background: #050000;
+    padding: 6px 14px;
+    border-radius: 3px;
+    border: 1px solid #2A0000;
+  }
+
+  /* Ticker */
+  .ticker {
+    background: var(--dark3);
+    border-top: 1px solid var(--gray2);
+    padding: 10px 24px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .ticker-inner {
+    display: flex;
+    gap: 4rem;
+    animation: ticker 20s linear infinite;
+    white-space: nowrap;
+  }
+
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  .ticker-item {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray);
+  }
+
+  .ticker-item span { color: var(--orange); }
+
+  /* Hero CTA */
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    z-index: 2;
+  }
+
+  .btn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 14px 32px;
+    border-radius: 3px;
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+    transition: all 0.2s;
+  }
+
+  .btn-primary {
+    background: var(--orange);
+    color: var(--black);
+  }
+
+  .btn-primary:hover {
+    background: #FF8C1A;
+    transform: translateY(-2px);
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--orange);
+    border: 2px solid var(--orange);
+  }
+
+  .btn-outline:hover {
+    background: var(--orange-glow);
+    transform: translateY(-2px);
+  }
+
+  /* ── SECTION SHARED ── */
+  section {
+    padding: 80px 2rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+
+  .section-number {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    color: var(--orange);
+    letter-spacing: 2px;
+  }
+
+  .section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 40px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  .section-line {
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(90deg, var(--orange), transparent);
+  }
+
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  /* ── STATS ── */
+  #stats {
+    background: var(--panel);
+    border-top: 3px solid var(--orange);
+    border-bottom: 3px solid var(--orange);
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 2px;
+    background: var(--gray2);
+    border: 2px solid var(--gray2);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .stat-card {
+    background: var(--dark2);
+    padding: 28px 20px;
+    text-align: center;
+    position: relative;
+    transition: background 0.2s;
+  }
+
+  .stat-card:hover { background: var(--dark3); }
+
+  .stat-abbr {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 8px;
+  }
+
+  .stat-value {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 44px;
+    line-height: 1;
+    color: var(--white);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--gray);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 6px;
+  }
+
+  /* ── PROJECTS ── */
+  #projects { background: var(--court-bg); }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2px;
+  }
+
+  .project-card {
+    background: var(--dark2);
+    border: 1px solid var(--gray2);
+    overflow: hidden;
+    position: relative;
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: pointer;
+  }
+
+  .project-card:hover {
+    border-color: var(--orange);
+    transform: translateY(-3px);
+  }
+
+  .project-card-header {
+    background: var(--orange);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .project-card-header .quarter {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: rgba(0,0,0,0.6);
+    letter-spacing: 2px;
+  }
+
+  .project-card-header .type-badge {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--black);
+    background: rgba(0,0,0,0.15);
+    padding: 3px 10px;
+    border-radius: 2px;
+  }
+
+  .project-card-body {
+    padding: 24px 20px 20px;
+  }
+
+  .project-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 26px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .project-desc {
+    font-size: 14px;
+    color: var(--gray);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+
+  .tag {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--orange);
+    border: 1px solid rgba(244,114,11,0.4);
+    padding: 3px 10px;
+    border-radius: 2px;
+    background: var(--orange-glow);
+  }
+
+  .project-link {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--orange);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: gap 0.2s;
+  }
+
+  .project-link:hover { gap: 10px; }
+
+  .project-highlight {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--dark3);
+    border-left: 3px solid var(--orange);
+    padding: 10px 14px;
+    margin-top: 14px;
+    border-radius: 0 3px 3px 0;
+  }
+
+  .project-highlight span {
+    font-size: 12px;
+    color: var(--cream2);
+    font-style: italic;
+  }
+
+  /* Blueprint Brief special card */
+  .project-card.featured .project-card-header {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border-bottom: 2px solid var(--orange);
+  }
+
+  .project-card.featured .quarter,
+  .project-card.featured .type-badge {
+    color: var(--orange);
+  }
+
+  .project-card.featured .type-badge {
+    background: var(--orange-glow);
+    border: 1px solid rgba(244,114,11,0.3);
+  }
+
+  /* ── SKILLS ── */
+  #skills { background: var(--dark); }
+
+  .skills-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .skills-table th {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--orange);
+    text-align: left;
+    padding: 12px 16px;
+    background: var(--dark2);
+    border-bottom: 2px solid var(--orange);
+  }
+
+  .skills-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--gray2);
+    vertical-align: middle;
+  }
+
+  .skills-table tr:hover td { background: var(--dark2); }
+
+  .skill-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--white);
+  }
+
+  .skill-pos {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--gray);
+    letter-spacing: 1px;
+  }
+
+  .skill-bar-wrap {
+    background: var(--dark3);
+    border-radius: 2px;
+    height: 8px;
+    overflow: hidden;
+    width: 180px;
+  }
+
+  .skill-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--orange), #FFB347);
+    border-radius: 2px;
+    transition: width 1s ease;
+  }
+
+  .skill-rating {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 16px;
+    color: var(--orange);
+    font-weight: bold;
+    min-width: 40px;
+  }
+
+  /* ── CONTACT ── */
+  #contact {
+    background: var(--black);
+    border-top: 3px solid var(--orange);
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .contact-tagline {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 52px;
+    text-transform: uppercase;
+    line-height: 0.95;
+    color: var(--white);
+    margin-bottom: 1.5rem;
+  }
+
+  .contact-tagline em {
+    font-style: normal;
+    color: var(--orange);
+  }
+
+  .contact-sub {
+    font-size: 15px;
+    color: var(--gray);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+
+  .contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    background: var(--dark2);
+    border: 1px solid var(--gray2);
+    border-radius: 3px;
+    text-decoration: none;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .contact-link:hover {
+    border-color: var(--orange);
+    transform: translateX(4px);
+  }
+
+  .contact-link-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--orange-glow);
+    border: 1px solid rgba(244,114,11,0.3);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .contact-link-text {
+    flex: 1;
+  }
+
+  .contact-link-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray);
+    display: block;
+  }
+
+  .contact-link-value {
+    font-size: 14px;
+    color: var(--white);
+    font-weight: 500;
+  }
+
+  .contact-link-arrow {
+    font-size: 16px;
+    color: var(--orange);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .contact-link:hover .contact-link-arrow { opacity: 1; }
+
+  /* Jersey card */
+  .jersey-card {
+    background: var(--dark2);
+    border: 2px solid var(--orange);
+    border-radius: 6px;
+    padding: 32px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .jersey-card::before {
+    content: '';
+    position: absolute;
+    top: -40px; left: -40px;
+    width: 160px; height: 160px;
+    border: 3px solid rgba(244,114,11,0.08);
+    border-radius: 50%;
+  }
+
+  .jersey-card::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; right: -40px;
+    width: 160px; height: 160px;
+    border: 3px solid rgba(244,114,11,0.08);
+    border-radius: 50%;
+  }
+
+  .jersey-number {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 100px;
+    line-height: 1;
+    color: var(--orange);
+    text-shadow: 0 0 60px rgba(244,114,11,0.3);
+    position: relative;
+    z-index: 1;
+  }
+
+  .jersey-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 22px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-top: 8px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .jersey-team {
+    font-size: 12px;
+    color: var(--gray);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 4px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .jersey-divider {
+    width: 60px;
+    height: 2px;
+    background: var(--orange);
+    margin: 16px auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .jersey-stats-row {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .jersey-stat {
+    text-align: center;
+  }
+
+  .jersey-stat-val {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 22px;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  .jersey-stat-lbl {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-top: 4px;
+  }
+
+  /* Footer */
+  footer {
+    background: var(--dark2);
+    border-top: 1px solid var(--gray2);
+    padding: 24px 2rem;
+    text-align: center;
+  }
+
+  footer p {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray);
+  }
+
+  footer span { color: var(--orange); }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 700px) {
+    .scoreboard-body { grid-template-columns: 1fr; text-align: center; gap: 24px; }
+    .player-side.right { text-align: center; }
+    .player-number { font-size: 56px; }
+    .contact-grid { grid-template-columns: 1fr; }
+    nav { padding: 0 1.2rem; }
+    .nav-links { gap: 1.2rem; }
+    .section-title { font-size: 28px; }
+    .skill-bar-wrap { width: 100px; }
+    .skills-table th:nth-child(3), .skills-table td:nth-child(3) { display: none; }
+  }
+</style>
+</head>
+<body class="court-bg">
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">BM #00</div>
+  <ul class="nav-links">
+    <li><a href="#stats">Stats</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero court-bg">
+  <div class="scoreboard reveal">
+    <div class="scoreboard-top">
+      <span>Benyamin Mahamed &mdash; Portfolio</span>
+      <span>University of Westminster &bull; Computer Science</span>
+    </div>
+    <div class="scoreboard-body">
+      <div class="player-side">
+        <div class="player-number">00</div>
+        <div class="player-name">Benyamin<br>Mahamed</div>
+        <div class="player-title">Software Developer</div>
+        <div class="player-school">BSc Computer Science</div>
+      </div>
+      <div class="clock-panel">
+        <div class="led-clock" id="live-clock">00:00</div>
+        <div class="period-label">Game Clock</div>
+        <div class="shot-clock" id="shot-clock">24</div>
+        <div class="period-label">Shot Clock</div>
+      </div>
+      <div class="player-side right">
+        <div class="player-number" style="text-align:right">3</div>
+        <div class="player-name" style="text-align:right">Projects<br>Shipped</div>
+        <div class="player-title" style="text-align:right">Full Stack &bull; AI/ML</div>
+        <div class="player-school" style="text-align:right">London, UK</div>
+      </div>
+    </div>
+    <div class="ticker">
+      <div class="ticker-inner" id="ticker">
+        <span class="ticker-item"><span>FINAL YEAR PROJECT</span> &mdash; Lane Detection &bull; Computer Vision &bull; Python</span>
+        <span class="ticker-item"><span>SKY TV PROJECT</span> &mdash; Django &bull; Full Stack &bull; Group Project</span>
+        <span class="ticker-item"><span>THE BLUEPRINT BRIEF</span> &mdash; Legal &bull; Commercial News Platform</span>
+        <span class="ticker-item"><span>SKILLS</span> &mdash; Python &bull; Django &bull; OpenCV &bull; SQLite &bull; HTML &bull; CSS</span>
+        <span class="ticker-item"><span>FINAL YEAR PROJECT</span> &mdash; Lane Detection &bull; Computer Vision &bull; Python</span>
+        <span class="ticker-item"><span>SKY TV PROJECT</span> &mdash; Django &bull; Full Stack &bull; Group Project</span>
+        <span class="ticker-item"><span>THE BLUEPRINT BRIEF</span> &mdash; Legal &bull; Commercial News Platform</span>
+        <span class="ticker-item"><span>SKILLS</span> &mdash; Python &bull; Django &bull; OpenCV &bull; SQLite &bull; HTML &bull; CSS</span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-cta reveal" style="transition-delay:0.2s">
+    <a href="#projects" class="btn btn-primary">View Game Tape</a>
+    <a href="#contact" class="btn btn-outline">Get In Touch</a>
+  </div>
+</section>
+
+<!-- STATS -->
+<section id="stats">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-number">01</span>
+      <h2 class="section-title">Player Stats</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="stats-grid reveal" style="transition-delay:0.1s">
+      <div class="stat-card">
+        <div class="stat-abbr">PRJ</div>
+        <div class="stat-value">3</div>
+        <div class="stat-label">Projects Shipped</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-abbr">LNG</div>
+        <div class="stat-value">4+</div>
+        <div class="stat-label">Languages</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-abbr">FRW</div>
+        <div class="stat-value">2+</div>
+        <div class="stat-label">Frameworks</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-abbr">COL</div>
+        <div class="stat-value">&#x221E;</div>
+        <div class="stat-label">Collaboration</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-abbr">CV</div>
+        <div class="stat-value">1</div>
+        <div class="stat-label">AI/ML Projects</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" class="court-bg">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-number">02</span>
+      <h2 class="section-title">Game Tape</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="projects-grid">
+
+      <!-- Project 1 -->
+      <div class="project-card reveal">
+        <div class="project-card-header">
+          <span class="quarter">Q1 &mdash; Final Year</span>
+          <span class="type-badge">AI / Vision</span>
+        </div>
+        <div class="project-card-body">
+          <div class="project-name">Lane Detection System</div>
+          <p class="project-desc">Real-time autonomous driving simulation using classical computer vision. Detects road lanes and obstacles from live video using edge detection, masking, and blob detection — with manual keyboard override for testing.</p>
+          <div class="project-tags">
+            <span class="tag">Python</span>
+            <span class="tag">OpenCV</span>
+            <span class="tag">NumPy</span>
+            <span class="tag">Computer Vision</span>
+          </div>
+          <div class="project-highlight">
+            <span>"Real-time lane + obstacle detection with autonomous control logic"</span>
+          </div>
+          <a href="https://github.com/BenyaminMahamed/FINALYEARPROJECT" target="_blank" class="project-link" style="margin-top:14px; display:inline-flex">View Repo &rarr;</a>
+        </div>
+      </div>
+
+      <!-- Project 2 -->
+      <div class="project-card reveal" style="transition-delay:0.1s">
+        <div class="project-card-header">
+          <span class="quarter">Q2 &mdash; Group Project</span>
+          <span class="type-badge">Full Stack</span>
+        </div>
+        <div class="project-card-body">
+          <div class="project-name">Sky TV Voting App</div>
+          <p class="project-desc">Collaborative Django web app supporting a full voting workflow. Users register, manage profiles, create and join voting sessions, and cast votes — with a full portal dashboard and confirmation flows.</p>
+          <div class="project-tags">
+            <span class="tag">Python</span>
+            <span class="tag">Django</span>
+            <span class="tag">SQLite</span>
+            <span class="tag">HTML/CSS</span>
+          </div>
+          <div class="project-highlight">
+            <span>"Full-stack auth, session management, and voting system"</span>
+          </div>
+          <a href="https://github.com/simonepietraroia/Sky-TV-Project" target="_blank" class="project-link" style="margin-top:14px; display:inline-flex">View Repo &rarr;</a>
+        </div>
+      </div>
+
+      <!-- Project 3 -->
+      <div class="project-card featured reveal" style="transition-delay:0.2s">
+        <div class="project-card-header">
+          <span class="quarter">Q3 &mdash; Live Platform</span>
+          <span class="type-badge">Platform</span>
+        </div>
+        <div class="project-card-body">
+          <div class="project-name">The BluePrint Brief</div>
+          <p class="project-desc">A live multimedia platform simplifying legal and commercial news for students. Features articles, newsletters, team pages, and a full content management workflow. Real users, real content, running right now.</p>
+          <div class="project-tags">
+            <span class="tag">Web</span>
+            <span class="tag">Legal Tech</span>
+            <span class="tag">Content</span>
+            <span class="tag">Live</span>
+          </div>
+          <div class="project-highlight">
+            <span>"Student-led legal news platform with live readership"</span>
+          </div>
+          <a href="https://theblueprintbrief.com" target="_blank" class="project-link" style="margin-top:14px; display:inline-flex">Visit Live &rarr;</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-number">03</span>
+      <h2 class="section-title">Scouting Report</h2>
+      <div class="section-line"></div>
+    </div>
+    <table class="skills-table reveal">
+      <thead>
+        <tr>
+          <th>Skill</th>
+          <th>Position</th>
+          <th>Rating</th>
+          <th>Level</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="skill-name">Python</div></td>
+          <td><div class="skill-pos">Primary Language</div></td>
+          <td><div class="skill-rating">90</div></td>
+          <td><div class="skill-bar-wrap"><div class="skill-bar" style="width:90%"></div></div></td>
+        </tr>
+        <tr>
+          <td><div class="skill-name">Django</div></td>
+          <td><div class="skill-pos">Backend Framework</div></td>
+          <td><div class="skill-rating">82</div></td>
+          <td><div class="skill-bar-wrap"><div class="skill-bar" style="width:82%"></div></div></td>
+        </tr>
+        <tr>
+          <td><div class="skill-name">OpenCV</div></td>
+          <td><div class="skill-pos">Computer Vision</div></td>
+          <td><div class="skill-rating">78</div></td>
+          <td><div class="skill-bar-wrap"><div class="skill-bar" style="width:78%"></div></div></td>
+        </tr>
+        <tr>
+          <td><div class="skill-name">HTML / CSS</div></td>
+          <td><div class="skill-pos">Frontend</div></td>
+          <td><div class="skill-rating">80</div></td>
+          <td><div class="skill-bar-wrap"><div class="skill-bar" style="width:80%"></div></div></td>
+        </tr>
+        <tr>
+          <td><div class="skill-name">SQL / SQLite</div></td>
+          <td><div class="skill-pos">Database</div></td>
+          <td><div class="skill-rating">72</div></td>
+          <td><div class="skill-bar-wrap"><div class="skill-bar" style="width:72%"></div></div></td>
+        </tr>
+        <tr>
+          <td><div class="skill-name">Git / GitHub</div></td>
+          <td><div class="skill-pos">Version Control</div></td>
+          <td><div class="skill-rating">75</div></td>
+          <td><div class="skill-bar-wrap"><div class="skill-bar" style="width:75%"></div></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-number">04</span>
+      <h2 class="section-title">Free Agency</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="contact-grid">
+      <div class="reveal">
+        <div class="contact-tagline">Open<br>For <em>New<br>Opps.</em></div>
+        <p class="contact-sub">Looking to collaborate or hire? I'm a Computer Science graduate based in London with experience across AI/ML, full-stack development, and platform building. Let's talk.</p>
+        <div class="contact-links">
+          <a href="https://github.com/BenyaminMahamed" target="_blank" class="contact-link">
+            <div class="contact-link-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="color:var(--orange)"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            </div>
+            <div class="contact-link-text">
+              <span class="contact-link-label">GitHub</span>
+              <span class="contact-link-value">BenyaminMahamed</span>
+            </div>
+            <span class="contact-link-arrow">&rarr;</span>
+          </a>
+          <a href="https://www.linkedin.com/in/benyamin-mahamed/" target="_blank" class="contact-link">
+            <div class="contact-link-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="color:var(--orange)"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </div>
+            <div class="contact-link-text">
+              <span class="contact-link-label">LinkedIn</span>
+              <span class="contact-link-value">benyamin-mahamed</span>
+            </div>
+            <span class="contact-link-arrow">&rarr;</span>
+          </a>
+          <a href="https://theblueprintbrief.com" target="_blank" class="contact-link">
+            <div class="contact-link-icon" style="font-size:16px">&#x26A1;</div>
+            <div class="contact-link-text">
+              <span class="contact-link-label">Platform</span>
+              <span class="contact-link-value">theblueprintbrief.com</span>
+            </div>
+            <span class="contact-link-arrow">&rarr;</span>
+          </a>
+        </div>
+      </div>
+      <div class="jersey-card reveal" style="transition-delay:0.15s">
+        <div class="jersey-number">00</div>
+        <div class="jersey-name">Mahamed</div>
+        <div class="jersey-team">University of Westminster</div>
+        <div class="jersey-divider"></div>
+        <div class="jersey-stats-row">
+          <div class="jersey-stat">
+            <div class="jersey-stat-val">3</div>
+            <div class="jersey-stat-lbl">Projects</div>
+          </div>
+          <div class="jersey-stat">
+            <div class="jersey-stat-val">BSc</div>
+            <div class="jersey-stat-lbl">Degree</div>
+          </div>
+          <div class="jersey-stat">
+            <div class="jersey-stat-val">LDN</div>
+            <div class="jersey-stat-lbl">Location</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Benyamin Mahamed &mdash; <span>#00</span> &mdash; Built with code &bull; Deployed on Netlify</p>
+</footer>
+
+<script>
+  // Live clock
+  function updateClock() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2, '0');
+    const m = String(now.getMinutes()).padStart(2, '0');
+    document.getElementById('live-clock').textContent = h + ':' + m;
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  // Shot clock countdown
+  let shotTime = 24;
+  setInterval(() => {
+    shotTime = shotTime <= 1 ? 24 : shotTime - 1;
+    document.getElementById('shot-clock').textContent = shotTime;
+  }, 1000);
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(r => observer.observe(r));
+</script>
+</body>
+</html>
