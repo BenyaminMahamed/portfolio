@@ -3,1129 +3,1117 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Benyamin Mahamed</title>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<title>Benyamin Mahamed — Portfolio JAM</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 <style>
+/* ─────────────────────────────────────
+   TOKENS
+───────────────────────────────────── */
 :root {
-  --bg:      #050c14;
-  --dark:    #030810;
-  --panel:   #0a1628;
-  --panel2:  #0c1e3a;
-  --teal:    #00e8c8;
-  --teal-dk: #009b88;
-  --yellow:  #ffe000;
-  --fire1:   #ff2200;
-  --fire2:   #ff6600;
-  --fire3:   #ffaa00;
-  --fire4:   #ffdd00;
-  --white:   #ffffff;
-  --gray:    #7a8fa8;
-  --bw: 3px;
-  --pixel: 'Press Start 2P', monospace;
-  --vt:    'VT323', monospace;
-  --mono:  'Share Tech Mono', monospace;
-  --j1: #1a4a8a;
-  --j2: #ffffff;
+  --pixel : 'Press Start 2P', monospace;
+  --vt    : 'VT323', monospace;
+
+  /* Court wood */
+  --wood1 : #b87c18;
+  --wood2 : #9a6410;
+  --wood3 : #c89428;
+  --wood-line : rgba(255,180,0,.18);
+
+  /* Panel blue — NBA JAM side panels */
+  --blue1 : #0c1e50;
+  --blue2 : #081440;
+  --blue3 : #162870;
+
+  /* Gold border */
+  --gold  : #c8a228;
+  --gold2 : #e8c040;
+
+  /* Fire */
+  --f1 : #ff2200;
+  --f2 : #ff6600;
+  --f3 : #ffaa00;
+  --f4 : #ffdd00;
+
+  --teal  : #00e8c8;
+  --white : #ffffff;
+  --gray  : #7a8fa8;
+
+  --j1 : #1a4a8a;
+  --j2 : #ffffff;
 }
 
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
 
-body{
-  background:var(--bg);
-  color:var(--white);
-  font-family:var(--vt);
-  overflow-x:hidden;
+body {
+  background: var(--blue2);
+  color: var(--white);
+  font-family: var(--vt);
+  overflow-x: hidden;
 }
 
-body::after{
-  content:'';
-  position:fixed;inset:0;z-index:9999;
-  pointer-events:none;
-  background:repeating-linear-gradient(
-    0deg,transparent 0,transparent 3px,
-    rgba(0,0,0,.13) 3px,rgba(0,0,0,.13) 4px
+/* scanlines */
+body::after {
+  content:''; position:fixed; inset:0; z-index:9999; pointer-events:none;
+  background: repeating-linear-gradient(
+    0deg, transparent 0, transparent 3px,
+    rgba(0,0,0,.12) 3px, rgba(0,0,0,.12) 4px
   );
 }
 
-/* ═══════════════════════════════════════
+/* ─────────────────────────────────────
+   WOOD COURT BACKGROUND
+   Used as the backdrop for the whole
+   hero area — matches NBA JAM aesthetic
+───────────────────────────────────── */
+.court-bg {
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(0,0,0,.07) 0, rgba(0,0,0,.07) 1px,
+      transparent 1px, transparent 32px
+    ),
+    repeating-linear-gradient(
+      180deg,
+      rgba(255,255,255,.03) 0, rgba(255,255,255,.03) 1px,
+      transparent 1px, transparent 8px
+    ),
+    linear-gradient(160deg, var(--wood3) 0%, var(--wood1) 40%, var(--wood2) 100%);
+  border-top:    4px solid var(--gold);
+  border-bottom: 4px solid var(--gold);
+}
+
+/* ══════════════════════════════════════
    LOADING SCREEN
-═══════════════════════════════════════ */
-#loading-screen{
-  position:fixed;inset:0;z-index:8000;
-  background:#000;
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  overflow:hidden;
+══════════════════════════════════════ */
+#loading-screen {
+  position: fixed; inset: 0; z-index: 8000;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  overflow: hidden;
+  /* Wood court as background — just like the game */
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,.08) 0, rgba(0,0,0,.08) 1px, transparent 1px, transparent 32px),
+    linear-gradient(160deg, #c89428 0%, #b87c18 40%, #9a6410 100%);
 }
 
-.load-sky{
-  position:absolute;inset:0;
-  background:radial-gradient(ellipse at 50% 110%,
-    #ff2200 0%,#ff6600 18%,#ffaa00 35%,#1a0a00 60%,#000 100%);
-  opacity:.85;
+/* Dark vignette top & bottom */
+#loading-screen::before {
+  content:''; position:absolute; inset:0;
+  background: radial-gradient(ellipse at 50% 50%, transparent 30%, rgba(0,0,0,.65) 100%);
+  pointer-events: none; z-index: 0;
 }
 
-.load-court{
-  position:absolute;bottom:0;left:0;right:0;height:35%;
-  background:linear-gradient(180deg,#5c3800 0%,#7a4e00 40%,#8b5e00 100%);
-  border-top:4px solid #ffaa00;
-}
-.load-court::before{
-  content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
-  width:180px;height:100%;
-  border-left:2px solid rgba(255,170,0,.3);
-  border-right:2px solid rgba(255,170,0,.3);
-}
-.load-court::after{
-  content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
-  width:80px;height:60px;
-  border:2px solid rgba(255,170,0,.3);
-  border-radius:0 0 40px 40px;border-top:none;
+/* centre column */
+.load-col {
+  position: relative; z-index: 2;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 18px;
+  text-align: center;
+  width: min(520px, 90vw);
 }
 
-.load-content{
-  position:relative;z-index:2;
-  display:flex;flex-direction:column;
-  align-items:center;gap:16px;
-  margin-top:-80px;
-  text-align:center;
+/* ── Blue badge panel — echoes the NBA JAM logo frame ── */
+.load-badge {
+  background: linear-gradient(160deg, var(--blue3) 0%, var(--blue1) 60%, var(--blue2) 100%);
+  border: 4px solid var(--gold);
+  box-shadow: 0 0 0 2px var(--blue1), 0 0 40px rgba(200,162,40,.4), inset 0 0 30px rgba(0,0,60,.5);
+  padding: 20px 40px 16px;
+  position: relative;
+  width: 100%;
+}
+.load-badge::before {
+  content:''; position:absolute; inset:6px;
+  border: 1px solid rgba(200,162,40,.3); pointer-events:none;
 }
 
-.load-logo-sub{
-  font-family:var(--pixel);font-size:10px;
-  color:var(--teal);letter-spacing:6px;
-  text-shadow:0 0 16px rgba(0,232,200,.8);
-  animation:teal-pulse 1.4s ease-in-out infinite alternate;
+.load-by {
+  font-family: var(--pixel); font-size: 8px;
+  color: var(--teal); letter-spacing: 5px;
+  text-shadow: 0 0 12px rgba(0,232,200,.7);
+  margin-bottom: 10px;
+  animation: teal-glow 1.6s ease-in-out infinite alternate;
 }
-@keyframes teal-pulse{
-  from{text-shadow:0 0 10px rgba(0,232,200,.5);}
-  to{text-shadow:0 0 28px rgba(0,232,200,1),0 0 60px rgba(0,232,200,.4);}
-}
-
-/* NBA JAM big stacked logo */
-.load-logo-main{
-  font-family:var(--pixel);
-  font-size:clamp(22px,5vw,48px);
-  line-height:1.2;letter-spacing:4px;
-  text-transform:uppercase;
-  background:linear-gradient(180deg,
-    #ffffff 0%,#ffdd00 20%,#ffaa00 50%,#ff6600 80%,#ff2200 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  background-clip:text;
-  filter:drop-shadow(0 0 24px rgba(255,102,0,.9)) drop-shadow(0 5px 0 rgba(0,0,0,.9));
-  animation:logo-flame 2s ease-in-out infinite alternate;
-}
-@keyframes logo-flame{
-  from{filter:drop-shadow(0 0 16px rgba(255,102,0,.7)) drop-shadow(0 5px 0 rgba(0,0,0,.9));}
-  to{filter:drop-shadow(0 0 40px rgba(255,220,0,1)) drop-shadow(0 0 80px rgba(255,102,0,.5)) drop-shadow(0 5px 0 rgba(0,0,0,.9));}
+@keyframes teal-glow {
+  from { text-shadow: 0 0 6px rgba(0,232,200,.4); }
+  to   { text-shadow: 0 0 24px rgba(0,232,200,1), 0 0 50px rgba(0,232,200,.3); }
 }
 
-.load-logo-year{
-  font-family:var(--pixel);font-size:11px;
-  color:var(--yellow);letter-spacing:10px;
-  text-shadow:2px 2px 0 #664400;
+.load-title {
+  font-family: var(--pixel);
+  font-size: clamp(26px, 6vw, 52px);
+  line-height: 1.2; letter-spacing: 5px;
+  background: linear-gradient(180deg,
+    #fff 0%, var(--f4) 20%, var(--f3) 45%, var(--f2) 75%, var(--f1) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 20px rgba(255,102,0,.8)) drop-shadow(0 4px 0 #000);
+  animation: title-flare 2s ease-in-out infinite alternate;
+}
+@keyframes title-flare {
+  from { filter: drop-shadow(0 0 14px rgba(255,102,0,.6)) drop-shadow(0 4px 0 #000); }
+  to   { filter: drop-shadow(0 0 40px rgba(255,220,0,1)) drop-shadow(0 0 70px rgba(255,102,0,.4)) drop-shadow(0 4px 0 #000); }
 }
 
-.load-players{
-  display:flex;align-items:flex-end;justify-content:center;gap:80px;
+.load-season {
+  font-family: var(--pixel); font-size: 9px;
+  color: var(--gold); letter-spacing: 8px;
+  margin-top: 4px;
 }
 
-.load-player{position:relative;display:flex;flex-direction:column;align-items:center;}
+/* ── Players flanking the bar — like the game's character select ── */
+.load-players {
+  display: flex; align-items: flex-end;
+  justify-content: space-between;
+  width: 100%; padding: 0 8px;
+}
+.load-player { display: flex; flex-direction: column; align-items: center; position: relative; }
+.sil-head { width:32px; height:32px; border-radius:50%; background:var(--f2); box-shadow:0 0 18px var(--f1); animation:bob .8s ease-in-out infinite alternate; }
+.sil-body { width:44px; height:50px; background:linear-gradient(180deg,var(--f2),#c03300); clip-path:polygon(12% 0%,88% 0%,100% 100%,0% 100%); animation:bob .8s ease-in-out infinite alternate; }
+.sil-legs { display:flex; gap:4px; }
+.sil-leg  { width:16px; height:28px; background:linear-gradient(180deg,#c03300,#881800); border-radius:0 0 4px 4px; }
+.load-player.p2 .sil-head,.load-player.p2 .sil-body,.load-player.p2 .sil-leg { filter:hue-rotate(25deg) brightness(1.1); }
+@keyframes bob { from{transform:translateY(0);} to{transform:translateY(-8px);} }
+.load-player.p1 *{ animation-delay:.3s; }
+.sil-flames { position:absolute; bottom:-10px; left:50%; transform:translateX(-50%); display:flex; gap:3px; }
+.sil-flame  { width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-bottom:16px solid var(--f2); animation:flick .3s ease-in-out infinite alternate; }
+.sil-flame:nth-child(2){ border-bottom-color:var(--f3); animation-delay:.1s; }
+.sil-flame:nth-child(3){ animation-delay:.2s; }
+@keyframes flick { from{transform:scaleY(1);} to{transform:scaleY(1.5) scaleX(.7);} }
 
-.sil-head{
-  width:36px;height:36px;background:#ff6600;border-radius:50%;
-  box-shadow:0 0 20px #ff4400,0 0 50px rgba(255,68,0,.4);
-  animation:sil-bob .8s ease-in-out infinite alternate;
+/* ── Loading bar ── */
+.load-bar-wrap {
+  width: 100%; height:14px;
+  border: 3px solid var(--gold); background:#050800; overflow:hidden;
 }
-.sil-body{
-  width:48px;height:54px;
-  background:linear-gradient(180deg,#ff6600 0%,#cc3300 100%);
-  clip-path:polygon(10% 0%,90% 0%,100% 100%,0% 100%);
-  box-shadow:0 0 24px rgba(255,68,0,.5);
-  animation:sil-bob .8s ease-in-out infinite alternate;
-}
-.sil-legs{display:flex;gap:4px;}
-.sil-leg{width:18px;height:32px;background:linear-gradient(180deg,#cc3300,#992200);border-radius:0 0 4px 4px;}
-.load-player.p2 .sil-head,.load-player.p2 .sil-body,.load-player.p2 .sil-leg{
-  background:linear-gradient(180deg,#ff9900,#ff5500);filter:hue-rotate(20deg);
-}
-@keyframes sil-bob{from{transform:translateY(0);}to{transform:translateY(-10px);}}
-.load-player.p1 *{animation-delay:.4s;}
-.load-player.p2 .sil-head{animation-delay:.2s;}
-
-.sil-fire{position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);display:flex;gap:3px;}
-.sil-flame{
-  width:0;height:0;
-  border-left:5px solid transparent;border-right:5px solid transparent;
-  border-bottom:18px solid var(--fire2);
-  animation:fflick .35s ease-in-out infinite alternate;
-  filter:drop-shadow(0 0 5px var(--fire1));
-}
-.sil-flame:nth-child(2){border-bottom-color:var(--fire3);animation-delay:.1s;}
-.sil-flame:nth-child(3){animation-delay:.22s;}
-@keyframes fflick{from{transform:scaleY(1);}to{transform:scaleY(1.6) scaleX(.7);}}
-
-/* ── PRESS START — smooth glow pulse, no jarring blink ── */
-.load-press-start{
-  font-family:var(--pixel);font-size:14px;
-  color:#000;
-  letter-spacing:4px;text-transform:uppercase;
-  cursor:pointer;
-  border:3px solid var(--yellow);
-  padding:16px 40px;
-  background:var(--yellow);
-  box-shadow:0 0 0 0 rgba(255,224,0,0);
-  animation:btn-pulse 1.6s ease-in-out infinite;
-  margin-top:4px;
-  position:relative;z-index:10;
-  transition:transform .1s;
-}
-.load-press-start:hover{transform:scale(1.04);}
-
-@keyframes btn-pulse{
-  0%  {box-shadow:0 0 8px 2px rgba(255,224,0,.4), inset 0 0 0 0 rgba(255,255,255,0);}
-  50% {box-shadow:0 0 32px 10px rgba(255,224,0,.9), 0 0 60px 20px rgba(255,170,0,.4), inset 0 0 10px rgba(255,255,255,.15);}
-  100%{box-shadow:0 0 8px 2px rgba(255,224,0,.4), inset 0 0 0 0 rgba(255,255,255,0);}
-}
-
-/* Sub text — gentle fade not harsh blink */
-.load-coin{
-  font-family:var(--pixel);font-size:8px;
-  color:rgba(255,224,0,.6);letter-spacing:3px;
-  text-transform:uppercase;
-  animation:coin-fade 2s ease-in-out infinite;
-}
-@keyframes coin-fade{
-  0%,100%{opacity:.3;}
-  50%{opacity:1;}
-}
-
-.load-bar-wrap{
-  width:300px;height:14px;
-  border:3px solid var(--yellow);
-  background:#0a0a00;overflow:hidden;
-}
-.load-bar-fill{
+.load-bar-fill {
   height:100%;
-  background:linear-gradient(90deg,var(--fire1),var(--fire2),var(--fire3),var(--fire4));
-  width:0%;
-  animation:load-fill 2.4s ease-out forwards;
-  position:relative;
+  background:linear-gradient(90deg,var(--f1),var(--f2),var(--f3),var(--f4));
+  width:0%; animation:bar-fill 2.6s ease-out forwards; position:relative;
 }
-.load-bar-fill::after{
-  content:'';position:absolute;inset:0;
-  background:repeating-linear-gradient(90deg,transparent 0,transparent 8px,rgba(0,0,0,.3) 8px,rgba(0,0,0,.3) 9px);
+.load-bar-fill::after {
+  content:''; position:absolute; inset:0;
+  background:repeating-linear-gradient(90deg,transparent 0,transparent 8px,rgba(0,0,0,.28) 8px,rgba(0,0,0,.28) 9px);
 }
-@keyframes load-fill{0%{width:0%;}60%{width:85%;}90%{width:92%;}100%{width:100%;}}
+@keyframes bar-fill { 0%{width:0%} 60%{width:84%} 90%{width:93%} 100%{width:100%} }
+.load-status {
+  font-family: var(--pixel); font-size:7px;
+  color: var(--gold); letter-spacing:2px;
+  animation: pulse-fade 1s ease-in-out infinite;
+}
+@keyframes pulse-fade { 0%,100%{opacity:.4;} 50%{opacity:1;} }
 
-.load-bar-label{
-  font-family:var(--pixel);font-size:7px;
-  color:var(--yellow);letter-spacing:2px;
+/* ── PRESS START — solid gold panel, truly centred, smooth glow ── */
+.load-press-panel {
+  width: 100%;
+  background: linear-gradient(160deg, var(--blue3), var(--blue1));
+  border: 4px solid var(--gold);
+  box-shadow: 0 0 0 2px var(--blue2), inset 0 0 20px rgba(0,0,60,.4);
+  padding: 4px;
+  display: flex; align-items: center; justify-content: center;
 }
-
-.load-copy{
-  position:absolute;bottom:14px;left:0;right:0;text-align:center;
-  font-family:var(--pixel);font-size:6px;color:#444;letter-spacing:2px;
+.load-press-start {
+  font-family: var(--pixel); font-size: 14px;
+  color: #000; background: var(--gold2);
+  border: 3px solid #8a6010;
+  padding: 14px 0; letter-spacing: 5px;
+  text-transform: uppercase; cursor: pointer;
+  width: 100%; text-align: center;
+  display: block;
+  animation: press-pulse 1.8s ease-in-out infinite;
+  box-shadow: 0 3px 0 #5a4000;
+  transition: transform .1s;
+  position: relative;
 }
-
-#flash{
-  position:fixed;inset:0;z-index:7999;
-  background:#fff;opacity:0;pointer-events:none;
-  transition:opacity .12s;
+.load-press-start:hover { transform: translateY(-2px); }
+@keyframes press-pulse {
+  0%,100% { box-shadow:0 3px 0 #5a4000, 0 0 10px rgba(200,162,40,.3); }
+  50%      { box-shadow:0 3px 0 #5a4000, 0 0 40px rgba(200,162,40,.9), 0 0 80px rgba(255,170,0,.3); }
 }
-
-/* ═══════════════════════════════════════
-   MAIN PORTFOLIO
-═══════════════════════════════════════ */
-#main-portfolio{
-  opacity:0;pointer-events:none;
-  transition:opacity .5s;
-}
-#main-portfolio.visible{opacity:1;pointer-events:all;}
-
-/* ── TOP BAR ── */
-.top-bar{
-  background:#030810;
-  border-bottom:var(--bw) solid var(--yellow);
-  display:grid;grid-template-columns:1fr auto 1fr;
-  align-items:stretch;
-}
-.top-bar-label{
-  font-family:var(--pixel);font-size:7px;
-  color:var(--yellow);letter-spacing:2px;
-  padding:10px 18px;display:flex;align-items:center;
-}
-.top-bar-label.right{justify-content:flex-end;}
-.top-bar-center{
-  background:#0c1e3a;
-  border-left:var(--bw) solid var(--yellow);
-  border-right:var(--bw) solid var(--yellow);
-  padding:8px 28px;text-align:center;
-}
-.game-title{
-  font-family:var(--pixel);font-size:clamp(9px,1.8vw,13px);
-  color:var(--fire3);letter-spacing:3px;
-  text-shadow:2px 2px 0 #660000,0 0 20px rgba(255,170,0,.6);
-  line-height:1.6;
-}
-.game-subtitle{
-  font-family:var(--vt);font-size:20px;
-  color:var(--teal);letter-spacing:4px;
-  text-shadow:1px 1px 0 var(--teal-dk);
+.load-coin {
+  font-family: var(--pixel); font-size:7px;
+  color: rgba(200,162,40,.5); letter-spacing:3px;
+  animation: pulse-fade 2.2s ease-in-out infinite;
+  margin-top: -4px;
 }
 
-/* ═══════════════════════════════════════
-   SELECT SCREEN — key fix: height:auto not min-height:100vh
-═══════════════════════════════════════ */
-.select-screen{
-  display:grid;
-  grid-template-columns:220px 1fr 220px;
-  /* FIX: removed min-height so it shrinks to content */
-  border-bottom:var(--bw) solid var(--yellow);
+.load-copy {
+  position:absolute; bottom:12px; left:0; right:0;
+  text-align:center; font-family:var(--pixel); font-size:6px;
+  color:rgba(200,162,40,.3); letter-spacing:2px;
 }
 
-/* LEFT PANEL */
-.skill-selector-panel{
-  background:var(--panel2);border-right:var(--bw) solid var(--yellow);
-  display:flex;flex-direction:column;
+#flash { position:fixed;inset:0;z-index:7999;background:#fff;opacity:0;pointer-events:none;transition:opacity .12s; }
+
+/* ══════════════════════════════════════
+   MAIN PORTFOLIO — hidden until start
+══════════════════════════════════════ */
+#main-portfolio { opacity:0; pointer-events:none; transition:opacity .5s; }
+#main-portfolio.visible { opacity:1; pointer-events:all; }
+
+/* ── TOP SCOREBOARD BAR — like the team select header ── */
+.top-bar {
+  background: var(--blue2);
+  border-bottom: 4px solid var(--gold);
+  display: grid; grid-template-columns: 1fr auto 1fr;
+  align-items: stretch;
 }
-.panel-header{
-  background:var(--yellow);padding:8px 14px;
-  font-family:var(--pixel);font-size:7px;color:#000;
-  letter-spacing:2px;border-bottom:3px solid #664400;flex-shrink:0;
+.top-bar-side {
+  font-family: var(--pixel); font-size: 8px;
+  color: var(--gold); letter-spacing: 3px;
+  padding: 10px 20px;
+  display: flex; align-items: center;
 }
-.skill-btn-list{padding:8px 6px;display:flex;flex-direction:column;gap:3px;}
-.skill-btn{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:6px;padding:9px 10px;background:#071428;
-  border:2px solid rgba(255,224,0,.12);cursor:pointer;
-  transition:border-color .1s,background .1s;position:relative;overflow:hidden;
+.top-bar-side.right { justify-content: flex-end; }
+
+.top-bar-centre {
+  background: linear-gradient(180deg, var(--blue3), var(--blue1));
+  border-left: 3px solid var(--gold); border-right: 3px solid var(--gold);
+  padding: 8px 32px; text-align: center;
 }
-.skill-btn::after{
-  content:'';position:absolute;bottom:0;left:0;height:2px;width:0%;
-  background:linear-gradient(90deg,var(--fire1),var(--fire3));transition:width .25s;
+.top-bar-title {
+  font-family: var(--pixel); font-size: clamp(9px,1.6vw,13px);
+  color: var(--f3); letter-spacing: 3px;
+  text-shadow: 2px 2px 0 #660000, 0 0 18px rgba(255,170,0,.5);
 }
-.skill-btn:hover::after,.skill-btn.active::after{width:100%;}
-.skill-btn:hover,.skill-btn.active{border-color:var(--teal);background:rgba(0,232,200,.07);}
-.skill-btn-name{font-family:var(--vt);font-size:21px;color:var(--white);letter-spacing:1px;text-transform:uppercase;}
-.skill-btn.active .skill-btn-name{color:var(--teal);}
-.skill-btn-rtg{font-family:var(--pixel);font-size:9px;color:var(--yellow);}
-.panel-footer{
-  padding:10px 12px;border-top:2px solid rgba(255,224,0,.15);
-  font-family:var(--pixel);font-size:6px;color:var(--teal);
-  letter-spacing:1px;text-align:center;line-height:1.9;flex-shrink:0;
+.top-bar-sub {
+  font-family: var(--vt); font-size: 20px;
+  color: var(--teal); letter-spacing: 4px;
 }
 
-/* CENTER */
-.center-panel{
-  background:#081528;
-  display:flex;flex-direction:column;align-items:center;
-  padding:18px 0 18px;
+/* ══════════════════════════════════════
+   HERO — NBA JAM SELECT SCREEN LAYOUT
+   Left panel | Court centre | Right panel
+══════════════════════════════════════ */
+.hero {
+  display: grid;
+  grid-template-columns: 200px 1fr 200px;
+  border-bottom: 4px solid var(--gold);
 }
 
-.player-card{
-  width:100%;max-width:480px;
-  background:linear-gradient(180deg,#0d2040 0%,#061020 100%);
-  border:3px solid var(--yellow);position:relative;overflow:hidden;margin-bottom:10px;
+/* ── SIDE PANELS — deep blue with gold border, like WEST/EAST ── */
+.side-panel {
+  background: linear-gradient(180deg, var(--blue3) 0%, var(--blue2) 100%);
+  border-color: var(--gold);
+  display: flex; flex-direction: column;
 }
-.player-card::before{
-  content:'';position:absolute;inset:6px;
-  border:1px solid rgba(255,224,0,.15);pointer-events:none;z-index:2;
+.side-panel.left  { border-right:  4px solid var(--gold); }
+.side-panel.right { border-left:   4px solid var(--gold); }
+
+.side-panel-header {
+  background: linear-gradient(90deg, var(--gold), var(--gold2), var(--gold));
+  padding: 8px 14px; text-align: center;
+  font-family: var(--pixel); font-size: 7px;
+  color: #000; letter-spacing: 2px;
+  border-bottom: 3px solid #8a6010;
+  flex-shrink: 0;
 }
-.card-fire-bar{
+
+/* Language list items — styled like the team list rows */
+.lang-list { padding: 6px 4px; display:flex; flex-direction:column; gap:2px; }
+.lang-btn {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 10px; cursor: pointer;
+  border: 2px solid rgba(200,162,40,.15);
+  background: rgba(8,20,64,.7);
+  transition: background .1s, border-color .1s;
+  position: relative; overflow: hidden;
+  gap: 8px;
+}
+.lang-btn::before {
+  content:''; position:absolute; left:0; top:0; bottom:0; width:0;
+  background: var(--f2); transition: width .18s; opacity:.7;
+}
+.lang-btn:hover::before,
+.lang-btn.active::before { width:3px; }
+.lang-btn:hover, .lang-btn.active {
+  border-color: var(--gold2);
+  background: rgba(200,162,40,.1);
+}
+.lang-dot  { width:9px; height:9px; border-radius:50%; flex-shrink:0; border:1.5px solid rgba(255,255,255,.2); }
+.lang-name { font-family:var(--vt); font-size:22px; color:var(--white); letter-spacing:1px; text-transform:uppercase; }
+.lang-btn.active .lang-name { color:var(--f3); }
+.lang-rtg  { font-family:var(--pixel); font-size:8px; color:var(--gold); margin-left:auto; }
+
+.side-panel-footer {
+  padding:10px 12px; margin-top:auto;
+  border-top:2px solid rgba(200,162,40,.15);
+  font-family:var(--pixel); font-size:5px;
+  color:rgba(200,162,40,.5); letter-spacing:1px;
+  text-align:center; line-height:1.9;
+  flex-shrink:0;
+}
+
+/* ── PROJECT PREVIEW LIST (right panel) ── */
+.proj-list { padding:6px 4px; display:flex; flex-direction:column; gap:4px; flex:1; overflow-y:auto; }
+.proj-list-empty {
+  font-family:var(--vt); font-size:19px;
+  color:rgba(200,162,40,.45); letter-spacing:1px;
+  padding:16px 10px; text-align:center; line-height:1.7;
+  animation:pulse-fade 1.8s ease-in-out infinite;
+}
+.proj-card {
+  display:block; background:rgba(8,20,64,.8);
+  border:2px solid rgba(200,162,40,.18);
+  padding:9px 10px; cursor:pointer; text-decoration:none;
+  transition:border-color .1s, background .1s, transform .1s;
+  position:relative; overflow:hidden;
+}
+.proj-card::before {
+  content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+  background:linear-gradient(180deg,var(--f2),var(--f4));
+  opacity:0; transition:opacity .12s;
+}
+.proj-card:hover { border-color:var(--f2); transform:translateX(3px); }
+.proj-card:hover::before { opacity:1; }
+.proj-card-num   { font-family:var(--pixel); font-size:6px; color:var(--f3); letter-spacing:2px; margin-bottom:3px; }
+.proj-card-title { font-family:var(--vt); font-size:20px; color:var(--white); letter-spacing:1px; text-transform:uppercase; line-height:1.1; margin-bottom:4px; }
+.proj-card-tags  { display:flex; flex-wrap:wrap; gap:3px; }
+.pct { font-family:var(--pixel); font-size:5px; color:var(--gold); border:1px solid rgba(200,162,40,.35); padding:2px 4px; letter-spacing:1px; }
+.pct.match { color:var(--f3); border-color:var(--f2); background:rgba(255,102,0,.1); }
+
+/* ── CENTRE — COURT BACKGROUND ── */
+.hero-court {
+  /* Wood grain */
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,.07) 0, rgba(0,0,0,.07) 1px, transparent 1px, transparent 32px),
+    linear-gradient(180deg, #c89428 0%, #b87c18 50%, #9a6410 100%);
+  display: flex; flex-direction: column;
+  align-items: center; padding: 20px 16px 20px;
+  position: relative;
+}
+
+/* Paint / key lines on the court */
+.hero-court::before {
+  content:''; position:absolute;
+  bottom:0; left:50%; transform:translateX(-50%);
+  width:160px; height:55%;
+  border-left: 2px solid rgba(255,180,0,.18);
+  border-right:2px solid rgba(255,180,0,.18);
+  border-top: 2px solid rgba(255,180,0,.18);
+  border-radius:50% 50% 0 0 / 20% 20% 0 0;
+  pointer-events:none;
+}
+
+/* ── PLAYER CARD — centred, gold-bordered ── */
+.player-card {
+  width:100%; max-width:460px;
+  border: 3px solid var(--gold);
+  background: linear-gradient(180deg, var(--blue3) 0%, var(--blue2) 100%);
+  box-shadow: 0 0 0 1px rgba(200,162,40,.2), 0 8px 32px rgba(0,0,0,.5);
+  position:relative; overflow:hidden; margin-bottom:10px;
+}
+.player-card::before {
+  content:''; position:absolute; inset:5px;
+  border:1px solid rgba(200,162,40,.2); pointer-events:none; z-index:2;
+}
+
+.card-fire-bar {
   height:6px;
-  background:linear-gradient(90deg,var(--fire1),var(--fire2),var(--fire3),var(--fire4),var(--fire3),var(--fire2),var(--fire1));
+  background:linear-gradient(90deg,var(--f1),var(--f2),var(--f3),var(--f4),var(--f3),var(--f2),var(--f1));
   animation:fireshift 2s ease-in-out infinite alternate;
 }
-@keyframes fireshift{from{filter:brightness(1);}to{filter:brightness(1.5) saturate(1.4);}}
+@keyframes fireshift { from{filter:brightness(1);} to{filter:brightness(1.5) saturate(1.3);} }
 
-.card-portrait-area{display:flex;align-items:stretch;border-bottom:3px solid var(--yellow);}
+/* Portrait + stats side by side */
+.card-body { display:flex; align-items:stretch; border-bottom:3px solid var(--gold); }
 
-.portrait-box{
-  width:190px;min-height:210px;
-  background:linear-gradient(135deg,#0e2244 0%,#1a3468 100%);
-  border-right:3px solid var(--yellow);
-  display:flex;align-items:center;justify-content:center;
-  position:relative;overflow:hidden;flex-shrink:0;
+.portrait-box {
+  width:180px; flex-shrink:0;
+  background:linear-gradient(135deg, #0e2244, #1a3468);
+  border-right:3px solid var(--gold);
+  display:flex; align-items:center; justify-content:center;
+  position:relative; overflow:hidden;
+  min-height:200px;
 }
-.portrait-box::before{
-  content:'';position:absolute;bottom:0;left:0;right:0;height:30px;
-  background:linear-gradient(180deg,transparent,rgba(255,170,0,.08));
-  border-top:1px solid rgba(255,170,0,.15);
+.portrait-box::after {
+  content:''; position:absolute; bottom:10px; left:50%; transform:translateX(-50%);
+  width:70px; height:10px;
+  background:radial-gradient(ellipse,rgba(0,0,0,.5),transparent 70%);
 }
-.portrait-box::after{
-  content:'';position:absolute;bottom:12px;left:50%;transform:translateX(-50%);
-  width:80px;height:12px;
-  background:radial-gradient(ellipse,rgba(0,0,0,.6),transparent 70%);
-}
-#player-svg{width:120px;height:180px;overflow:visible;position:relative;z-index:1;}
+#player-svg { width:110px; height:170px; overflow:visible; position:relative; z-index:1; }
 
-.portrait-stats{flex:1;padding:12px 14px;display:flex;flex-direction:column;gap:9px;}
-.pstat-label{font-family:var(--pixel);font-size:7px;color:var(--yellow);letter-spacing:2px;margin-bottom:2px;}
-.pstat-row{display:flex;align-items:center;gap:7px;}
-.pstat-lbl{font-family:var(--pixel);font-size:6px;color:var(--gray);width:44px;letter-spacing:1px;}
-.pstat-bar-wrap{flex:1;height:10px;background:#0a1a30;border:1px solid #1a3a60;overflow:hidden;position:relative;}
-.pstat-bar{height:100%;position:relative;}
-.pstat-bar.spd{background:var(--teal);}
-.pstat-bar.pts{background:var(--fire2);}
-.pstat-bar.dunk{background:var(--fire4);}
-.pstat-bar.def{background:#4ab8ff;}
-.pstat-bar::after{
-  content:'';position:absolute;inset:0;
-  background:repeating-linear-gradient(90deg,transparent 0,transparent 7px,rgba(0,0,0,.35) 7px,rgba(0,0,0,.35) 8px);
+/* ── DEV STATS STRIP — like the SPD/3PT/DUNK/DEF strip in NBA JAM ── */
+.dev-stats {
+  flex:1; display:flex; flex-direction:column;
+  padding:12px 14px; gap:8px;
 }
-.pstat-num{font-family:var(--vt);font-size:18px;color:var(--yellow);width:28px;text-align:right;}
-.player-meta-box{margin-top:auto;padding-top:10px;border-top:1px solid rgba(255,224,0,.15);}
-.pmeta-row{font-family:var(--pixel);font-size:6px;color:var(--gray);letter-spacing:1px;line-height:2.1;}
-.pmeta-row span{color:var(--teal);}
+.dev-stats-title {
+  font-family:var(--pixel); font-size:7px;
+  color:var(--gold); letter-spacing:2px; margin-bottom:2px;
+}
+.dstat { display:flex; align-items:center; gap:7px; }
+.dstat-lbl { font-family:var(--pixel); font-size:6px; color:var(--gray); width:48px; letter-spacing:1px; }
+.dstat-bar-wrap { flex:1; height:9px; background:#050e1c; border:1px solid var(--blue3); overflow:hidden; }
+.dstat-bar { height:100%; position:relative; }
+.dstat-bar.py  { background:#3a9fd5; }
+.dstat-bar.dj  { background:#44bb44; }
+.dstat-bar.cv  { background:var(--f2); }
+.dstat-bar.js  { background:#e8cc00; }
+.dstat-bar.db  { background:#aa66ff; }
+.dstat-bar.gi  { background:var(--teal); }
+.dstat-bar::after { content:''; position:absolute; inset:0; background:repeating-linear-gradient(90deg,transparent 0,transparent 7px,rgba(0,0,0,.3) 7px,rgba(0,0,0,.3) 8px); }
+.dstat-num { font-family:var(--vt); font-size:18px; color:var(--gold); width:26px; text-align:right; }
 
-/* NBA JAM NAME PLATE — big centred impact */
-.player-namePlate{
-  padding:14px 16px;
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  text-align:center;gap:6px;
-}
-.player-big-name{
-  font-family:var(--pixel);font-size:clamp(11px,1.8vw,15px);
-  color:var(--yellow);
-  text-shadow:3px 3px 0 #664400,0 0 20px rgba(255,224,0,.6);
-  letter-spacing:4px;line-height:1.7;text-transform:uppercase;
-}
-.player-pos-row{
-  display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center;
-}
-.player-pos-txt{
-  font-family:var(--vt);font-size:22px;
-  color:var(--teal);letter-spacing:4px;
-  text-shadow:1px 1px 0 var(--teal-dk);
+.card-meta { padding-top:8px; border-top:1px solid rgba(200,162,40,.15); margin-top:auto; }
+.card-meta-row { font-family:var(--pixel); font-size:6px; color:var(--gray); letter-spacing:1px; line-height:2.2; }
+.card-meta-row b { color:var(--f3); font-weight:normal; }
+
+/* ── NAME PLATE — NBA JAM big centred nameplate ── */
+.name-plate {
+  padding:14px 20px;
+  background:linear-gradient(180deg,rgba(8,20,64,.8),rgba(4,10,40,.9));
   text-align:center;
+  display:flex; flex-direction:column; align-items:center; gap:5px;
 }
-.player-pos-sep{color:rgba(255,224,0,.3);font-size:20px;}
+.name-plate-name {
+  font-family:var(--pixel); font-size:clamp(11px,1.7vw,14px);
+  color:var(--gold2);
+  text-shadow:2px 2px 0 #5a4000, 0 0 18px rgba(200,162,40,.6);
+  letter-spacing:4px; text-transform:uppercase; line-height:1.6;
+}
+.name-plate-role {
+  font-family:var(--vt); font-size:22px;
+  color:var(--teal); letter-spacing:5px;
+}
+.name-plate-deg {
+  font-family:var(--pixel); font-size:7px;
+  color:var(--f3); letter-spacing:3px;
+}
 
-/* ON FIRE BADGE */
-.on-fire-badge{
-  font-family:var(--pixel);font-size:8px;
-  color:var(--fire3);
-  background:rgba(255,102,0,.12);
-  border:2px solid var(--fire2);
-  padding:8px 16px;text-align:center;
-  letter-spacing:3px;
+/* ON FIRE badge */
+.on-fire {
+  font-family:var(--pixel); font-size:8px;
+  color:var(--f3); background:rgba(255,102,0,.1);
+  border:2px solid var(--f2);
+  padding:8px 16px; text-align:center; letter-spacing:3px;
   text-shadow:0 0 8px rgba(255,170,0,.7);
-  animation:firepulse 1.2s ease-in-out infinite alternate;
-  width:100%;max-width:480px;
+  animation:fire-badge 1.2s ease-in-out infinite alternate;
+  width:100%; max-width:460px;
 }
-@keyframes firepulse{
-  from{box-shadow:0 0 6px rgba(255,102,0,.2);}
-  to{box-shadow:0 0 28px rgba(255,102,0,.6);border-color:var(--fire3);}
+@keyframes fire-badge {
+  from { box-shadow:0 0 6px rgba(255,102,0,.2); }
+  to   { box-shadow:0 0 24px rgba(255,102,0,.6); border-color:var(--f3); }
 }
 
 /* JERSEY CUSTOMISER */
-.customiser{
-  width:100%;max-width:480px;
-  border:3px solid var(--teal);background:var(--dark);
-  overflow:hidden;margin-bottom:10px;
+.customiser {
+  width:100%; max-width:460px;
+  border:3px solid var(--teal); background:rgba(4,10,32,.9);
+  overflow:hidden; margin-bottom:10px;
 }
-.customiser-hdr{
-  background:var(--teal);padding:7px 14px;
-  display:flex;align-items:center;justify-content:center;gap:12px;
+.customiser-hdr {
+  background:var(--teal); padding:7px 14px;
+  font-family:var(--pixel); font-size:7px; color:#000;
+  letter-spacing:2px; text-align:center;
 }
-.customiser-hdr-txt{font-family:var(--pixel);font-size:7px;color:#000;letter-spacing:2px;}
-.customiser-body{
-  padding:12px 14px;display:flex;gap:20px;align-items:flex-end;
-  flex-wrap:wrap;justify-content:center;
-}
-.colour-pick{display:flex;flex-direction:column;gap:5px;align-items:center;}
-.colour-pick-label{font-family:var(--pixel);font-size:6px;color:var(--gray);letter-spacing:1px;text-transform:uppercase;}
-.colour-swatches{display:flex;gap:5px;flex-wrap:wrap;width:120px;justify-content:center;}
-.swatch{
-  width:24px;height:24px;border:2px solid rgba(255,255,255,.2);
-  cursor:pointer;transition:transform .1s,border-color .1s;flex-shrink:0;
-}
-.swatch:hover{transform:scale(1.15);border-color:var(--yellow);}
-.swatch.selected{border-color:var(--yellow);border-width:3px;transform:scale(1.15);}
-.randomise-btn{
-  font-family:var(--pixel);font-size:7px;color:#000;background:var(--yellow);
-  border:3px solid #664400;padding:8px 12px;cursor:pointer;letter-spacing:1px;
-  transition:filter .1s;white-space:nowrap;
-}
-.randomise-btn:hover{filter:brightness(1.1);}
+.customiser-body { padding:12px 14px; display:flex; gap:16px; align-items:flex-end; flex-wrap:wrap; justify-content:center; }
+.colour-pick { display:flex; flex-direction:column; gap:5px; align-items:center; }
+.colour-pick-lbl { font-family:var(--pixel); font-size:6px; color:var(--gray); letter-spacing:1px; }
+.swatches { display:flex; gap:5px; flex-wrap:wrap; width:120px; justify-content:center; }
+.swatch { width:22px; height:22px; border:2px solid rgba(255,255,255,.2); cursor:pointer; transition:transform .1s,border-color .1s; flex-shrink:0; }
+.swatch:hover { transform:scale(1.15); border-color:var(--gold2); }
+.swatch.sel { border-color:var(--gold2); border-width:3px; transform:scale(1.15); }
+.rand-btn { font-family:var(--pixel); font-size:7px; color:#000; background:var(--gold2); border:3px solid #8a6010; padding:8px 12px; cursor:pointer; letter-spacing:1px; transition:filter .1s; }
+.rand-btn:hover { filter:brightness(1.1); }
 
 /* CTA buttons */
-.hero-cta{display:flex;gap:12px;margin:6px 0 0;flex-wrap:wrap;justify-content:center;}
-.btn-fire{
-  font-family:var(--pixel);font-size:7px;color:#000;background:var(--yellow);
-  border:3px solid #664400;padding:12px 24px;text-decoration:none;
-  letter-spacing:2px;text-transform:uppercase;
-  transition:filter .1s,transform .1s;
+.cta-row { display:flex; gap:12px; flex-wrap:wrap; justify-content:center; }
+.btn-gold {
+  font-family:var(--pixel); font-size:7px;
+  color:#000; background:var(--gold2);
+  border:3px solid #8a6010; box-shadow:0 3px 0 #5a4000;
+  padding:12px 22px; text-decoration:none;
+  letter-spacing:2px; text-transform:uppercase;
+  transition:transform .1s,filter .1s;
 }
-.btn-fire:hover{filter:brightness(1.1);transform:translateY(-2px);}
-.btn-ghost{
-  font-family:var(--pixel);font-size:7px;color:var(--teal);background:transparent;
-  border:3px solid var(--teal);padding:12px 24px;text-decoration:none;
-  letter-spacing:2px;text-transform:uppercase;transition:background .1s,transform .1s;
+.btn-gold:hover { filter:brightness(1.1); transform:translateY(-2px); }
+.btn-outline {
+  font-family:var(--pixel); font-size:7px;
+  color:var(--teal); background:transparent;
+  border:3px solid var(--teal);
+  padding:12px 22px; text-decoration:none;
+  letter-spacing:2px; text-transform:uppercase;
+  transition:background .1s,transform .1s;
 }
-.btn-ghost:hover{background:rgba(0,232,200,.1);transform:translateY(-2px);}
+.btn-outline:hover { background:rgba(0,232,200,.1); transform:translateY(-2px); }
 
-/* RIGHT PANEL */
-.proj-preview-panel{
-  background:var(--panel2);border-left:var(--bw) solid var(--yellow);
-  display:flex;flex-direction:column;
-}
-.preview-header{
-  background:var(--yellow);padding:8px 14px;
-  display:flex;align-items:center;justify-content:space-between;
-  border-bottom:3px solid #664400;flex-shrink:0;
-}
-.preview-header-txt{font-family:var(--pixel);font-size:7px;color:#000;letter-spacing:2px;}
-.preview-skill-name{font-family:var(--pixel);font-size:7px;color:#333;}
-.preview-list{padding:8px 6px;display:flex;flex-direction:column;gap:5px;flex:1;overflow-y:auto;}
-.preview-empty{
-  font-family:var(--vt);font-size:19px;color:var(--gray);
-  letter-spacing:1px;padding:16px 10px;text-align:center;line-height:1.6;
-  animation:coin-fade 1.6s ease-in-out infinite;
-}
-.proj-mini{
-  display:block;background:#071428;border:2px solid rgba(255,224,0,.12);
-  padding:10px;cursor:pointer;text-decoration:none;
-  transition:border-color .1s,background .1s,transform .1s;
-  position:relative;overflow:hidden;
-}
-.proj-mini::before{
-  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
-  background:linear-gradient(180deg,var(--fire2),var(--fire4));
-  opacity:0;transition:opacity .1s;
-}
-.proj-mini:hover{border-color:var(--fire2);background:rgba(255,102,0,.05);transform:translateX(3px);}
-.proj-mini:hover::before{opacity:1;}
-.proj-mini-num{font-family:var(--pixel);font-size:6px;color:var(--fire3);letter-spacing:2px;margin-bottom:3px;}
-.proj-mini-title{font-family:var(--vt);font-size:20px;color:var(--white);letter-spacing:1px;text-transform:uppercase;line-height:1.1;margin-bottom:5px;}
-.proj-mini-tags{display:flex;flex-wrap:wrap;gap:3px;}
-.mini-tag{font-family:var(--pixel);font-size:5px;color:var(--teal);border:1px solid var(--teal-dk);padding:2px 4px;letter-spacing:1px;}
-.mini-tag.match{color:var(--fire3);border-color:var(--fire2);background:rgba(255,102,0,.1);}
-.preview-footer{padding:8px 12px;border-top:1px solid rgba(255,224,0,.1);font-family:var(--pixel);font-size:5px;color:var(--gray);letter-spacing:1px;text-align:center;flex-shrink:0;}
-
-/* ═══════════════════════════════════════
+/* ══════════════════════════════════════
    TICKER
-═══════════════════════════════════════ */
-.ticker-wrap{
-  background:#020608;border-top:3px solid var(--teal);border-bottom:3px solid var(--teal);
-  padding:8px 0;overflow:hidden;position:relative;
+══════════════════════════════════════ */
+.ticker-wrap {
+  background:var(--blue2);
+  border-top:3px solid var(--teal); border-bottom:3px solid var(--teal);
+  padding:8px 0; overflow:hidden; position:relative;
 }
-.ticker-chip{
-  position:absolute;left:0;top:0;bottom:0;width:56px;
-  background:var(--teal);display:flex;align-items:center;justify-content:center;z-index:2;
+.ticker-chip {
+  position:absolute; left:0; top:0; bottom:0; width:52px;
+  background:var(--teal); display:flex; align-items:center; justify-content:center; z-index:2;
 }
-.ticker-chip span{font-family:var(--pixel);font-size:6px;color:#000;letter-spacing:1px;}
-.ticker-inner{
-  display:flex;gap:4rem;white-space:nowrap;padding-left:68px;
-  animation:ticker-scroll 28s linear infinite;
-}
-@keyframes ticker-scroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
-.tick{font-family:var(--vt);font-size:19px;color:var(--gray);letter-spacing:2px;text-transform:uppercase;}
-.tick .hi{color:var(--fire3);}
-.tick .sep{color:var(--teal);margin:0 5px;}
+.ticker-chip span { font-family:var(--pixel); font-size:6px; color:#000; letter-spacing:1px; }
+.ticker-inner { display:flex; gap:3rem; white-space:nowrap; padding-left:62px; animation:ticker-scroll 30s linear infinite; }
+@keyframes ticker-scroll { from{transform:translateX(0);} to{transform:translateX(-50%);} }
+.tick { font-family:var(--vt); font-size:19px; color:var(--gray); letter-spacing:2px; text-transform:uppercase; }
+.tick .hi  { color:var(--f3); }
+.tick .sep { color:var(--teal); margin:0 6px; }
 
-/* ═══════════════════════════════════════
-   SHARED SECTION STYLES
-═══════════════════════════════════════ */
-section{border-bottom:var(--bw) solid var(--yellow);}
+/* ══════════════════════════════════════
+   SECTION HEADERS
+══════════════════════════════════════ */
+section { border-bottom:3px solid var(--gold); }
+.sec-hdr {
+  display:flex; align-items:stretch;
+  background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold));
+  border-bottom:3px solid #8a6010;
+}
+.sec-num  { background:#000; padding:10px 20px; font-family:var(--pixel); font-size:10px; color:var(--gold); letter-spacing:2px; border-right:3px solid var(--gold); display:flex; align-items:center; }
+.sec-ttl  { flex:1; padding:10px 20px; font-family:var(--pixel); font-size:clamp(8px,1.4vw,12px); color:#000; letter-spacing:3px; display:flex; align-items:center; }
+.sec-side { padding:10px 16px; font-family:var(--vt); font-size:20px; color:#000; letter-spacing:2px; border-left:3px solid #000; display:flex; align-items:center; }
+.reveal { opacity:0; transform:translateY(16px); transition:opacity .5s, transform .5s; }
+.reveal.visible { opacity:1; transform:translateY(0); }
 
-.sec-header{
-  display:flex;align-items:stretch;
-  border-bottom:3px solid var(--yellow);background:var(--yellow);
+/* ══════════════════════════════════════
+   STATS — dev scoreboard
+══════════════════════════════════════ */
+#stats { background:var(--blue2); }
+.stats-grid {
+  display:grid; grid-template-columns:repeat(5,1fr);
+  border-left:3px solid var(--gold); border-right:3px solid var(--gold);
+  border-top:3px solid var(--gold); margin:24px;
 }
-.sec-num{
-  background:#000;padding:10px 20px;
-  font-family:var(--pixel);font-size:10px;color:var(--yellow);
-  letter-spacing:2px;border-right:3px solid var(--yellow);display:flex;align-items:center;
+.stat-cell {
+  border-right:3px solid var(--gold); border-bottom:3px solid var(--gold);
+  padding:22px 10px; text-align:center;
+  background:linear-gradient(180deg,var(--blue3),var(--blue2));
+  position:relative; overflow:hidden; transition:background .15s;
 }
-.sec-title{
-  flex:1;padding:10px 20px;
-  font-family:var(--pixel);font-size:clamp(9px,1.5vw,12px);
-  color:#000;letter-spacing:3px;text-transform:uppercase;
-  display:flex;align-items:center;
-}
-.sec-right{
-  padding:10px 16px;font-family:var(--vt);font-size:20px;
-  color:#000;letter-spacing:2px;border-left:3px solid #000;display:flex;align-items:center;
-}
+.stat-cell:last-child { border-right:none; }
+.stat-cell:hover { background:var(--blue3); }
+.stat-cell::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--f3); opacity:0; transition:opacity .15s; }
+.stat-cell:hover::before { opacity:1; }
+.stat-abbr  { font-family:var(--pixel); font-size:7px; color:var(--gold); letter-spacing:3px; margin-bottom:10px; display:block; }
+.stat-value { font-family:var(--pixel); font-size:26px; color:var(--white); text-shadow:3px 3px 0 rgba(0,0,0,.5); line-height:1; display:block; }
+.stat-label { font-family:var(--vt); font-size:16px; color:var(--gray); letter-spacing:2px; margin-top:8px; display:block; text-transform:uppercase; }
 
-.reveal{opacity:0;transform:translateY(18px);transition:opacity .5s,transform .5s;}
-.reveal.visible{opacity:1;transform:translateY(0);}
+/* ══════════════════════════════════════
+   PROJECTS — on wood court background
+══════════════════════════════════════ */
+#projects {
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,.06) 0, rgba(0,0,0,.06) 1px, transparent 1px, transparent 32px),
+    linear-gradient(180deg, #b87c18 0%, #9a6410 100%);
+}
+.projects-inner { padding:0 24px 24px; }
 
-/* ═══════════════════════════════════════
-   STATS SCOREBOARD
-═══════════════════════════════════════ */
-#stats{background:#07121f;}
-.stats-grid{
-  display:grid;grid-template-columns:repeat(5,1fr);
-  border-left:3px solid var(--yellow);border-right:3px solid var(--yellow);
-  margin:24px;border-top:3px solid var(--yellow);
+.project-row {
+  display:grid; grid-template-columns:76px 1fr;
+  border:3px solid var(--gold); margin-bottom:14px;
+  background:linear-gradient(90deg, rgba(8,20,64,.92), rgba(4,12,48,.96));
+  overflow:hidden; transition:transform .12s; position:relative;
 }
-.stat-cell{
-  border-right:3px solid var(--yellow);border-bottom:3px solid var(--yellow);
-  padding:24px 10px;text-align:center;
-  background:#050e1c;position:relative;overflow:hidden;transition:background .15s;cursor:default;
-}
-.stat-cell:last-child{border-right:none;}
-.stat-cell:hover{background:#0c1e3a;}
-.stat-cell::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--teal);opacity:0;transition:opacity .15s;}
-.stat-cell:hover::before{opacity:1;}
-.stat-abbr{font-family:var(--pixel);font-size:7px;color:var(--yellow);letter-spacing:3px;margin-bottom:10px;display:block;}
-.stat-value{font-family:var(--pixel);font-size:28px;color:var(--white);text-shadow:3px 3px 0 rgba(0,0,0,.5);line-height:1;display:block;}
-.stat-label{font-family:var(--vt);font-size:16px;color:var(--gray);letter-spacing:2px;margin-top:8px;display:block;text-transform:uppercase;}
+.project-row::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--f1),var(--f2),var(--f3),var(--f4)); opacity:0; transition:opacity .15s; }
+.project-row:hover { transform:translateX(5px); }
+.project-row:hover::before { opacity:1; }
+.project-row.feat { border-color:var(--f2); }
+.project-row.feat::before { opacity:1; }
 
-/* ═══════════════════════════════════════
-   PROJECTS
-═══════════════════════════════════════ */
-#projects{background:#060f1c;}
-.projects-area{padding:0 24px 24px;}
-.project-row{
-  display:grid;grid-template-columns:80px 1fr;
-  border:3px solid var(--yellow);margin-bottom:16px;background:#050e1c;
-  overflow:hidden;transition:transform .12s;position:relative;
+.proj-num-col {
+  background:linear-gradient(90deg,var(--gold),var(--gold2));
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:14px 6px; border-right:3px solid var(--gold); flex-shrink:0;
 }
-.project-row::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:3px;
-  background:linear-gradient(90deg,var(--fire1),var(--fire2),var(--fire3),var(--fire4));
-  opacity:0;transition:opacity .15s;
-}
-.project-row:hover{transform:translateX(5px);}
-.project-row:hover::before{opacity:1;}
-.project-row.featured{border-color:var(--fire2);}
-.project-row.featured::before{opacity:1;}
-.proj-num-col{
-  background:var(--yellow);display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  padding:14px 8px;border-right:3px solid var(--yellow);flex-shrink:0;
-}
-.proj-num-col.feat{background:var(--fire3);}
-.proj-jersey{font-family:var(--pixel);font-size:22px;color:#000;line-height:1;}
-.proj-type{font-family:var(--pixel);font-size:5px;color:#000;letter-spacing:1px;margin-top:5px;text-align:center;text-transform:uppercase;}
-.proj-content{padding:14px 18px;}
-.proj-name-row{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:7px;flex-wrap:wrap;}
-.proj-title{font-family:var(--pixel);font-size:clamp(7px,1.2vw,10px);color:var(--white);letter-spacing:1px;text-transform:uppercase;text-shadow:2px 2px 0 rgba(0,0,0,.5);}
-.proj-status{font-family:var(--vt);font-size:18px;letter-spacing:2px;}
-.proj-desc{font-family:var(--vt);font-size:18px;color:var(--gray);line-height:1.5;margin-bottom:10px;letter-spacing:.5px;}
-.proj-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;}
-.tag{font-family:var(--pixel);font-size:6px;color:var(--teal);border:2px solid var(--teal-dk);padding:3px 7px;background:rgba(0,232,200,.05);letter-spacing:1px;}
-.tag.fire{color:var(--fire3);border-color:var(--fire2);background:rgba(255,102,0,.05);}
-.proj-link{font-family:var(--pixel);font-size:6px;color:var(--teal);text-decoration:none;letter-spacing:2px;display:inline-flex;align-items:center;gap:5px;transition:color .1s;}
-.proj-link:hover{color:var(--yellow);}
-.proj-link.fire{color:var(--fire3);}
-.proj-link.fire:hover{color:var(--fire4);}
+.proj-num-col.feat { background:linear-gradient(90deg,var(--f2),var(--f3)); }
+.proj-jersey { font-family:var(--pixel); font-size:20px; color:#000; line-height:1; }
+.proj-type   { font-family:var(--pixel); font-size:5px; color:#000; letter-spacing:1px; margin-top:5px; text-align:center; text-transform:uppercase; }
+
+.proj-content { padding:14px 18px; }
+.proj-name-row { display:flex; align-items:baseline; justify-content:space-between; gap:10px; margin-bottom:6px; flex-wrap:wrap; }
+.proj-title    { font-family:var(--pixel); font-size:clamp(7px,1.1vw,9px); color:var(--white); letter-spacing:1px; text-transform:uppercase; }
+.proj-status   { font-family:var(--vt); font-size:18px; letter-spacing:2px; }
+.proj-desc     { font-family:var(--vt); font-size:18px; color:var(--gray); line-height:1.5; margin-bottom:10px; }
+.proj-tags     { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:10px; }
+.tag           { font-family:var(--pixel); font-size:6px; color:var(--teal); border:2px solid rgba(0,180,160,.4); padding:3px 7px; background:rgba(0,232,200,.04); letter-spacing:1px; }
+.tag.fire      { color:var(--f3); border-color:var(--f2); background:rgba(255,102,0,.05); }
+.proj-link     { font-family:var(--pixel); font-size:6px; color:var(--teal); text-decoration:none; letter-spacing:2px; transition:color .1s; display:inline-flex; align-items:center; gap:5px; }
+.proj-link:hover { color:var(--gold2); }
+.proj-link.fire  { color:var(--f3); }
+.proj-link.fire:hover { color:var(--f4); }
 
 /* GitHub feed */
-.gh-feed{margin:0 24px 24px;border:3px solid var(--teal);background:#050e1c;overflow:hidden;}
-.gh-hdr{background:var(--teal);padding:8px 14px;display:flex;align-items:center;justify-content:space-between;}
-.gh-hdr-txt{font-family:var(--pixel);font-size:7px;color:#000;letter-spacing:2px;}
-.gh-dot{width:8px;height:8px;background:var(--fire2);border-radius:50%;animation:ledblink 1s ease-in-out infinite;flex-shrink:0;}
-@keyframes ledblink{50%{opacity:.15;}}
-.gh-body{padding:8px 0;}
-.gh-row{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:12px;padding:8px 16px;border-bottom:1px solid rgba(0,232,200,.07);transition:background .1s;}
-.gh-row:last-child{border-bottom:none;}
-.gh-row:hover{background:rgba(0,232,200,.04);}
-.gh-name{font-family:var(--vt);font-size:19px;color:var(--teal);text-decoration:none;letter-spacing:1px;transition:color .1s;}
-.gh-name:hover{color:var(--yellow);}
-.gh-desc{font-family:var(--vt);font-size:15px;color:var(--gray);margin-top:2px;}
-.gh-lang{font-family:var(--pixel);font-size:6px;color:var(--fire3);border:2px solid var(--fire2);padding:2px 5px;white-space:nowrap;}
-.gh-stars{font-family:var(--vt);font-size:17px;color:var(--yellow);white-space:nowrap;}
-.gh-loading{font-family:var(--vt);font-size:19px;color:var(--teal);text-align:center;padding:18px;animation:coin-fade 1.4s ease-in-out infinite;}
+.gh-feed { margin:0 24px 24px; border:3px solid var(--teal); background:rgba(4,12,48,.95); overflow:hidden; }
+.gh-hdr  { background:var(--teal); padding:8px 14px; display:flex; align-items:center; justify-content:space-between; }
+.gh-hdr-txt { font-family:var(--pixel); font-size:7px; color:#000; letter-spacing:2px; }
+.gh-dot { width:8px; height:8px; background:var(--f2); border-radius:50%; animation:led 1s ease-in-out infinite; flex-shrink:0; }
+@keyframes led { 50%{opacity:.15;} }
+.gh-body { padding:6px 0; }
+.gh-row  { display:grid; grid-template-columns:1fr auto auto; align-items:center; gap:12px; padding:8px 16px; border-bottom:1px solid rgba(0,232,200,.07); transition:background .1s; }
+.gh-row:last-child { border-bottom:none; }
+.gh-row:hover { background:rgba(0,232,200,.04); }
+.gh-name  { font-family:var(--vt); font-size:19px; color:var(--teal); text-decoration:none; letter-spacing:1px; transition:color .1s; }
+.gh-name:hover { color:var(--gold2); }
+.gh-desc  { font-family:var(--vt); font-size:15px; color:var(--gray); margin-top:2px; }
+.gh-lang  { font-family:var(--pixel); font-size:6px; color:var(--f3); border:2px solid var(--f2); padding:2px 5px; white-space:nowrap; }
+.gh-stars { font-family:var(--vt); font-size:17px; color:var(--gold2); white-space:nowrap; }
+.gh-load  { font-family:var(--vt); font-size:19px; color:var(--teal); text-align:center; padding:18px; animation:pulse-fade 1.4s ease-in-out infinite; }
 
-/* ═══════════════════════════════════════
-   SKILLS
-═══════════════════════════════════════ */
-#skills{background:#07121f;}
-.skills-board{margin:0 24px 24px;border:3px solid var(--yellow);overflow:hidden;background:#050e1c;}
-.skills-thead{display:grid;grid-template-columns:2fr 1fr 140px 48px;background:#000;border-bottom:3px solid var(--yellow);padding:8px 14px;gap:10px;}
-.skills-thead div{font-family:var(--pixel);font-size:6px;color:var(--yellow);letter-spacing:2px;text-transform:uppercase;}
-.skills-thead div:last-child{text-align:right;}
-.skill-row{display:grid;grid-template-columns:2fr 1fr 140px 48px;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid rgba(255,224,0,.07);transition:background .1s;}
-.skill-row:last-child{border-bottom:none;}
-.skill-row:hover{background:rgba(255,224,0,.04);}
-.sk-name{font-family:var(--vt);font-size:22px;color:var(--white);letter-spacing:1px;text-transform:uppercase;}
-.sk-pos{font-family:var(--vt);font-size:17px;color:var(--gray);letter-spacing:1px;}
-.sk-bar-wrap{height:12px;background:#0a1a30;border:2px solid #1a3a60;overflow:hidden;}
-.sk-bar{height:100%;background:linear-gradient(90deg,var(--fire1),var(--fire2),var(--fire3),var(--fire4));width:0;transition:width 1.2s cubic-bezier(.2,.8,.3,1);position:relative;}
-.sk-bar::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0,transparent 8px,rgba(0,0,0,.3) 8px,rgba(0,0,0,.3) 9px);}
-.sk-rtg{font-family:var(--pixel);font-size:10px;color:var(--yellow);text-align:right;text-shadow:1px 1px 0 #664400;}
+/* ══════════════════════════════════════
+   SKILLS — blue panel, category blocks
+══════════════════════════════════════ */
+#skills { background:var(--blue2); }
+.skills-board { margin:0 24px 24px; border:3px solid var(--gold); overflow:hidden; }
+.skills-thead {
+  display:grid; grid-template-columns:36px 2fr 1fr 140px 44px;
+  background:linear-gradient(90deg,var(--blue3),var(--blue2));
+  border-bottom:3px solid var(--gold); padding:8px 14px; gap:10px;
+}
+.skills-thead span { font-family:var(--pixel); font-size:6px; color:var(--gold); letter-spacing:2px; text-transform:uppercase; }
+.skills-thead span:last-child { text-align:right; }
 
-/* ═══════════════════════════════════════
-   CONTACT — NBA JAM scoreboard style
-═══════════════════════════════════════ */
-#contact{background:#060f1c;border-bottom:var(--bw) solid var(--fire2);}
-.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;padding:0 24px 24px;}
+.skills-cat {
+  background:linear-gradient(90deg,var(--blue3),var(--blue2));
+  border-bottom:2px solid rgba(200,162,40,.3);
+  padding:6px 14px; margin-top:2px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.skills-cat-lbl { font-family:var(--pixel); font-size:6px; color:var(--gold); letter-spacing:3px; }
+.skills-cat-cnt { font-family:var(--vt); font-size:16px; color:rgba(200,162,40,.45); }
 
-.contact-heading{
-  font-family:var(--pixel);font-size:clamp(12px,2.5vw,16px);
-  line-height:1.9;text-transform:uppercase;margin-bottom:14px;
+.skill-row {
+  display:grid; grid-template-columns:36px 2fr 1fr 140px 44px;
+  align-items:center; gap:10px; padding:9px 14px;
+  border-bottom:1px solid rgba(200,162,40,.08);
+  background:linear-gradient(90deg,rgba(8,20,64,.7),rgba(4,12,40,.8));
+  transition:background .1s;
 }
-.contact-heading .l1{color:var(--white);display:block;text-shadow:2px 2px 0 rgba(0,0,0,.5);}
-.contact-heading .l2{
-  color:var(--fire3);display:block;
-  text-shadow:2px 2px 0 #660000,0 0 16px rgba(255,170,0,.4);
-  animation:flamepulse 2.5s ease-in-out infinite alternate;
-}
-@keyframes flamepulse{
-  from{text-shadow:2px 2px 0 #660000,0 0 16px rgba(255,170,0,.4);}
-  to{text-shadow:2px 2px 0 #880000,0 0 32px rgba(255,170,0,.9);}
-}
-.contact-sub{font-family:var(--vt);font-size:20px;color:var(--gray);line-height:1.5;letter-spacing:1px;margin-bottom:16px;}
-.contact-links{display:flex;flex-direction:column;gap:10px;}
-.contact-link{
-  display:flex;align-items:center;gap:14px;padding:12px 16px;background:#050e1c;
-  border:2px solid rgba(255,224,0,.18);text-decoration:none;
-  transition:border-color .1s,transform .1s;position:relative;overflow:hidden;
-}
-.contact-link::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--fire2),var(--fire4));opacity:0;transition:opacity .15s;}
-.contact-link:hover{border-color:var(--fire2);transform:translateX(7px);}
-.contact-link:hover::before{opacity:1;}
-.cl-icon{width:38px;height:38px;background:rgba(255,102,0,.08);border:2px solid rgba(255,102,0,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.cl-icon svg{width:18px;height:18px;fill:var(--fire3);}
-.cl-lbl{font-family:var(--pixel);font-size:6px;color:var(--gray);letter-spacing:2px;display:block;margin-bottom:3px;}
-.cl-val{font-family:var(--vt);font-size:19px;color:var(--white);letter-spacing:1px;}
-.cl-arrow{margin-left:auto;font-family:var(--pixel);font-size:9px;color:var(--fire3);opacity:0;transition:opacity .15s;}
-.contact-link:hover .cl-arrow{opacity:1;}
+.skill-row:last-child { border-bottom:none; }
+.skill-row:hover { background:rgba(200,162,40,.05); }
+.sk-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; border:1.5px solid rgba(255,255,255,.15); }
+.sk-name { font-family:var(--vt); font-size:22px; color:var(--white); letter-spacing:1px; text-transform:uppercase; }
+.sk-cat  { font-family:var(--vt); font-size:17px; color:var(--gray); letter-spacing:1px; }
+.sk-bar-wrap { height:12px; background:#050e1c; border:2px solid rgba(22,40,112,.8); overflow:hidden; }
+.sk-bar { height:100%; background:linear-gradient(90deg,var(--f1),var(--f2),var(--f3),var(--f4)); width:0; transition:width 1.2s cubic-bezier(.2,.8,.3,1); position:relative; }
+.sk-bar::after { content:''; position:absolute; inset:0; background:repeating-linear-gradient(90deg,transparent 0,transparent 8px,rgba(0,0,0,.28) 8px,rgba(0,0,0,.28) 9px); }
+.sk-rtg { font-family:var(--pixel); font-size:10px; color:var(--gold2); text-align:right; }
 
-/* TROPHY CARD — NBA JAM scoreboard, fully centred */
-.trophy-card{
-  background:linear-gradient(180deg,#0d2040 0%,#061020 100%);
-  border:3px solid var(--yellow);
-  padding:32px 24px;
-  text-align:center;
-  position:relative;overflow:hidden;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
+/* ══════════════════════════════════════
+   CONTACT
+══════════════════════════════════════ */
+#contact {
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,.06) 0, rgba(0,0,0,.06) 1px, transparent 1px, transparent 32px),
+    linear-gradient(180deg, #b87c18 0%, #9a6410 100%);
+  border-bottom:3px solid var(--f2);
 }
-.trophy-card::before{content:'';position:absolute;inset:8px;border:1px solid rgba(255,224,0,.12);pointer-events:none;}
+.contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; padding:0 24px 24px; }
 
-/* Fire bar at top of trophy card */
-.trophy-fire-bar{
-  position:absolute;top:0;left:0;right:0;height:5px;
-  background:linear-gradient(90deg,var(--fire1),var(--fire2),var(--fire3),var(--fire4),var(--fire3),var(--fire2),var(--fire1));
-  animation:fireshift 2s ease-in-out infinite alternate;
-}
+.contact-heading { font-family:var(--pixel); font-size:clamp(11px,2.2vw,16px); line-height:1.9; text-transform:uppercase; margin-bottom:14px; }
+.contact-heading .l1 { color:var(--white); display:block; text-shadow:2px 2px 0 rgba(0,0,0,.6); }
+.contact-heading .l2 { color:var(--f3); display:block; text-shadow:2px 2px 0 #660000, 0 0 16px rgba(255,170,0,.4); animation:flare2 2.5s ease-in-out infinite alternate; }
+@keyframes flare2 { from{text-shadow:2px 2px 0 #660000, 0 0 12px rgba(255,170,0,.3);} to{text-shadow:2px 2px 0 #880000, 0 0 28px rgba(255,170,0,.8);} }
 
-.trophy-badge{
-  font-family:var(--pixel);font-size:7px;
-  color:#000;background:var(--fire3);
-  padding:4px 14px;letter-spacing:3px;
-  text-transform:uppercase;
-  position:relative;z-index:1;
-}
+.contact-sub { font-family:var(--vt); font-size:20px; color:rgba(255,255,255,.7); line-height:1.5; letter-spacing:1px; margin-bottom:16px; text-shadow:1px 1px 0 rgba(0,0,0,.5); }
 
-.trophy-name{
-  font-family:var(--pixel);
-  font-size:clamp(14px,2.2vw,20px);
-  color:var(--yellow);
-  text-shadow:3px 3px 0 #664400,0 0 24px rgba(255,224,0,.7);
-  animation:flamepulse 2.5s ease-in-out infinite alternate;
-  line-height:1.7;letter-spacing:4px;text-transform:uppercase;
-  position:relative;z-index:1;
+.contact-links { display:flex; flex-direction:column; gap:8px; }
+.contact-link {
+  display:flex; align-items:center; gap:14px;
+  padding:12px 16px;
+  background:rgba(8,20,64,.92);
+  border:2px solid rgba(200,162,40,.25);
+  text-decoration:none;
+  transition:border-color .1s, transform .1s; position:relative; overflow:hidden;
 }
+.contact-link::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:linear-gradient(180deg,var(--f2),var(--f4)); opacity:0; transition:opacity .15s; }
+.contact-link:hover { border-color:var(--f2); transform:translateX(6px); }
+.contact-link:hover::before { opacity:1; }
+.cl-icon { width:36px; height:36px; background:rgba(255,102,0,.08); border:2px solid rgba(255,102,0,.2); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.cl-icon svg { width:18px; height:18px; fill:var(--f3); }
+.cl-lbl { font-family:var(--pixel); font-size:6px; color:var(--gray); letter-spacing:2px; display:block; margin-bottom:2px; }
+.cl-val { font-family:var(--vt); font-size:19px; color:var(--white); letter-spacing:1px; }
+.cl-arrow { margin-left:auto; font-family:var(--pixel); font-size:9px; color:var(--f3); opacity:0; transition:opacity .15s; }
+.contact-link:hover .cl-arrow { opacity:1; }
 
-.trophy-pos{
-  font-family:var(--vt);font-size:24px;
-  color:var(--teal);letter-spacing:5px;
-  text-shadow:1px 1px 0 var(--teal-dk);
-  position:relative;z-index:1;
+/* TROPHY / PLAYER CARD panel */
+.trophy-card {
+  background:linear-gradient(160deg, var(--blue3), var(--blue2));
+  border:3px solid var(--gold);
+  box-shadow:0 0 0 1px rgba(200,162,40,.15);
+  padding:28px 24px; text-align:center;
+  position:relative; overflow:hidden;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;
 }
+.trophy-card::before { content:''; position:absolute; inset:8px; border:1px solid rgba(200,162,40,.15); pointer-events:none; }
+.trophy-firebar { position:absolute; top:0; left:0; right:0; height:5px; background:linear-gradient(90deg,var(--f1),var(--f2),var(--f3),var(--f4),var(--f3),var(--f2),var(--f1)); animation:fireshift 2s ease-in-out infinite alternate; }
+.trophy-badge { font-family:var(--pixel); font-size:7px; color:#000; background:var(--f3); padding:4px 14px; letter-spacing:3px; position:relative; z-index:1; }
+.trophy-name  { font-family:var(--pixel); font-size:clamp(13px,1.9vw,18px); color:var(--gold2); text-shadow:2px 2px 0 #5a4000, 0 0 20px rgba(200,162,40,.6); animation:flare2 2.5s ease-in-out infinite alternate; line-height:1.7; letter-spacing:4px; text-transform:uppercase; position:relative; z-index:1; }
+.trophy-role  { font-family:var(--vt); font-size:22px; color:var(--teal); letter-spacing:5px; position:relative; z-index:1; }
+.trophy-divider { width:120px; height:3px; background:linear-gradient(90deg,transparent,var(--f2),var(--f4),var(--f2),transparent); position:relative; z-index:1; }
+.trophy-team  { font-family:var(--vt); font-size:18px; color:rgba(255,255,255,.5); letter-spacing:3px; text-transform:uppercase; position:relative; z-index:1; }
+.trophy-stats { display:flex; justify-content:center; gap:0; position:relative; z-index:1; border:3px solid var(--gold); overflow:hidden; }
+.trophy-stat  { text-align:center; padding:14px 18px; background:rgba(8,20,64,.9); border-right:3px solid var(--gold); }
+.trophy-stat:last-child { border-right:none; }
+.trophy-stat-val { font-family:var(--pixel); font-size:20px; color:var(--white); text-shadow:2px 2px 0 rgba(0,0,0,.5); display:block; line-height:1; }
+.trophy-stat-lbl { font-family:var(--pixel); font-size:5px; color:var(--gold); letter-spacing:2px; display:block; margin-top:7px; }
 
-.trophy-divider{
-  width:120px;height:3px;
-  background:linear-gradient(90deg,transparent,var(--fire2),var(--fire4),var(--fire2),transparent);
-  position:relative;z-index:1;
-}
-
-.trophy-team{
-  font-family:var(--vt);font-size:18px;color:var(--gray);
-  letter-spacing:3px;text-transform:uppercase;
-  position:relative;z-index:1;
-}
-
-.trophy-stats{
-  display:flex;justify-content:center;gap:0;
-  position:relative;z-index:1;
-  border:3px solid var(--yellow);
-  overflow:hidden;
-}
-.trophy-stat{
-  text-align:center;padding:14px 20px;
-  background:#050e1c;
-  border-right:3px solid var(--yellow);
-}
-.trophy-stat:last-child{border-right:none;}
-.trophy-stat-val{
-  font-family:var(--pixel);font-size:22px;color:var(--white);
-  text-shadow:2px 2px 0 rgba(0,0,0,.5);display:block;line-height:1;
-}
-.trophy-stat-lbl{
-  font-family:var(--pixel);font-size:5px;color:var(--teal);
-  letter-spacing:2px;display:block;margin-top:7px;
-}
-
-/* footer */
-footer{background:#020608;border-top:3px solid var(--teal);padding:16px 24px;text-align:center;}
-footer p{font-family:var(--pixel);font-size:6px;color:var(--gray);letter-spacing:2px;text-transform:uppercase;}
-footer span{color:var(--teal);}
+/* FOOTER */
+footer { background:var(--blue2); border-top:3px solid var(--teal); padding:16px 24px; text-align:center; }
+footer p { font-family:var(--pixel); font-size:6px; color:var(--gray); letter-spacing:2px; text-transform:uppercase; }
+footer span { color:var(--teal); }
 
 /* RESPONSIVE */
 @media(max-width:860px){
-  .select-screen{grid-template-columns:1fr;}
-  .skill-selector-panel,.proj-preview-panel{display:none;}
-  .stats-grid{grid-template-columns:repeat(3,1fr);}
-  .stat-cell:nth-child(4),.stat-cell:nth-child(5){border-top:3px solid var(--yellow);}
-  .contact-grid{grid-template-columns:1fr;}
-  .skills-thead div:nth-child(2),.skill-row>*:nth-child(2){display:none;}
-  .skills-thead{grid-template-columns:2fr 140px 48px;}
-  .skill-row{grid-template-columns:2fr 140px 48px;}
+  .hero { grid-template-columns:1fr; }
+  .side-panel { display:none; }
+  .stats-grid { grid-template-columns:repeat(3,1fr); }
+  .stat-cell:nth-child(4),.stat-cell:nth-child(5) { border-top:3px solid var(--gold); }
+  .contact-grid { grid-template-columns:1fr; }
+  .skills-thead,.skill-row { grid-template-columns:36px 2fr 120px 40px; }
+  .skills-thead span:nth-child(3),.skill-row .sk-cat { display:none; }
 }
 </style>
 </head>
 <body>
 
-<!-- LOADING SCREEN -->
+<!-- ══════════════════════════════════════
+     LOADING SCREEN — NBA JAM attract mode
+══════════════════════════════════════ -->
 <div id="loading-screen">
-  <div class="load-sky"></div>
-  <div class="load-court"></div>
+  <div class="load-col">
 
-  <div class="load-content">
-    <div class="load-logo-sub">BENYAMIN MAHAMED PRESENTS</div>
-    <div class="load-logo-main">PORTFOLIO<br>JAM</div>
-    <div class="load-logo-year">SEASON · 2026</div>
+    <!-- Blue badge logo -->
+    <div class="load-badge">
+      <div class="load-by">BENYAMIN MAHAMED PRESENTS</div>
+      <div class="load-title">PORTFOLIO<br>JAM</div>
+      <div class="load-season">SEASON · 2026</div>
+    </div>
 
+    <!-- Players with fire -->
     <div class="load-players">
       <div class="load-player p1">
-        <div class="sil-fire"><div class="sil-flame"></div><div class="sil-flame"></div><div class="sil-flame"></div></div>
+        <div class="sil-flames"><div class="sil-flame"></div><div class="sil-flame"></div><div class="sil-flame"></div></div>
         <div class="sil-head"></div><div class="sil-body"></div>
         <div class="sil-legs"><div class="sil-leg"></div><div class="sil-leg"></div></div>
       </div>
       <div class="load-player p2">
-        <div class="sil-fire"><div class="sil-flame"></div><div class="sil-flame"></div><div class="sil-flame"></div></div>
+        <div class="sil-flames"><div class="sil-flame"></div><div class="sil-flame"></div><div class="sil-flame"></div></div>
         <div class="sil-head"></div><div class="sil-body"></div>
         <div class="sil-legs"><div class="sil-leg"></div><div class="sil-leg"></div></div>
       </div>
     </div>
 
     <div class="load-bar-wrap"><div class="load-bar-fill"></div></div>
-    <div class="load-bar-label">LOADING...</div>
+    <div class="load-status">LOADING...</div>
 
-    <!-- Smooth glowing yellow button instead of jarring teal blink -->
-    <div class="load-press-start" id="press-start-btn">▶ PRESS START ◀</div>
+    <!-- PRESS START — gold panel, dead centre -->
+    <div class="load-press-panel">
+      <div class="load-press-start" id="press-start-btn">▶ PRESS START ◀</div>
+    </div>
     <div class="load-coin">INSERT COIN TO CONTINUE</div>
-  </div>
 
+  </div>
   <div class="load-copy">© 2026 BENYAMIN MAHAMED · ALL RIGHTS RESERVED</div>
 </div>
 
 <div id="flash"></div>
 
-<!-- MAIN PORTFOLIO -->
+<!-- ══════════════════════════════════════
+     MAIN PORTFOLIO
+══════════════════════════════════════ -->
 <div id="main-portfolio">
 
-<!-- TOP BAR -->
+<!-- SCOREBOARD TOP BAR -->
 <div class="top-bar">
-  <div class="top-bar-label">SOFTWARE DEV</div>
-  <div class="top-bar-center">
-    <div class="game-title">BENYAMIN MAHAMED</div>
-    <div class="game-subtitle">◀ SELECT YOUR PLAYER ▶</div>
+  <div class="top-bar-side">SOFTWARE DEV</div>
+  <div class="top-bar-centre">
+    <div class="top-bar-title">BENYAMIN MAHAMED</div>
+    <div class="top-bar-sub">◀ SELECT YOUR PLAYER ▶</div>
   </div>
-  <div class="top-bar-label right">LONDON, UK</div>
+  <div class="top-bar-side right">LONDON · UK</div>
 </div>
 
-<!-- SELECT SCREEN -->
-<div class="select-screen">
+<!-- HERO — 3 column: blue left | wood court | blue right -->
+<div class="hero">
 
-  <!-- LEFT -->
-  <div class="skill-selector-panel">
-    <div class="panel-header">SELECT SKILL</div>
-    <div class="skill-btn-list">
-      <div class="skill-btn" data-skill="python"><span class="skill-btn-name">PYTHON</span><span class="skill-btn-rtg">90</span></div>
-      <div class="skill-btn" data-skill="django"><span class="skill-btn-name">DJANGO</span><span class="skill-btn-rtg">82</span></div>
-      <div class="skill-btn" data-skill="opencv"><span class="skill-btn-name">OPENCV</span><span class="skill-btn-rtg">78</span></div>
-      <div class="skill-btn" data-skill="html"><span class="skill-btn-name">HTML/CSS</span><span class="skill-btn-rtg">80</span></div>
-      <div class="skill-btn" data-skill="sql"><span class="skill-btn-name">SQL</span><span class="skill-btn-rtg">72</span></div>
-      <div class="skill-btn" data-skill="git"><span class="skill-btn-name">GIT</span><span class="skill-btn-rtg">75</span></div>
-      <div class="skill-btn" data-skill="numpy"><span class="skill-btn-name">NUMPY</span><span class="skill-btn-rtg">74</span></div>
+  <!-- LEFT PANEL: language selector like WEST teams -->
+  <div class="side-panel left">
+    <div class="side-panel-header">SELECT LANGUAGE</div>
+    <div class="lang-list">
+      <div class="lang-btn" data-skill="python">     <div class="lang-dot" style="background:#3a9fd5"></div><span class="lang-name">PYTHON</span>    <span class="lang-rtg">90</span></div>
+      <div class="lang-btn" data-skill="django">     <div class="lang-dot" style="background:#44bb44"></div><span class="lang-name">DJANGO</span>    <span class="lang-rtg">82</span></div>
+      <div class="lang-btn" data-skill="javascript"> <div class="lang-dot" style="background:#e8cc00"></div><span class="lang-name">JS</span>        <span class="lang-rtg">70</span></div>
+      <div class="lang-btn" data-skill="html">       <div class="lang-dot" style="background:#e44d26"></div><span class="lang-name">HTML/CSS</span> <span class="lang-rtg">80</span></div>
+      <div class="lang-btn" data-skill="sql">        <div class="lang-dot" style="background:#aa66ff"></div><span class="lang-name">SQL</span>       <span class="lang-rtg">72</span></div>
+      <div class="lang-btn" data-skill="opencv">     <div class="lang-dot" style="background:#ff6600"></div><span class="lang-name">OPENCV</span>    <span class="lang-rtg">78</span></div>
+      <div class="lang-btn" data-skill="numpy">      <div class="lang-dot" style="background:#4ab8ff"></div><span class="lang-name">NUMPY</span>     <span class="lang-rtg">74</span></div>
+      <div class="lang-btn" data-skill="micropython"><div class="lang-dot" style="background:#00cc88"></div><span class="lang-name">µPYTHON</span>  <span class="lang-rtg">65</span></div>
+      <div class="lang-btn" data-skill="bash">       <div class="lang-dot" style="background:#888"></div>   <span class="lang-name">BASH</span>      <span class="lang-rtg">60</span></div>
+      <div class="lang-btn" data-skill="git">        <div class="lang-dot" style="background:#00e8c8"></div><span class="lang-name">GIT</span>       <span class="lang-rtg">75</span></div>
     </div>
-    <div class="panel-footer">CLICK A SKILL<br>TO SEE PROJECTS</div>
+    <div class="side-panel-footer">CLICK TO FILTER<br>PROJECTS</div>
   </div>
 
-  <!-- CENTER -->
-  <div class="center-panel">
+  <!-- CENTRE: wood court + player card -->
+  <div class="hero-court">
+
     <div class="player-card">
       <div class="card-fire-bar"></div>
-      <div class="card-portrait-area">
+      <div class="card-body">
+
+        <!-- SVG portrait -->
         <div class="portrait-box">
           <svg id="player-svg" viewBox="0 0 120 180" xmlns="http://www.w3.org/2000/svg">
-            <g>
-              <ellipse cx="60" cy="22" rx="14" ry="8" fill="#ff4400" opacity=".5">
-                <animate attributeName="ry" values="8;14;8" dur=".5s" repeatCount="indefinite"/>
-                <animate attributeName="opacity" values=".5;.2;.5" dur=".5s" repeatCount="indefinite"/>
-              </ellipse>
-              <ellipse cx="60" cy="18" rx="9" ry="6" fill="#ff8800" opacity=".7">
-                <animate attributeName="ry" values="6;11;6" dur=".4s" repeatCount="indefinite"/>
-              </ellipse>
-              <ellipse cx="60" cy="14" rx="5" ry="4" fill="#ffcc00" opacity=".9">
-                <animate attributeName="ry" values="4;8;4" dur=".35s" repeatCount="indefinite"/>
-              </ellipse>
-            </g>
+            <!-- Flames -->
+            <ellipse cx="60" cy="22" rx="14" ry="8" fill="#ff4400" opacity=".5"><animate attributeName="ry" values="8;14;8" dur=".5s" repeatCount="indefinite"/><animate attributeName="opacity" values=".5;.2;.5" dur=".5s" repeatCount="indefinite"/></ellipse>
+            <ellipse cx="60" cy="18" rx="9" ry="6" fill="#ff8800" opacity=".7"><animate attributeName="ry" values="6;11;6" dur=".4s" repeatCount="indefinite"/></ellipse>
+            <ellipse cx="60" cy="14" rx="5" ry="4" fill="#ffcc00" opacity=".9"><animate attributeName="ry" values="4;8;4" dur=".35s" repeatCount="indefinite"/></ellipse>
+            <!-- Head -->
             <circle cx="60" cy="42" r="22" fill="#c8824a"/>
             <ellipse cx="60" cy="22" rx="18" ry="10" fill="#1a1005"/>
-            <circle cx="52" cy="40" r="4" fill="#fff"/>
-            <circle cx="68" cy="40" r="4" fill="#fff"/>
-            <circle cx="53" cy="41" r="2.5" fill="#3a2010"/>
-            <circle cx="69" cy="41" r="2.5" fill="#3a2010"/>
+            <circle cx="52" cy="40" r="4" fill="#fff"/><circle cx="68" cy="40" r="4" fill="#fff"/>
+            <circle cx="53" cy="41" r="2.5" fill="#3a2010"/><circle cx="69" cy="41" r="2.5" fill="#3a2010"/>
             <path d="M52 52 Q60 58 68 52" stroke="#8b5520" stroke-width="2" fill="none" stroke-linecap="round"/>
             <path d="M48 36 Q52 33 56 36" stroke="#4a2a08" stroke-width="2" fill="none" stroke-linecap="round"/>
             <path d="M64 36 Q68 33 72 36" stroke="#4a2a08" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <!-- Jersey -->
             <rect x="28" y="64" width="64" height="62" rx="4" fill="var(--j1)"/>
-            <text x="60" y="101" font-family="'Press Start 2P', monospace" font-size="11" fill="var(--j2)" text-anchor="middle" font-weight="bold">BM</text>
+            <text x="60" y="101" font-family="'Press Start 2P',monospace" font-size="11" fill="var(--j2)" text-anchor="middle" font-weight="bold">BM</text>
             <rect x="28" y="64" width="16" height="62" fill="var(--j2)" opacity=".35"/>
             <rect x="76" y="64" width="16" height="62" fill="var(--j2)" opacity=".35"/>
             <path d="M46 64 Q60 74 74 64" fill="var(--j2)" opacity=".6"/>
+            <!-- Shorts -->
             <rect x="30" y="126" width="60" height="26" rx="3" fill="var(--j2)"/>
             <rect x="30" y="126" width="60" height="6" fill="var(--j1)" opacity=".5"/>
-            <rect x="12" y="66" width="18" height="40" rx="8" fill="var(--j1)"/>
-            <circle cx="21" cy="108" r="9" fill="#c8824a"/>
-            <rect x="90" y="66" width="18" height="40" rx="8" fill="var(--j1)"/>
-            <circle cx="99" cy="108" r="9" fill="#c8824a"/>
+            <!-- Arms -->
+            <rect x="12" y="66" width="18" height="40" rx="8" fill="var(--j1)"/><circle cx="21" cy="108" r="9" fill="#c8824a"/>
+            <rect x="90" y="66" width="18" height="40" rx="8" fill="var(--j1)"/><circle cx="99" cy="108" r="9" fill="#c8824a"/>
+            <!-- Legs & shoes -->
             <rect x="32" y="152" width="22" height="24" rx="5" fill="#1a1a2e"/>
             <rect x="66" y="152" width="22" height="24" rx="5" fill="#1a1a2e"/>
             <ellipse cx="43" cy="176" rx="14" ry="6" fill="#111"/>
             <ellipse cx="77" cy="176" rx="14" ry="6" fill="#111"/>
-            <path d="M36 173 L50 173" stroke="var(--fire3)" stroke-width="1.5" stroke-linecap="round"/>
-            <path d="M70 173 L84 173" stroke="var(--fire3)" stroke-width="1.5" stroke-linecap="round"/>
-            <circle cx="106" cy="104" r="12" fill="var(--fire2)"/>
+            <path d="M36 173 L50 173" stroke="#ffaa00" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M70 173 L84 173" stroke="#ffaa00" stroke-width="1.5" stroke-linecap="round"/>
+            <!-- Ball -->
+            <circle cx="106" cy="104" r="12" fill="#ff6600"/>
             <path d="M96 104 Q106 96 116 104" stroke="#8b2200" stroke-width="1.2" fill="none"/>
             <path d="M96 104 Q106 112 116 104" stroke="#8b2200" stroke-width="1.2" fill="none"/>
             <line x1="106" y1="92" x2="106" y2="116" stroke="#8b2200" stroke-width="1.2"/>
           </svg>
         </div>
-        <div class="portrait-stats">
-          <div class="pstat-label">PLAYER STATS</div>
-          <div class="pstat-row"><div class="pstat-lbl">SPEED</div><div class="pstat-bar-wrap"><div class="pstat-bar spd" style="width:85%"></div></div><div class="pstat-num">85</div></div>
-          <div class="pstat-row"><div class="pstat-lbl">3 PTS</div><div class="pstat-bar-wrap"><div class="pstat-bar pts" style="width:90%"></div></div><div class="pstat-num">90</div></div>
-          <div class="pstat-row"><div class="pstat-lbl">DUNKS</div><div class="pstat-bar-wrap"><div class="pstat-bar dunk" style="width:78%"></div></div><div class="pstat-num">78</div></div>
-          <div class="pstat-row"><div class="pstat-lbl">DEF</div><div class="pstat-bar-wrap"><div class="pstat-bar def" style="width:82%"></div></div><div class="pstat-num">82</div></div>
-          <div class="player-meta-box">
-            <div class="pmeta-row"><span>TEAM:</span> WESTMINSTER</div>
-            <div class="pmeta-row"><span>POS:</span> FULL STACK / AI</div>
-            <div class="pmeta-row"><span>FROM:</span> LONDON, UK</div>
+
+        <!-- DEV STATS strip -->
+        <div class="dev-stats">
+          <div class="dev-stats-title">DEV STATS</div>
+          <div class="dstat"><div class="dstat-lbl">PYTHON</div><div class="dstat-bar-wrap"><div class="dstat-bar py" style="width:90%"></div></div><div class="dstat-num">90</div></div>
+          <div class="dstat"><div class="dstat-lbl">DJANGO</div><div class="dstat-bar-wrap"><div class="dstat-bar dj" style="width:82%"></div></div><div class="dstat-num">82</div></div>
+          <div class="dstat"><div class="dstat-lbl">CV/ML</div><div class="dstat-bar-wrap"><div class="dstat-bar cv" style="width:78%"></div></div><div class="dstat-num">78</div></div>
+          <div class="dstat"><div class="dstat-lbl">HTML/JS</div><div class="dstat-bar-wrap"><div class="dstat-bar js" style="width:75%"></div></div><div class="dstat-num">75</div></div>
+          <div class="dstat"><div class="dstat-lbl">SQL/DB</div><div class="dstat-bar-wrap"><div class="dstat-bar db" style="width:72%"></div></div><div class="dstat-num">72</div></div>
+          <div class="dstat"><div class="dstat-lbl">GIT</div><div class="dstat-bar-wrap"><div class="dstat-bar gi" style="width:75%"></div></div><div class="dstat-num">75</div></div>
+          <div class="card-meta">
+            <div class="card-meta-row"><b>TEAM:</b> WESTMINSTER</div>
+            <div class="card-meta-row"><b>POS:</b> FULL STACK / AI</div>
+            <div class="card-meta-row"><b>FROM:</b> LONDON, UK</div>
           </div>
         </div>
       </div>
 
-      <!-- NBA JAM name plate — centred, impactful -->
-      <div class="player-namePlate">
-        <div class="player-big-name">BENYAMIN MAHAMED</div>
-        <div class="player-pos-row">
-          <div class="player-pos-txt">SOFTWARE DEVELOPER</div>
-          <div class="player-pos-sep">·</div>
-          <div class="player-pos-txt" style="color:var(--yellow);font-size:20px;">BSc COMP SCI</div>
-        </div>
+      <!-- Name plate -->
+      <div class="name-plate">
+        <div class="name-plate-name">BENYAMIN MAHAMED</div>
+        <div class="name-plate-role">SOFTWARE DEVELOPER</div>
+        <div class="name-plate-deg">BSc COMPUTER SCIENCE · 2026</div>
       </div>
     </div>
 
-    <div class="on-fire-badge">🔥 ON FIRE — SEEKING ROLES — AVAILABLE NOW 🔥</div>
+    <div class="on-fire">🔥 ON FIRE — SEEKING ROLES — AVAILABLE NOW 🔥</div>
 
+    <!-- Jersey customiser -->
     <div class="customiser">
-      <div class="customiser-hdr">
-        <span class="customiser-hdr-txt">🎨 CUSTOMISE JERSEY — PICK YOUR COLOURS</span>
-      </div>
+      <div class="customiser-hdr">🎨 CUSTOMISE JERSEY — PICK YOUR COLOURS</div>
       <div class="customiser-body">
-        <div class="colour-pick">
-          <div class="colour-pick-label">PRIMARY</div>
-          <div class="colour-swatches" id="swatches-1"></div>
-        </div>
-        <div class="colour-pick">
-          <div class="colour-pick-label">ACCENT</div>
-          <div class="colour-swatches" id="swatches-2"></div>
-        </div>
-        <button class="randomise-btn" id="random-btn">🎲 RANDOM</button>
+        <div class="colour-pick"><div class="colour-pick-lbl">PRIMARY</div><div class="swatches" id="swatches-1"></div></div>
+        <div class="colour-pick"><div class="colour-pick-lbl">ACCENT</div><div class="swatches" id="swatches-2"></div></div>
+        <button class="rand-btn" id="random-btn">🎲 RANDOM</button>
       </div>
     </div>
 
-    <div class="hero-cta">
-      <a href="#projects" class="btn-fire">▶ VIEW GAME TAPE</a>
-      <a href="#contact" class="btn-ghost">GET IN TOUCH ▶</a>
+    <div class="cta-row">
+      <a href="#projects" class="btn-gold">▶ VIEW GAME TAPE</a>
+      <a href="#contact" class="btn-outline">GET IN TOUCH ▶</a>
     </div>
   </div>
 
-  <!-- RIGHT -->
-  <div class="proj-preview-panel">
-    <div class="preview-header">
-      <span class="preview-header-txt">PROJECTS</span>
-      <span class="preview-skill-name" id="preview-skill-label">— SELECT SKILL —</span>
+  <!-- RIGHT PANEL: project preview like EAST teams -->
+  <div class="side-panel right">
+    <div class="side-panel-header">PROJECTS</div>
+    <div class="proj-list" id="proj-preview-list">
+      <div class="proj-list-empty">SELECT A<br>LANGUAGE<br>TO FILTER →</div>
     </div>
-    <div class="preview-list" id="proj-preview-list">
-      <div class="preview-empty">← CLICK A<br>SKILL TO SEE<br>MATCHING<br>PROJECTS</div>
-    </div>
-    <div class="preview-footer">CLICK PROJECT TO JUMP TO IT</div>
+    <div class="side-panel-footer" id="preview-skill-label">— SELECT LANG —</div>
   </div>
 
-</div>
+</div><!-- /hero -->
 
 <!-- TICKER -->
 <div class="ticker-wrap">
   <div class="ticker-chip"><span>HOT</span></div>
   <div class="ticker-inner">
-    <span class="tick"><span class="hi">BLUEPRINT BRIEF</span><span class="sep">▸</span>DJANGO · POSTGRESQL · LIVE PLATFORM</span>
-    <span class="tick"><span class="hi">DISSERTATION</span><span class="sep">▸</span>LANE DETECTION · OPENCV · RASPBERRY PI</span>
-    <span class="tick"><span class="hi">SKY TV PROJECT</span><span class="sep">▸</span>DJANGO · FULL STACK · GROUP PROJECT</span>
-    <span class="tick"><span class="hi">SKILLS</span><span class="sep">▸</span>PYTHON · DJANGO · OPENCV · POSTGRESQL · HTML/CSS</span>
-    <span class="tick"><span class="hi">BLUEPRINT BRIEF</span><span class="sep">▸</span>DJANGO · POSTGRESQL · LIVE PLATFORM</span>
-    <span class="tick"><span class="hi">DISSERTATION</span><span class="sep">▸</span>LANE DETECTION · OPENCV · RASPBERRY PI</span>
-    <span class="tick"><span class="hi">SKY TV PROJECT</span><span class="sep">▸</span>DJANGO · FULL STACK · GROUP PROJECT</span>
-    <span class="tick"><span class="hi">SKILLS</span><span class="sep">▸</span>PYTHON · DJANGO · OPENCV · POSTGRESQL · HTML/CSS</span>
+    <span class="tick"><span class="hi">BLUEPRINT BRIEF</span><span class="sep">▸</span>DJANGO · POSTGRESQL · LIVE</span>
+    <span class="tick"><span class="hi">DISSERTATION</span><span class="sep">▸</span>LANE DETECTION · OPENCV · PI 5</span>
+    <span class="tick"><span class="hi">SKY TV APP</span><span class="sep">▸</span>DJANGO · FULL STACK · GROUP PROJECT</span>
+    <span class="tick"><span class="hi">IOT DASHBOARD</span><span class="sep">▸</span>MICROPYTHON · PICO W · GOOGLE SHEETS</span>
+    <span class="tick"><span class="hi">LANGUAGES</span><span class="sep">▸</span>PYTHON · DJANGO · JS · SQL · OPENCV · MICROPYTHON · BASH</span>
+    <span class="tick"><span class="hi">BLUEPRINT BRIEF</span><span class="sep">▸</span>DJANGO · POSTGRESQL · LIVE</span>
+    <span class="tick"><span class="hi">DISSERTATION</span><span class="sep">▸</span>LANE DETECTION · OPENCV · PI 5</span>
+    <span class="tick"><span class="hi">SKY TV APP</span><span class="sep">▸</span>DJANGO · FULL STACK · GROUP PROJECT</span>
+    <span class="tick"><span class="hi">IOT DASHBOARD</span><span class="sep">▸</span>MICROPYTHON · PICO W · GOOGLE SHEETS</span>
+    <span class="tick"><span class="hi">LANGUAGES</span><span class="sep">▸</span>PYTHON · DJANGO · JS · SQL · OPENCV · MICROPYTHON · BASH</span>
   </div>
 </div>
 
-<!-- STATS -->
+<!-- 01 STATS -->
 <section id="stats">
-  <div class="sec-header reveal">
+  <div class="sec-hdr reveal">
     <div class="sec-num">01</div>
-    <div class="sec-title">PLAYER STATS</div>
-    <div class="sec-right">2026 SEASON</div>
+    <div class="sec-ttl">PLAYER STATS</div>
+    <div class="sec-side">2026 SEASON</div>
   </div>
   <div class="stats-grid reveal" style="transition-delay:.1s">
-    <div class="stat-cell"><span class="stat-abbr">PRJ</span><span class="stat-value">3</span><span class="stat-label">Projects Shipped</span></div>
-    <div class="stat-cell"><span class="stat-abbr">LNG</span><span class="stat-value">4+</span><span class="stat-label">Languages</span></div>
-    <div class="stat-cell"><span class="stat-abbr">FRW</span><span class="stat-value">2+</span><span class="stat-label">Frameworks</span></div>
-    <div class="stat-cell"><span class="stat-abbr">AI</span><span class="stat-value">1</span><span class="stat-label">Vision Projects</span></div>
-    <div class="stat-cell"><span class="stat-abbr">COL</span><span class="stat-value">∞</span><span class="stat-label">Teamwork</span></div>
+    <div class="stat-cell"><span class="stat-abbr">PRJ</span><span class="stat-value">5+</span><span class="stat-label">Projects Built</span></div>
+    <div class="stat-cell"><span class="stat-abbr">LNG</span><span class="stat-value">7+</span><span class="stat-label">Languages</span></div>
+    <div class="stat-cell"><span class="stat-abbr">FRW</span><span class="stat-value">3+</span><span class="stat-label">Frameworks</span></div>
+    <div class="stat-cell"><span class="stat-abbr">AI</span><span class="stat-value">2</span><span class="stat-label">AI/CV Projects</span></div>
+    <div class="stat-cell"><span class="stat-abbr">LIVE</span><span class="stat-value">1</span><span class="stat-label">Live Platforms</span></div>
   </div>
 </section>
 
-<!-- PROJECTS -->
+<!-- 02 PROJECTS -->
 <section id="projects">
-  <div class="sec-header reveal">
+  <div class="sec-hdr reveal">
     <div class="sec-num">02</div>
-    <div class="sec-title">GAME TAPE</div>
-    <div class="sec-right">3 PLAYS</div>
+    <div class="sec-ttl">GAME TAPE</div>
+    <div class="sec-side">4 PLAYS</div>
   </div>
-  <div class="projects-area">
-    <div class="project-row featured reveal" id="proj-01" style="transition-delay:.05s">
+  <div class="projects-inner">
+
+    <div class="project-row feat reveal" id="proj-01" style="transition-delay:.05s">
       <div class="proj-num-col feat"><div class="proj-jersey">01</div><div class="proj-type">LIVE<br>PLATFORM</div></div>
       <div class="proj-content">
-        <div class="proj-name-row">
-          <div class="proj-title">THE BLUEPRINT BRIEF</div>
-          <div class="proj-status" style="color:var(--fire3)">● LIVE NOW</div>
-        </div>
-        <div class="proj-desc">Co-founded student legal news platform. Articles, newsletters, team pages, full CMS workflow. Real users, real content, running right now.</div>
-        <div class="proj-tags"><span class="tag fire">DJANGO</span><span class="tag fire">POSTGRESQL</span><span class="tag fire">PYTHON</span><span class="tag fire">CO-FOUNDER</span></div>
+        <div class="proj-name-row"><div class="proj-title">THE BLUEPRINT BRIEF</div><div class="proj-status" style="color:var(--f3)">● LIVE NOW</div></div>
+        <div class="proj-desc">Co-founded student legal news platform. Articles, newsletters, team pages, full CMS workflow. Real users, real content.</div>
+        <div class="proj-tags"><span class="tag fire">DJANGO</span><span class="tag fire">POSTGRESQL</span><span class="tag fire">PYTHON</span><span class="tag fire">HTML/CSS</span><span class="tag fire">JAVASCRIPT</span></div>
         <a href="https://theblueprintbrief.com" target="_blank" class="proj-link fire">VISIT LIVE ▸</a>
       </div>
     </div>
+
     <div class="project-row reveal" id="proj-02" style="transition-delay:.1s">
       <div class="proj-num-col"><div class="proj-jersey">02</div><div class="proj-type">AI /<br>VISION</div></div>
       <div class="proj-content">
-        <div class="proj-name-row">
-          <div class="proj-title">AUTONOMOUS NAV SYSTEM</div>
-          <div class="proj-status" style="color:var(--teal)">DISSERTATION</div>
-        </div>
-        <div class="proj-desc">Real-time lane detection and obstacle avoidance on Raspberry Pi 5. Classical CV pipeline with edge detection, masking, and blob analysis.</div>
-        <div class="proj-tags"><span class="tag">PYTHON</span><span class="tag">OPENCV</span><span class="tag">NUMPY</span><span class="tag">RASPBERRY PI</span></div>
+        <div class="proj-name-row"><div class="proj-title">AUTONOMOUS NAV SYSTEM</div><div class="proj-status" style="color:var(--teal)">DISSERTATION</div></div>
+        <div class="proj-desc">Real-time lane detection and obstacle avoidance on Raspberry Pi 5. Classical CV pipeline — Canny, Hough, HSV masking.</div>
+        <div class="proj-tags"><span class="tag">PYTHON</span><span class="tag">OPENCV</span><span class="tag">NUMPY</span><span class="tag">BASH</span><span class="tag">GIT</span></div>
         <a href="https://github.com/BenyaminMahamed/FINALYEARPROJECT" target="_blank" class="proj-link">VIEW REPO ▸</a>
       </div>
     </div>
+
     <div class="project-row reveal" id="proj-03" style="transition-delay:.15s">
       <div class="proj-num-col"><div class="proj-jersey">03</div><div class="proj-type">FULL<br>STACK</div></div>
       <div class="proj-content">
-        <div class="proj-name-row">
-          <div class="proj-title">SKY TV VOTING APP</div>
-          <div class="proj-status" style="color:var(--teal)">GROUP PROJECT</div>
-        </div>
+        <div class="proj-name-row"><div class="proj-title">SKY TV VOTING APP</div><div class="proj-status" style="color:var(--teal)">GROUP PROJECT</div></div>
         <div class="proj-desc">Django web app with full voting workflow. Auth, profile management, sessions, portal dashboard and confirmation flows.</div>
-        <div class="proj-tags"><span class="tag">PYTHON</span><span class="tag">DJANGO</span><span class="tag">SQL</span><span class="tag">HTML/CSS</span></div>
+        <div class="proj-tags"><span class="tag">PYTHON</span><span class="tag">DJANGO</span><span class="tag">SQL</span><span class="tag">HTML/CSS</span><span class="tag">JAVASCRIPT</span></div>
         <a href="https://github.com/simonepietraroia/Sky-TV-Project" target="_blank" class="proj-link">VIEW REPO ▸</a>
       </div>
     </div>
+
+    <div class="project-row reveal" id="proj-04" style="transition-delay:.2s">
+      <div class="proj-num-col"><div class="proj-jersey">04</div><div class="proj-type">IOT /<br>EMBEDDED</div></div>
+      <div class="proj-content">
+        <div class="proj-name-row"><div class="proj-title">IOT SENSOR DASHBOARD</div><div class="proj-status" style="color:var(--teal)">COURSEWORK</div></div>
+        <div class="proj-desc">Raspberry Pi Pico W + BME280. Web dashboard, Google Sheets cloud logger, WiFi resilience, MicroPython interface.</div>
+        <div class="proj-tags"><span class="tag">MICROPYTHON</span><span class="tag">PYTHON</span><span class="tag">HTML/CSS</span><span class="tag">JAVASCRIPT</span><span class="tag">BASH</span></div>
+        <a href="https://github.com/BenyaminMahamed" target="_blank" class="proj-link">VIEW GITHUB ▸</a>
+      </div>
+    </div>
+
   </div>
-  <div class="gh-feed reveal" style="transition-delay:.2s">
+
+  <div class="gh-feed reveal" style="transition-delay:.25s">
     <div class="gh-hdr">
       <div class="gh-hdr-txt">LIVE GITHUB FEED — BenyaminMahamed</div>
       <div style="display:flex;align-items:center;gap:6px;"><div class="gh-dot"></div><span style="font-family:var(--pixel);font-size:5px;color:#000;letter-spacing:1px;">AUTO-UPDATES</span></div>
     </div>
-    <div class="gh-body" id="gh-repos"><div class="gh-loading">LOADING REPOS FROM GITHUB...</div></div>
+    <div class="gh-body" id="gh-repos"><div class="gh-load">LOADING REPOS...</div></div>
   </div>
 </section>
 
-<!-- SKILLS -->
+<!-- 03 SKILLS -->
 <section id="skills">
-  <div class="sec-header reveal">
+  <div class="sec-hdr reveal">
     <div class="sec-num">03</div>
-    <div class="sec-title">SCOUTING REPORT</div>
-    <div class="sec-right">RATINGS</div>
+    <div class="sec-ttl">SCOUTING REPORT</div>
+    <div class="sec-side">ALL LANGUAGES</div>
   </div>
   <div class="skills-board reveal" style="transition-delay:.05s">
     <div class="skills-thead">
-      <div>SKILL</div><div>POSITION</div><div>LEVEL</div><div style="text-align:right">RTG</div>
+      <span></span><span>LANGUAGE / TOOL</span><span>CATEGORY</span><span>PROFICIENCY</span><span style="text-align:right">RTG</span>
     </div>
-    <div class="skill-row"><div class="sk-name">PYTHON</div><div class="sk-pos">Primary Language</div><div class="sk-bar-wrap"><div class="sk-bar" data-pct="90"></div></div><div class="sk-rtg">90</div></div>
-    <div class="skill-row"><div class="sk-name">DJANGO</div><div class="sk-pos">Backend Framework</div><div class="sk-bar-wrap"><div class="sk-bar" data-pct="82"></div></div><div class="sk-rtg">82</div></div>
-    <div class="skill-row"><div class="sk-name">OPENCV</div><div class="sk-pos">Computer Vision</div><div class="sk-bar-wrap"><div class="sk-bar" data-pct="78"></div></div><div class="sk-rtg">78</div></div>
-    <div class="skill-row"><div class="sk-name">HTML / CSS</div><div class="sk-pos">Frontend</div><div class="sk-bar-wrap"><div class="sk-bar" data-pct="80"></div></div><div class="sk-rtg">80</div></div>
-    <div class="skill-row"><div class="sk-name">SQL / POSTGRESQL</div><div class="sk-pos">Database</div><div class="sk-bar-wrap"><div class="sk-bar" data-pct="72"></div></div><div class="sk-rtg">72</div></div>
-    <div class="skill-row"><div class="sk-name">GIT / GITHUB</div><div class="sk-pos">Version Control</div><div class="sk-bar-wrap"><div class="sk-bar" data-pct="75"></div></div><div class="sk-rtg">75</div></div>
+    <div class="skills-cat"><div class="skills-cat-lbl">BACKEND &amp; CORE</div><div class="skills-cat-cnt">3 SKILLS</div></div>
+    <div class="skill-row"><div class="sk-dot" style="background:#3a9fd5"></div><div class="sk-name">PYTHON</div>       <div class="sk-cat">Primary Lang</div>   <div class="sk-bar-wrap"><div class="sk-bar" data-pct="90"></div></div><div class="sk-rtg">90</div></div>
+    <div class="skill-row"><div class="sk-dot" style="background:#44bb44"></div><div class="sk-name">DJANGO</div>       <div class="sk-cat">Web Framework</div>  <div class="sk-bar-wrap"><div class="sk-bar" data-pct="82"></div></div><div class="sk-rtg">82</div></div>
+    <div class="skill-row"><div class="sk-dot" style="background:#aa66ff"></div><div class="sk-name">SQL / POSTGRESQL</div><div class="sk-cat">Database</div>     <div class="sk-bar-wrap"><div class="sk-bar" data-pct="72"></div></div><div class="sk-rtg">72</div></div>
+    <div class="skills-cat"><div class="skills-cat-lbl">FRONTEND</div><div class="skills-cat-cnt">2 SKILLS</div></div>
+    <div class="skill-row"><div class="sk-dot" style="background:#e44d26"></div><div class="sk-name">HTML / CSS</div>   <div class="sk-cat">Markup &amp; Style</div><div class="sk-bar-wrap"><div class="sk-bar" data-pct="80"></div></div><div class="sk-rtg">80</div></div>
+    <div class="skill-row"><div class="sk-dot" style="background:#e8cc00"></div><div class="sk-name">JAVASCRIPT</div>   <div class="sk-cat">Scripting</div>      <div class="sk-bar-wrap"><div class="sk-bar" data-pct="70"></div></div><div class="sk-rtg">70</div></div>
+    <div class="skills-cat"><div class="skills-cat-lbl">AI / COMPUTER VISION</div><div class="skills-cat-cnt">2 SKILLS</div></div>
+    <div class="skill-row"><div class="sk-dot" style="background:#ff6600"></div><div class="sk-name">OPENCV</div>       <div class="sk-cat">Computer Vision</div><div class="sk-bar-wrap"><div class="sk-bar" data-pct="78"></div></div><div class="sk-rtg">78</div></div>
+    <div class="skill-row"><div class="sk-dot" style="background:#4ab8ff"></div><div class="sk-name">NUMPY</div>        <div class="sk-cat">Scientific Python</div><div class="sk-bar-wrap"><div class="sk-bar" data-pct="74"></div></div><div class="sk-rtg">74</div></div>
+    <div class="skills-cat"><div class="skills-cat-lbl">EMBEDDED &amp; IoT</div><div class="skills-cat-cnt">1 SKILL</div></div>
+    <div class="skill-row"><div class="sk-dot" style="background:#00cc88"></div><div class="sk-name">MICROPYTHON</div>  <div class="sk-cat">Pico W / IoT</div>   <div class="sk-bar-wrap"><div class="sk-bar" data-pct="65"></div></div><div class="sk-rtg">65</div></div>
+    <div class="skills-cat"><div class="skills-cat-lbl">DEVOPS &amp; TOOLS</div><div class="skills-cat-cnt">2 SKILLS</div></div>
+    <div class="skill-row"><div class="sk-dot" style="background:#00e8c8"></div><div class="sk-name">GIT / GITHUB</div> <div class="sk-cat">Version Control</div><div class="sk-bar-wrap"><div class="sk-bar" data-pct="75"></div></div><div class="sk-rtg">75</div></div>
+    <div class="skill-row"><div class="sk-dot" style="background:#888"></div>   <div class="sk-name">BASH / LINUX</div> <div class="sk-cat">Shell Scripting</div><div class="sk-bar-wrap"><div class="sk-bar" data-pct="60"></div></div><div class="sk-rtg">60</div></div>
   </div>
 </section>
 
-<!-- CONTACT -->
+<!-- 04 CONTACT -->
 <section id="contact">
-  <div class="sec-header reveal">
+  <div class="sec-hdr reveal">
     <div class="sec-num">04</div>
-    <div class="sec-title">FREE AGENCY</div>
-    <div class="sec-right">OPEN</div>
+    <div class="sec-ttl">FREE AGENCY</div>
+    <div class="sec-side">OPEN</div>
   </div>
   <div class="contact-grid">
     <div class="reveal">
-      <div class="contact-heading">
-        <span class="l1">OPEN FOR</span>
-        <span class="l2">NEW OPPS.</span>
-      </div>
-      <div class="contact-sub">CS graduate in London. Experience across AI/ML, full-stack, and platform building. Let's talk.</div>
+      <div class="contact-heading"><span class="l1">OPEN FOR</span><span class="l2">NEW OPPS.</span></div>
+      <div class="contact-sub">CS graduate in London. AI/ML, full-stack, and platform building. Let's talk.</div>
       <div class="contact-links">
         <a href="https://github.com/BenyaminMahamed" target="_blank" class="contact-link">
           <div class="cl-icon"><svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg></div>
-          <div><span class="cl-lbl">GITHUB</span><span class="cl-val">BenyaminMahamed</span></div>
-          <span class="cl-arrow">▸</span>
+          <div><span class="cl-lbl">GITHUB</span><span class="cl-val">BenyaminMahamed</span></div><span class="cl-arrow">▸</span>
         </a>
         <a href="https://www.linkedin.com/in/benyamin-mahamed/" target="_blank" class="contact-link">
           <div class="cl-icon"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></div>
-          <div><span class="cl-lbl">LINKEDIN</span><span class="cl-val">benyamin-mahamed</span></div>
-          <span class="cl-arrow">▸</span>
+          <div><span class="cl-lbl">LINKEDIN</span><span class="cl-val">benyamin-mahamed</span></div><span class="cl-arrow">▸</span>
         </a>
         <a href="https://theblueprintbrief.com" target="_blank" class="contact-link">
-          <div class="cl-icon" style="font-size:18px;color:var(--fire3)">⚡</div>
-          <div><span class="cl-lbl">PLATFORM</span><span class="cl-val">theblueprintbrief.com</span></div>
-          <span class="cl-arrow">▸</span>
+          <div class="cl-icon" style="font-size:18px;color:var(--f3)">⚡</div>
+          <div><span class="cl-lbl">PLATFORM</span><span class="cl-val">theblueprintbrief.com</span></div><span class="cl-arrow">▸</span>
         </a>
       </div>
     </div>
 
-    <!-- TROPHY CARD — NBA JAM scoreboard style, fully centred -->
     <div class="trophy-card reveal" style="transition-delay:.15s">
-      <div class="trophy-fire-bar"></div>
+      <div class="trophy-firebar"></div>
       <div class="trophy-badge">🏆 PLAYER CARD</div>
       <div class="trophy-name">BENYAMIN<br>MAHAMED</div>
-      <div class="trophy-pos">FULL STACK · AI/ML</div>
+      <div class="trophy-role">FULL STACK · AI/ML</div>
       <div class="trophy-divider"></div>
       <div class="trophy-team">UNIVERSITY OF WESTMINSTER · LONDON</div>
       <div class="trophy-stats">
-        <div class="trophy-stat">
-          <span class="trophy-stat-val">3</span>
-          <span class="trophy-stat-lbl">PROJECTS</span>
-        </div>
-        <div class="trophy-stat">
-          <span class="trophy-stat-val">BSc</span>
-          <span class="trophy-stat-lbl">DEGREE</span>
-        </div>
-        <div class="trophy-stat">
-          <span class="trophy-stat-val">LDN</span>
-          <span class="trophy-stat-lbl">LOCATION</span>
-        </div>
+        <div class="trophy-stat"><span class="trophy-stat-val">5+</span><span class="trophy-stat-lbl">PROJECTS</span></div>
+        <div class="trophy-stat"><span class="trophy-stat-val">BSc</span><span class="trophy-stat-lbl">DEGREE</span></div>
+        <div class="trophy-stat"><span class="trophy-stat-val">LDN</span><span class="trophy-stat-lbl">LOCATION</span></div>
       </div>
     </div>
   </div>
@@ -1135,10 +1123,10 @@ footer span{color:var(--teal);}
   <p>BENYAMIN MAHAMED — <span>COMPUTER SCIENCE GRADUATE</span> — BUILT WITH CODE · LONDON, UK</p>
 </footer>
 
-</div>
+</div><!-- /main-portfolio -->
 
 <script>
-/* LOADING */
+/* ── LOADING TRANSITION ── */
 const loadScreen = document.getElementById('loading-screen');
 const mainPort   = document.getElementById('main-portfolio');
 const flashEl    = document.getElementById('flash');
@@ -1154,107 +1142,126 @@ function doTransition() {
 }
 startBtn.addEventListener('click', doTransition);
 document.addEventListener('keydown', e => {
-  if ((e.key === 'Enter' || e.key === ' ') && loadScreen.style.display !== 'none') doTransition();
+  if ((e.key==='Enter'||e.key===' ') && loadScreen.style.display !== 'none') doTransition();
 });
 
-/* JERSEY CUSTOMISER */
-const PALETTE = [
-  '#1a4a8a','#8b0000','#006400','#4b0082','#b8860b',
-  '#008080','#4a0e0e','#2c4a2c','#1a1a6e','#8b4513',
-  '#c41e3a','#2e8b57','#00008b','#8b008b','#ff6600',
-  '#ffffff','#000000','#f5f5dc','#ffd700','#e8e8e8',
-];
+/* ── JERSEY CUSTOMISER ── */
+const PALETTE = ['#1a4a8a','#8b0000','#006400','#4b0082','#b8860b','#008080','#4a0e0e','#2c4a2c','#1a1a6e','#8b4513','#c41e3a','#2e8b57','#00008b','#8b008b','#ff6600','#ffffff','#000000','#f5f5dc','#ffd700','#e8e8e8'];
 let j1='#1a4a8a', j2='#ffffff';
 function renderSwatches(id, cur, cb) {
   const el = document.getElementById(id);
-  el.innerHTML = PALETTE.map(c=>`<div class="swatch${c===cur?' selected':''}" style="background:${c}" data-colour="${c}"></div>`).join('');
-  el.querySelectorAll('.swatch').forEach(sw=>sw.addEventListener('click',()=>{
-    el.querySelectorAll('.swatch').forEach(s=>s.classList.remove('selected'));
-    sw.classList.add('selected');cb(sw.dataset.colour);
+  el.innerHTML = PALETTE.map(c=>`<div class="swatch${c===cur?' sel':''}" style="background:${c}" data-c="${c}"></div>`).join('');
+  el.querySelectorAll('.swatch').forEach(sw => sw.addEventListener('click', () => {
+    el.querySelectorAll('.swatch').forEach(s=>s.classList.remove('sel'));
+    sw.classList.add('sel'); cb(sw.dataset.c);
   }));
 }
-function applyJersey(){
-  document.documentElement.style.setProperty('--j1',j1);
-  document.documentElement.style.setProperty('--j2',j2);
+function applyJersey() {
+  document.documentElement.style.setProperty('--j1', j1);
+  document.documentElement.style.setProperty('--j2', j2);
 }
-renderSwatches('swatches-1',j1,c=>{j1=c;applyJersey();});
-renderSwatches('swatches-2',j2,c=>{j2=c;applyJersey();});
-document.getElementById('random-btn').addEventListener('click',()=>{
-  const p=PALETTE;
-  j1=p[Math.floor(Math.random()*p.length)];
-  j2=p[Math.floor(Math.random()*p.length)];
+renderSwatches('swatches-1', j1, c=>{j1=c;applyJersey();});
+renderSwatches('swatches-2', j2, c=>{j2=c;applyJersey();});
+document.getElementById('random-btn').addEventListener('click', () => {
+  j1 = PALETTE[Math.floor(Math.random()*PALETTE.length)];
+  j2 = PALETTE[Math.floor(Math.random()*PALETTE.length)];
   applyJersey();
-  renderSwatches('swatches-1',j1,c=>{j1=c;applyJersey();});
-  renderSwatches('swatches-2',j2,c=>{j2=c;applyJersey();});
+  renderSwatches('swatches-1', j1, c=>{j1=c;applyJersey();});
+  renderSwatches('swatches-2', j2, c=>{j2=c;applyJersey();});
 });
 
-/* SKILL FILTER */
-const PROJECTS=[
-  {id:'proj-01',num:'01',title:'THE BLUEPRINT BRIEF',featured:true,tags:['django','python','postgresql','sql','html','git']},
-  {id:'proj-02',num:'02',title:'AUTONOMOUS NAV SYSTEM',tags:['python','opencv','numpy','git']},
-  {id:'proj-03',num:'03',title:'SKY TV VOTING APP',tags:['python','django','sql','html','git']},
+/* ── PROJECTS DATA ── */
+const PROJECTS = [
+  { id:'proj-01', num:'01', title:'THE BLUEPRINT BRIEF', featured:true,
+    tags:['python','django','sql','html','javascript','git'] },
+  { id:'proj-02', num:'02', title:'AUTONOMOUS NAV SYSTEM',
+    tags:['python','opencv','numpy','bash','git'] },
+  { id:'proj-03', num:'03', title:'SKY TV VOTING APP',
+    tags:['python','django','sql','html','javascript','git'] },
+  { id:'proj-04', num:'04', title:'IOT SENSOR DASHBOARD',
+    tags:['micropython','python','html','javascript','bash'] },
 ];
-const previewList=document.getElementById('proj-preview-list');
-const previewLabel=document.getElementById('preview-skill-label');
-function showSkillProjects(skill,label){
-  const matches=PROJECTS.filter(p=>p.tags.includes(skill));
-  previewLabel.textContent=label.toUpperCase();
-  if(!matches.length){previewList.innerHTML=`<div class="preview-empty">NO PROJECTS<br>FOR ${label.toUpperCase()}<br>YET</div>`;return;}
-  previewList.innerHTML=matches.map(p=>`
-    <a class="proj-mini" href="#${p.id}">
-      <div class="proj-mini-num">#${p.num}${p.featured?' 🔥':''}</div>
-      <div class="proj-mini-title">${p.title}</div>
-      <div class="proj-mini-tags">${p.tags.map(t=>`<span class="mini-tag${t===skill?' match':''}">${t.toUpperCase()}</span>`).join('')}</div>
+
+const previewList  = document.getElementById('proj-preview-list');
+const previewLabel = document.getElementById('preview-skill-label');
+
+function showProjects(skill, label) {
+  previewLabel.textContent = label.toUpperCase();
+  const matches = PROJECTS.filter(p => p.tags.includes(skill));
+  if (!matches.length) { previewList.innerHTML=`<div class="proj-list-empty">NO MATCHES<br>FOR ${label.toUpperCase()}</div>`; return; }
+  previewList.innerHTML = matches.map(p=>`
+    <a class="proj-card" href="#${p.id}">
+      <div class="proj-card-num">#${p.num}${p.featured?' 🔥':''}</div>
+      <div class="proj-card-title">${p.title}</div>
+      <div class="proj-card-tags">${p.tags.map(t=>`<span class="pct${t===skill?' match':''}">${t.toUpperCase()}</span>`).join('')}</div>
     </a>`).join('');
 }
-function applyProjectFade(skill){
-  document.querySelectorAll('.project-row').forEach(row=>{
-    const tags=[...row.querySelectorAll('.tag')].map(t=>t.textContent.toLowerCase().trim());
-    const match=!skill||tags.some(t=>t.includes(skill));
-    row.style.opacity=match?'1':'0.3';row.style.transition='opacity .3s';
+
+function fadeProjects(skill) {
+  document.querySelectorAll('.project-row').forEach(row => {
+    const tags = [...row.querySelectorAll('.tag')].map(t=>t.textContent.toLowerCase().replace(/\//g,'').trim());
+    const ok = !skill || tags.some(t => t.includes(skill));
+    row.style.opacity    = ok ? '1' : '0.2';
+    row.style.transition = 'opacity .3s';
   });
 }
-document.querySelectorAll('.skill-btn').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    const wasActive=btn.classList.contains('active');
-    document.querySelectorAll('.skill-btn').forEach(b=>b.classList.remove('active'));
-    if(!wasActive){
+
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const wasActive = btn.classList.contains('active');
+    document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+    if (!wasActive) {
       btn.classList.add('active');
-      showSkillProjects(btn.dataset.skill,btn.querySelector('.skill-btn-name').textContent);
-      applyProjectFade(btn.dataset.skill);
+      const skill = btn.dataset.skill;
+      showProjects(skill, btn.querySelector('.lang-name').textContent);
+      fadeProjects(skill);
     } else {
-      previewLabel.textContent='— SELECT SKILL —';
-      previewList.innerHTML='<div class="preview-empty">← CLICK A<br>SKILL TO SEE<br>MATCHING<br>PROJECTS</div>';
-      applyProjectFade(null);
+      previewLabel.textContent = '— SELECT LANG —';
+      previewList.innerHTML = '<div class="proj-list-empty">SELECT A<br>LANGUAGE<br>TO FILTER →</div>';
+      fadeProjects(null);
     }
   });
 });
 
-/* SCROLL REVEAL */
-const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:.07});
+/* ── SCROLL REVEAL ── */
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold:.07 });
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 
-/* SKILL BARS */
-const barObs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.querySelectorAll('.sk-bar').forEach(b=>{b.style.width=b.dataset.pct+'%';});});},{threshold:.3});
-const sb=document.querySelector('.skills-board');if(sb)barObs.observe(sb);
+/* ── SKILL BARS ── */
+const barObs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if (e.isIntersecting)
+      e.target.querySelectorAll('.sk-bar').forEach(b=>{ b.style.width=b.dataset.pct+'%'; });
+  });
+}, { threshold:.2 });
+const sb = document.querySelector('.skills-board');
+if (sb) barObs.observe(sb);
 
-/* GITHUB */
-async function loadGithubRepos(){
-  const container=document.getElementById('gh-repos');
-  try{
-    const res=await fetch('https://api.github.com/users/BenyaminMahamed/repos?sort=updated&per_page=6',{headers:{'Accept':'application/vnd.github.v3+json'}});
-    if(!res.ok)throw new Error();
-    const repos=await res.json();
-    if(!repos.length){container.innerHTML='<div class="gh-loading">NO PUBLIC REPOS</div>';return;}
-    container.innerHTML=repos.map(r=>`
+/* ── GITHUB FEED ── */
+async function loadGithub() {
+  const container = document.getElementById('gh-repos');
+  try {
+    const res  = await fetch('https://api.github.com/users/BenyaminMahamed/repos?sort=updated&per_page=6',
+      { headers:{ 'Accept':'application/vnd.github.v3+json' } });
+    if (!res.ok) throw new Error();
+    const repos = await res.json();
+    if (!repos.length) { container.innerHTML='<div class="gh-load">NO PUBLIC REPOS</div>'; return; }
+    container.innerHTML = repos.map(r=>`
       <div class="gh-row">
-        <div><a href="${r.html_url}" target="_blank" class="gh-name">${r.name.toUpperCase()}</a><div class="gh-desc">${r.description?r.description.slice(0,58)+(r.description.length>58?'…':''):'No description'}</div></div>
+        <div>
+          <a href="${r.html_url}" target="_blank" class="gh-name">${r.name.toUpperCase()}</a>
+          <div class="gh-desc">${r.description ? r.description.slice(0,55)+(r.description.length>55?'…':'') : 'No description'}</div>
+        </div>
         <div class="gh-lang">${r.language||'N/A'}</div>
         <div class="gh-stars">★ ${r.stargazers_count}</div>
       </div>`).join('');
-  }catch{container.innerHTML=`<div class="gh-loading" style="animation:none;color:var(--fire2)">COULD NOT LOAD — VISIT GITHUB.COM/BENYAMINMAHAMED</div>`;}
+  } catch {
+    container.innerHTML=`<div class="gh-load" style="animation:none;color:var(--f2)">COULD NOT LOAD — VISIT GITHUB.COM/BENYAMINMAHAMED</div>`;
+  }
 }
-loadGithubRepos();
+loadGithub();
 </script>
 </body>
 </html>
