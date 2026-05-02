@@ -180,23 +180,28 @@ body::after{
 /* ── TITLE BLOCK ── */
 .cab-presents{
   font-family:var(--px);font-size:clamp(5px,.8vw,7px);
-  color:var(--teal);letter-spacing:6px;
+  color:var(--teal);letter-spacing:6px;text-align:center;
   animation:tglow 2s ease-in-out infinite alternate, sub-rise .6s ease-out .2s both;
-  position:relative;z-index:1;
+  position:relative;z-index:1;width:100%;
+}
+.cab-title-row{
+  display:flex;align-items:flex-start;justify-content:center;
+  gap:6px;position:relative;z-index:1;width:100%;
 }
 .cab-title{
   font-family:var(--px);font-size:clamp(26px,5.5vw,52px);
   line-height:1.25;letter-spacing:2px;text-transform:uppercase;
+  text-align:center;
   display:block;position:relative;z-index:1;
   background:linear-gradient(180deg,#fff 0%,#fff 8%,#ffe800 20%,#ff8800 46%,#ff2200 70%,#880000 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
   filter:drop-shadow(4px 4px 0 #000) drop-shadow(-2px -1px 0 #000) drop-shadow(0 0 20px rgba(255,80,0,.7));
   animation:fblaze 2s ease-in-out infinite alternate, title-slam .5s cubic-bezier(.2,1.4,.4,1) .05s both;
 }
-.cab-title-row{display:flex;align-items:center;justify-content:center;gap:10px;position:relative;z-index:1;}
-.cab-tm{font-family:var(--px);font-size:7px;color:var(--gold-hi);align-self:flex-start;margin-top:6px;}
+.cab-tm{font-family:var(--px);font-size:7px;color:var(--gold-hi);margin-top:8px;flex-shrink:0;}
 .cab-season{
   font-family:var(--px);font-size:clamp(5px,.75vw,7px);color:var(--gold);letter-spacing:8px;
+  text-align:center;width:100%;
   animation:sub-rise .5s ease-out .35s both;position:relative;z-index:1;
 }
 
@@ -352,10 +357,23 @@ body::after{
 .hero-hdr-sub{font-family:var(--vt);font-size:19px;color:var(--teal);letter-spacing:3px;}
 
 /* Select grid */
-.select-grid{display:grid;grid-template-columns:1fr 1fr;border-bottom:3px solid var(--gold);background:var(--content-bg);}
+.select-grid{display:grid;grid-template-columns:28px 1fr 28px 1fr;border-bottom:3px solid var(--gold);background:var(--content-bg);}
+.select-col-label{
+  display:flex;align-items:center;justify-content:center;
+  padding:10px 0;
+  border-right:2px solid rgba(200,162,40,.2);
+  background:rgba(0,0,0,.3);
+}
+.select-col-label span{
+  font-family:var(--px);font-size:6px;color:var(--gold);
+  letter-spacing:4px;line-height:1.6;
+  writing-mode:vertical-lr;
+  text-transform:uppercase;
+  filter:drop-shadow(1px 1px 0 rgba(0,0,0,.8));
+}
+.select-col-label.proj-lbl-col span{color:var(--purple);}
 .select-col{padding:10px 14px;border-right:2px solid rgba(200,162,40,.15);}
 .select-col:last-child{border-right:none;}
-.select-col-hdr{font-family:var(--px);font-size:6px;color:rgba(200,162,40,.5);letter-spacing:3px;padding-bottom:5px;margin-bottom:5px;border-bottom:1px solid rgba(200,162,40,.12);}
 .select-item{font-family:var(--vt);font-size:clamp(17px,2vw,21px);letter-spacing:1px;text-transform:uppercase;line-height:1.3;padding:2px 0;cursor:pointer;transition:color .1s,background .1s,padding-left .1s;display:flex;align-items:center;gap:8px;}
 .select-col.lang .select-item{color:#eec800;}
 .select-col.lang .select-item:hover,.select-col.lang .select-item.active{color:#fff;background:rgba(238,200,0,.08);padding-left:6px;}
@@ -373,9 +391,16 @@ body::after{
 .pc-banner.dark{background:#1a0a3a;border-bottom:2px solid var(--purple);}
 .pc-banner.red{background:#2a0808;border-bottom:2px solid var(--fire-o);}
 .pc-banner-name{font-family:var(--px);font-size:6px;color:#fff;letter-spacing:1px;}
-.pc-portrait{display:flex;align-items:center;justify-content:center;padding:6px 4px 3px;position:relative;background:linear-gradient(180deg,#0c1a50,#060e28);}
+/* Portrait — tighter padding, larger SVG, no wasted space */
+.pc-portrait{
+  display:flex;align-items:center;justify-content:center;
+  padding:10px 4px 8px;
+  position:relative;
+  background:linear-gradient(180deg,#0c1a50,#060e28);
+  flex:1;
+}
 .pc-portrait.blue-border{box-shadow:inset 0 0 0 3px var(--team-blue);}
-#player-svg{width:82px;height:124px;overflow:visible;}
+#player-svg{width:110px;height:162px;overflow:visible;}
 
 /* Stats grid below portrait — fixed font size */
 .pc-stats{background:#060610;border-top:2px solid var(--gold);padding:6px 10px;display:grid;grid-template-columns:1fr 1fr;gap:2px 6px;}
@@ -384,7 +409,7 @@ body::after{
 
 /* Customise panel */
 .custom-panel{display:flex;flex-direction:column;background:#06060e;}
-.custom-inner{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 10px;gap:6px;}
+.custom-inner{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 10px;gap:7px;}
 .custom-ttl{font-family:var(--px);font-size:6px;color:var(--teal);letter-spacing:2px;}
 .sw-lbl{font-family:var(--px);font-size:5px;color:var(--gray);letter-spacing:1px;margin-top:2px;}
 .sw-row{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;}
@@ -394,7 +419,7 @@ body::after{
 .rand-btn:hover{filter:brightness(1.15);}
 
 /* CTA panel */
-.cta-panel-inner{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px;gap:8px;background:linear-gradient(180deg,var(--blue-mid),var(--black));}
+.cta-panel-inner{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 12px;gap:10px;background:linear-gradient(180deg,var(--blue-mid),var(--black));}
 .cta-ps{width:100%;border:3px solid var(--gold);box-shadow:0 0 0 2px #000,0 0 0 4px var(--gold-dk);padding:3px;}
 .cta-ps-btn{font-family:var(--px);font-size:clamp(6px,.9vw,9px);color:#000;background:linear-gradient(180deg,var(--gold-hi),var(--gold));border:2px solid var(--gold-dk);box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 3px 0 var(--gold-dk);padding:9px 0;width:100%;text-align:center;letter-spacing:3px;text-transform:uppercase;cursor:pointer;display:block;animation:psglow 1.8s ease-in-out infinite;transition:transform .1s;text-decoration:none;}
 .cta-ps-btn:hover{transform:translateY(-1px);}
@@ -565,8 +590,8 @@ footer span{color:var(--teal);}
   .contact-grid{grid-template-columns:1fr;}
   .skills-thead,.skill-row{grid-template-columns:18px 2fr 100px 32px;}
   .skills-thead span:nth-child(3),.skill-row .sk-cat{display:none;}
-  .select-grid{grid-template-columns:1fr;}
-  .select-col.proj{display:none;}
+  .select-grid{grid-template-columns:28px 1fr;}
+  .select-col-label.proj-lbl-col,.select-col.proj{display:none;}
 }
 @media(max-width:520px){
   .player-row{grid-template-columns:1fr;}
@@ -750,9 +775,12 @@ footer span{color:var(--teal);}
     </div>
 
     <div class="select-grid">
-      <!-- Language column — data-skill values match tag text exactly -->
+      <!-- Vertical LANGUAGE label -->
+      <div class="select-col-label">
+        <span>L<br>A<br>N<br>G<br>U<br>A<br>G<br>E</span>
+      </div>
+      <!-- Language column -->
       <div class="select-col lang">
-        <div class="select-col-hdr">SELECT LANGUAGE</div>
         <div class="select-item lang-btn" data-skill="python">    <div class="cli-dot" style="background:#3a9fd5"></div>PYTHON</div>
         <div class="select-item lang-btn" data-skill="django">    <div class="cli-dot" style="background:#44bb44"></div>DJANGO</div>
         <div class="select-item lang-btn" data-skill="javascript"><div class="cli-dot" style="background:#e8cc00"></div>JAVASCRIPT</div>
@@ -764,16 +792,14 @@ footer span{color:var(--teal);}
         <div class="select-item lang-btn" data-skill="bash">      <div class="cli-dot" style="background:#888"></div>BASH</div>
         <div class="select-item lang-btn" data-skill="git">       <div class="cli-dot" style="background:#00e8c8"></div>GIT</div>
       </div>
+      <!-- Vertical PROJECTS label -->
+      <div class="select-col-label proj-lbl-col" style="border-left:2px solid rgba(200,162,40,.2);">
+        <span>P<br>R<br>O<br>J<br>E<br>C<br>T<br>S</span>
+      </div>
       <!-- Project column -->
       <div class="select-col proj">
-        <div class="select-col-hdr" id="proj-hdr">ALL PROJECTS</div>
-        <div id="proj-list">
-          <div class="select-item" style="color:rgba(200,162,40,.3);font-size:17px;">← SELECT LANGUAGE</div>
-          <div class="select-item feat">🔥 BLUEPRINT BRIEF</div>
-          <div class="select-item">AUTONOMOUS NAV</div>
-          <div class="select-item">SKY TV VOTING APP</div>
-          <div class="select-item">IOT DASHBOARD</div>
-        </div>
+        <div class="select-col-hdr" id="proj-hdr" style="font-family:var(--px);font-size:6px;color:rgba(200,162,40,.4);letter-spacing:2px;padding-bottom:5px;margin-bottom:5px;border-bottom:1px solid rgba(200,162,40,.12);">ALL PROJECTS</div>
+        <div id="proj-list"></div>
       </div>
     </div>
 
@@ -1154,7 +1180,7 @@ document.getElementById('rand-btn').addEventListener('click', () => {
   mkSw('sw2', j2, c => { j2 = c; applyJ(); });
 });
 
-/* ── Language filter — tags now match data-skill values exactly ── */
+/* ── Language filter ── */
 const PROJS = [
   { id: 'proj-01', title: '🔥 BLUEPRINT BRIEF', feat: true,  tags: ['python','django','sql','html/css','javascript','git'] },
   { id: 'proj-02', title: 'AUTONOMOUS NAV',     feat: false, tags: ['python','opencv','numpy','bash','git'] },
@@ -1164,29 +1190,28 @@ const PROJS = [
 const projList = document.getElementById('proj-list');
 const projHdr  = document.getElementById('proj-hdr');
 
-function renderProj(skill) {
+function applyFilter(skill) {
+  // 1. Update the right-column project list
   projHdr.textContent = skill ? skill.toUpperCase() + ' PROJECTS' : 'ALL PROJECTS';
   const matched = skill ? PROJS.filter(p => p.tags.includes(skill)) : PROJS;
-  if (!matched.length) {
-    projList.innerHTML = '<div class="select-item" style="color:rgba(200,162,40,.3);font-size:17px;">NO MATCHES</div>';
-    return;
-  }
-  projList.innerHTML = matched.map(p =>
-    `<a class="select-item${p.feat ? ' feat' : ''}" href="#${p.id}" style="text-decoration:none;">${p.title}</a>`
-  ).join('');
-}
-renderProj(null);
+  projList.innerHTML = matched.length
+    ? matched.map(p =>
+        `<a class="select-item${p.feat ? ' feat' : ''}" href="#${p.id}" style="text-decoration:none;">${p.title}</a>`
+      ).join('')
+    : '<div class="select-item" style="color:rgba(200,162,40,.3);font-size:17px;">NO MATCHES</div>';
 
-function fadeProj(skill) {
+  // 2. Fade project rows — compare against PROJS data, not DOM text
   document.querySelectorAll('.project-row').forEach(row => {
-    const tags = [...row.querySelectorAll('.tag')].map(t =>
-      t.textContent.trim().toLowerCase()
-    );
-    const ok = !skill || tags.some(t => t === skill || t.replace(/\s*\/\s*/g,'/') === skill);
-    row.style.opacity  = ok ? '1' : '0.18';
+    const id   = row.id; // e.g. "proj-01"
+    const proj = PROJS.find(p => p.id === id);
+    const ok   = !skill || (proj && proj.tags.includes(skill));
     row.style.transition = 'opacity .3s';
+    row.style.opacity    = ok ? '1' : '0.15';
   });
 }
+
+// Initialise with no filter
+applyFilter(null);
 
 document.querySelectorAll('.lang-btn').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -1194,11 +1219,9 @@ document.querySelectorAll('.lang-btn').forEach(btn => {
     document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
     if (!was) {
       btn.classList.add('active');
-      renderProj(btn.dataset.skill);
-      fadeProj(btn.dataset.skill);
+      applyFilter(btn.dataset.skill); // data-skill is already lowercase
     } else {
-      renderProj(null);
-      fadeProj(null);
+      applyFilter(null);
     }
   });
 });
