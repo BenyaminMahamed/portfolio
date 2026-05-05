@@ -61,8 +61,7 @@ Relevant modules: Applied AI, Cyber Security, Applied Robotics, Internet of Thin
 - Selected to present full-stack solutions to a panel of SKY developers
 - Lead developer on a Software Development Group Project (84%)
 - Administered Okta identity platform and managed Apple device fleet in a corporate environment
-- 4× Brent Cup winner, BUCS basketball player — Student Athlete most of my life
-
+- 4× Brent Cup winner, BUCS basketball player — Student Athlete
 ---
 
 ## Contact
