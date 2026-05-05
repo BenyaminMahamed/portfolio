@@ -1,63 +1,71 @@
-# Benyamin Mahamed | Portfolio
+# Benyamin Mahamed — Portfolio
 
-**Lead Full-Stack Developer | BSc Computer Science @ University of Westminster**
+Third year CS student at Westminster (predicted First) based in London. I build full-stack web apps, AI pipelines, and autonomous systems. Co-founded a live editorial platform serving 1,000+ users, shipped a RAG research assistant from scratch, and built an autonomous driving prototype that hit 70+ FPS on a Raspberry Pi 5 for my final year project.
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Benyamin--Mahamed-blue?style=flat&logo=linkedin)](https://linkedin.com/in/benyamin-mahamed)
-[![GitHub](https://img.shields.io/badge/GitHub-BenyaminMahamed-black?style=flat&logo=github)](https://github.com/BenyaminMahamed)
+Currently looking for junior backend / AI engineering roles.
 
----
-
-## 👨‍💻 Professional Summary
-First-Class Computer Science student with a proven track record in full-stack development, AI integration, and technical leadership. Co-Founder of **The BluePrint Brief** (1,000+ users) and lead developer on multiple high-stakes projects presented to industry experts at **SKY**. I combine technical proficiency in Python, Java, and AI with a disciplined, team-oriented mindset.
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/benyamin-mahamed)
+[![GitHub](https://img.shields.io/badge/GitHub-Follow-black?style=for-the-badge&logo=github)](https://github.com/BenyaminMahamed)
 
 ---
 
-## 🛠️ Technical Arsenal
+## Projects
 
-| Category | Technologies |
-| :--- | :--- |
-| **Languages** | Python, Java, JavaScript (ES6+), SQL, Bash |
-| **AI / ML** | PyTorch, TensorFlow, Scikit-learn, OpenCV, RAG Pipelines, Q-Learning |
-| **Backend** | Django, PostgreSQL, SQLite, REST APIs |
-| **Tools & Infrastructure** | Git, Docker, Linux (Ubuntu/Kali), Okta, Google Workspace |
-| **Embedded Systems** | Raspberry Pi 5, PiCar-X, I2C/SPI, Hardware-Software Co-design |
+### [Lexis — AI Research Assistant](https://github.com/BenyaminMahamed/AI-Research-Assistant)
 
----
+Full-stack RAG pipeline built from scratch — no LangChain, no abstractions. PDFs are extracted page-by-page with PyMuPDF, chunked into 500-word overlapping windows, embedded with `all-MiniLM-L6-v2` (384-dim), and indexed in FAISS. Queries hit the same embedding model, do nearest-neighbour search, and retrieve the top-k chunks as grounded context for Gemini 2.0 Flash.
 
-## 🚀 Highlighted Projects
+Four modes: Q&A, structured summarisation, peer-review style critique, and multi-paper comparison. Every answer surfaces the exact source chunks and page numbers — no hallucination hiding behind vague responses.
 
-### [AI Research Assistant (RAG)](https://github.com/BenyaminMahamed/AI-Research-Assistant)
-*   **The Tech:** Django, FAISS, Sentence-Transformers, PyMuPDF.
-*   **The Result:** A full-stack Retrieval-Augmented Generation (RAG) tool that parses academic PDFs and allows users to query them using semantic search with millisecond latency.
-
-### [Autonomous Self-Driving Prototype](https://github.com/BenyaminMahamed/Autonomous-Self-Driving-Car)
-*   **The Tech:** Python, OpenCV, Deep Learning, Raspberry Pi 5.
-*   **The Result:** A real-time computer vision pipeline achieving **70+ FPS** and **2.25ms latency** for lane detection and obstacle avoidance on resource-constrained hardware.
-
-### [The BluePrint Brief](https://theblueprintbrief.com)
-*   **Role:** Co-Founder & Lead Developer.
-*   **The Result:** Built and deployed a custom publishing platform serving over **1,000 users**. Implemented role-based access control (RBAC), automated editorial workflows, and SEO optimization.
+**Stack:** Django, DRF, FAISS, Sentence-Transformers, PyMuPDF, Gemini 2.0 Flash, SQLite
 
 ---
 
-## 🎓 Education & Certifications
-*   **BSc Computer Science** | University of Westminster | *Predicted First-Class (Year 2 Avg: 71.83%)*
-*   **Quantum Mechanics for Scientists and Engineers** | Stanford Online
-*   **BTEC IT & Business** | Distinction* Distinction*
+### [Autonomous Navigation System](https://github.com/BenyaminMahamed/FINALYEARPROJECT)
+
+Final year project. A Classical Computer Vision system for real-time lane following and obstacle avoidance on a Raspberry Pi 5 — built as a proof-of-concept for affordable assistive mobility technology. The core question: can you replicate the navigation capabilities of £5,000+ commercial systems for under £200?
+
+Results from a 10,298-frame integration session: ~10ms average processing latency against a 200ms target (20× margin), ~14 FPS sustained, 100% obstacle detection reliability, manual override response under 10ms. All on a CPU-only embedded platform with no GPU and no cloud inference.
+
+Chose Classical CV over deep learning deliberately — YOLOv5 on a Pi CPU runs at 80–120ms per frame before any other processing, which alone risks the latency budget. Classical blob detection runs in under 5ms and meets the reliability requirement that matters most for a safety-critical assistive system.
+
+**Stack:** Python, OpenCV, NumPy, Picamera2, Raspberry Pi 5, PiCar-X SDK
 
 ---
 
-## 📊 Statistics & Achievements
-*   **Lead Developer:** Managed team delivery for Software Development Group Projects (Grade: 84%).
-*   **Industry Presentation:** Selected to present full-stack solutions to a panel of **SKY** developers.
-*   **Competitive Spirit:** 4× Brent Cup Winner (Basketball) & University BUCS Player.
+### [The BluePrint Brief](https://theblueprintbrief.com) *(Private)*
+
+Co-founded this and built the entire platform as lead developer — a custom Django CMS for legal and commercial editorial content. Built RBAC from scratch (writer, editor, admin tiers), a signal-driven editorial workflow, automated SEO metadata generation, and newsletter distribution. Solved N+1 query issues and tuned Gunicorn worker configuration to handle real concurrent traffic without reaching for expensive infrastructure.
+
+1,000+ active users. Running in production since launch.
+
+**Stack:** Django, PostgreSQL, JavaScript, HTML/CSS, Linux, Gunicorn
 
 ---
 
-## 📫 Connect with Me
-- **Email:** benyaminmahamed@gmail.com
-- **LinkedIn:** [benyamin-mahamed](https://linkedin.com/in/benyamin-mahamed)
-- **Portfolio Website:** *Coming Soon*
+## Education
+
+**BSc Computer Science** — University of Westminster  
+Predicted First-Class | Year 2 Average: 71.83%
+
+Relevant modules: Applied AI, Cyber Security, Applied Robotics, Internet of Things, Database Systems, Client-Server Architectures, Server-Side Web Development, Object Oriented Programming, Human Computer Interaction, Computer Science Final Project
+
+**Quantum Mechanics for Scientists and Engineers** — Stanford Online
+
+**BTEC IT & Business** — Distinction* Distinction*
 
 ---
-*“Combining technical excellence with physics-informed AI to solve real-world problems.”*
+
+## A few other things
+
+- Selected to present full-stack solutions to a panel of SKY developers
+- Lead developer on a Software Development Group Project (84%)
+- Administered Okta identity platform and managed Apple device fleet in a corporate environment
+- 4× Brent Cup winner, BUCS basketball player — Student Athlete most of my life
+
+---
+
+## Contact
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-benyamin--mahamed-blue?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/benyamin-mahamed)
+[![Email](https://img.shields.io/badge/Email-benyaminmahamed%40gmail.com-red?style=for-the-badge&logo=gmail&logoColor=white)](mailto:benyaminmahamed@gmail.com)
