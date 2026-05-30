@@ -1,6 +1,6 @@
 /* ════════════════════════════════════════════════════════════
    main.js — Cinematic interactions & animation orchestration
-   Loader · Cursor · Reveal · Skills · Projects · Petals · Nav
+   Lenis · GSAP ScrollTrigger · Cursor · Reveal · Skills
    ════════════════════════════════════════════════════════════ */
 
 'use strict';
@@ -9,47 +9,93 @@
 const $  = (sel, ctx = document) => ctx.querySelector(sel);
 const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
 
+
+/* ══════════════════════════════════════════
+   LENIS SMOOTH SCROLL
+   ══════════════════════════════════════════ */
+const SmoothScroll = (() => {
+  let lenis = null;
+
+  const init = () => {
+    // Only initialise if Lenis is available
+    if (typeof Lenis === 'undefined') return;
+
+    lenis = new Lenis({
+      duration: 1.4,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      direction: 'vertical',
+      smooth: true,
+      smoothTouch: false,
+      touchMultiplier: 2,
+    });
+
+    // Sync GSAP ScrollTrigger with Lenis
+    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add((time) => {
+        lenis.raf(time * 1000);
+      });
+      gsap.ticker.lagSmoothing(0);
+    } else {
+      // Fallback: standard RAF
+      const raf = (time) => {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      };
+      requestAnimationFrame(raf);
+    }
+  };
+
+  // Expose for smooth-scroll anchor links
+  const scrollTo = (target, offset = -80) => {
+    if (lenis) {
+      lenis.scrollTo(target, { offset });
+    } else {
+      const el = typeof target === 'string' ? $(target) : target;
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  return { init, scrollTo };
+})();
+
+
 /* ══════════════════════════════════════════
    LOADER
    ══════════════════════════════════════════ */
 const Loader = (() => {
-  const el      = $('#loader');
-  const bar     = $('#ld-bar');
-  const status  = $('#ld-status');
-  const btn     = $('#ld-enter');
-  let started   = false;
-  let prog      = 0;
-  let msgIdx    = 0;
+  const el  = $('#loader');
+  const bar = $('#ld-bar');
+  const pct = $('#ld-pct');
+  const btn = $('#ld-enter');
 
-  const messages = [
-    { pct: 15,  txt: 'Mounting assets…'      },
-    { pct: 38,  txt: 'Loading sakura…'       },
-    { pct: 62,  txt: 'Sharpening blade…'     },
-    { pct: 84,  txt: 'Preparing portfolio…'  },
-    { pct: 100, txt: 'Ready.'                },
-  ];
+  let started = false;
+  let prog    = 0;
 
+  // Simulate asset loading progress
   const tick = () => {
     if (prog >= 100) return;
-    const step = Math.random() * 3 + 0.6;
+    const step = Math.random() * 2.8 + 0.5;
     prog = Math.min(100, prog + step);
+
     if (bar) bar.style.width = prog + '%';
-    while (msgIdx < messages.length && prog >= messages[msgIdx].pct) {
-      if (status) status.textContent = messages[msgIdx].txt;
-      msgIdx++;
-    }
-    requestAnimationFrame(tick);
+    if (pct) pct.textContent = Math.floor(prog) + '%';
+
+    // Slow down near end for dramatic effect
+    const delay = prog > 85 ? 80 : 28;
+    setTimeout(() => requestAnimationFrame(tick), delay);
   };
 
   const enter = () => {
     if (started) return;
     started = true;
+
     if (el) {
       el.classList.add('out');
-      setTimeout(() => {
+      el.addEventListener('transitionend', () => {
         el.style.display = 'none';
         Main.init();
-      }, 900);
+      }, { once: true });
     } else {
       Main.init();
     }
@@ -57,12 +103,15 @@ const Loader = (() => {
 
   const init = () => {
     requestAnimationFrame(tick);
+
     if (btn) {
       btn.addEventListener('click', enter);
       btn.addEventListener('keydown', e => {
         if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); enter(); }
       });
     }
+
+    // Allow pressing Enter / Space anywhere on the page to enter
     document.addEventListener('keydown', e => {
       if ((e.key === 'Enter' || e.key === ' ') && !started) enter();
     });
@@ -76,42 +125,39 @@ const Loader = (() => {
    CUSTOM CURSOR
    ══════════════════════════════════════════ */
 const Cursor = (() => {
-  const dot   = $('.cursor');
-  const trail = $('.cursor-trail');
+  const dot  = $('.cursor-dot');
+  const ring = $('.cursor-ring');
   let mx = -200, my = -200;
   let tx = -200, ty = -200;
 
-  const move = e => { mx = e.clientX; my = e.clientY; };
+  const onMove = e => { mx = e.clientX; my = e.clientY; };
 
   const loop = () => {
-    tx += (mx - tx) * 0.13;
-    ty += (my - ty) * 0.13;
-    if (dot)   dot.style.transform   = `translate(${mx}px,${my}px) translate(-50%,-50%)`;
-    if (trail) trail.style.transform = `translate(${tx}px,${ty}px) translate(-50%,-50%)`;
+    tx += (mx - tx) * 0.12;
+    ty += (my - ty) * 0.12;
+    if (dot)  dot.style.transform  = `translate(${mx}px,${my}px) translate(-50%,-50%)`;
+    if (ring) ring.style.transform = `translate(${tx}px,${ty}px) translate(-50%,-50%)`;
     requestAnimationFrame(loop);
   };
 
-  /* Scale cursor on interactive elements */
   const addHoverScaling = () => {
-    const targets = $$('a, button, [role="button"], .proj-card, .gh-card');
-    targets.forEach(el => {
+    $$('a, button, [role="button"], .proj-item, .repo-card, .contact-link').forEach(el => {
       el.addEventListener('mouseenter', () => {
-        dot?.classList.add('cursor--hover');
-        trail?.classList.add('cursor--hover');
+        dot?.classList.add('hov');
+        ring?.classList.add('hov');
       });
       el.addEventListener('mouseleave', () => {
-        dot?.classList.remove('cursor--hover');
-        trail?.classList.remove('cursor--hover');
+        dot?.classList.remove('hov');
+        ring?.classList.remove('hov');
       });
     });
   };
 
   const init = () => {
-    if (window.matchMedia('(hover:none)').matches) return;
-    document.addEventListener('mousemove', move);
+    if (window.matchMedia('(hover: none)').matches) return;
+    document.addEventListener('mousemove', onMove, { passive: true });
     loop();
-    /* Delay hover scaling until DOM is fully set up */
-    setTimeout(addHoverScaling, 400);
+    setTimeout(addHoverScaling, 600);
   };
 
   return { init };
@@ -131,9 +177,11 @@ const Nav = (() => {
     if (!ticking) {
       requestAnimationFrame(() => {
         const y = window.scrollY;
-        if (y > lastY + 10 && y > 100) {
+        nav?.classList.toggle('scrolled', y > 20);
+
+        if (y > lastY + 12 && y > 120) {
           nav?.classList.add('hidden');
-        } else if (y < lastY - 10) {
+        } else if (y < lastY - 12) {
           nav?.classList.remove('hidden');
         }
         lastY = y;
@@ -158,29 +206,12 @@ const Nav = (() => {
     document.body.style.overflow = '';
   };
 
-  const init = () => {
-    window.addEventListener('scroll', onScroll, { passive: true });
-    burger?.addEventListener('click', toggleMenu);
-    $$('.mm-link').forEach(a => a.addEventListener('click', closeMenu));
-
-    /* Smooth scroll all anchor links */
-    $$('a[href^="#"]').forEach(a => {
-      a.addEventListener('click', e => {
-        const target = $(a.getAttribute('href'));
-        if (target) {
-          e.preventDefault();
-          target.scrollIntoView({ behavior: 'smooth' });
-          closeMenu();
-        }
-      });
-    });
-
-    /* Active nav link highlighting */
+  const initActiveHighlight = () => {
     const sections = $$('section[id]');
     const links    = $$('.nav-links a[href^="#"]');
 
     const setActive = () => {
-      const scrollY = window.scrollY + 120;
+      const scrollY = window.scrollY + 140;
       sections.forEach(sec => {
         const top    = sec.offsetTop;
         const bottom = top + sec.offsetHeight;
@@ -196,33 +227,142 @@ const Nav = (() => {
     setActive();
   };
 
+  const init = () => {
+    window.addEventListener('scroll', onScroll, { passive: true });
+    burger?.addEventListener('click', toggleMenu);
+    $$('.mm-link').forEach(a => a.addEventListener('click', closeMenu));
+
+    // Smooth scroll anchor links
+    $$('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const href = a.getAttribute('href');
+        if (href === '#') return;
+        const target = $(href);
+        if (target) {
+          e.preventDefault();
+          closeMenu();
+          SmoothScroll.scrollTo(href);
+        }
+      });
+    });
+
+    initActiveHighlight();
+  };
+
   return { init };
 })();
 
 
 /* ══════════════════════════════════════════
-   SCROLL REVEAL
+   GSAP SCROLL REVEAL
    ══════════════════════════════════════════ */
 const Reveal = (() => {
-  let observer;
-
   const init = () => {
-    observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('revealed');
-          observer.unobserve(entry.target);
-        }
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+      // Fallback: immediately show all revealed elements
+      $$('[data-gsap-reveal], [data-gsap-proj]').forEach(el => {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
       });
-    }, { threshold: 0.07, rootMargin: '0px 0px -36px 0px' });
+      return;
+    }
 
-    $$('[data-reveal]').forEach(el => {
-      const rect = el.getBoundingClientRect();
-      if (rect.top < window.innerHeight * 0.95) {
-        el.classList.add('revealed');
-      } else {
-        observer.observe(el);
-      }
+    gsap.registerPlugin(ScrollTrigger);
+
+    // General reveal elements
+    $$('[data-gsap-reveal]').forEach(el => {
+      const delay = parseFloat(el.dataset.delay || '0');
+      gsap.to(el, {
+        opacity: 1,
+        y: 0,
+        duration: 1.1,
+        delay,
+        ease: 'expo.out',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 88%',
+          once: true,
+        },
+      });
+    });
+
+    // Project items — staggered within their section
+    const projItems = $$('[data-gsap-proj]');
+    if (projItems.length) {
+      projItems.forEach((item, i) => {
+        gsap.to(item, {
+          opacity: 1,
+          y: 0,
+          duration: 1.2,
+          delay: i * 0.08,
+          ease: 'expo.out',
+          scrollTrigger: {
+            trigger: item,
+            start: 'top 90%',
+            once: true,
+          },
+        });
+      });
+    }
+  };
+
+  return { init };
+})();
+
+
+/* ══════════════════════════════════════════
+   CINEMATIC PARALLAX — multi-layer depth
+   ══════════════════════════════════════════ */
+const Parallax = (() => {
+  const init = () => {
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+
+    // Hero panel subtle upward drift
+    const heroPanel = $('#hero-img-panel');
+    if (heroPanel) {
+      gsap.to(heroPanel, {
+        y: -60,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '#hero',
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 1.5,
+        },
+      });
+    }
+
+    // Contact landscape band drift
+    const landscape = $('.contact-landscape-band');
+    if (landscape) {
+      gsap.to(landscape, {
+        y: 40,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '.section-contact',
+          start: 'top bottom',
+          end: 'top top',
+          scrub: 2,
+        },
+      });
+    }
+
+    // Section title horizontal scrub — very subtle
+    $$('.section-title').forEach((title, i) => {
+      const dir = i % 2 === 0 ? -12 : 12;
+      gsap.fromTo(title,
+        { x: 0 },
+        {
+          x: dir,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: title,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 2.5,
+          },
+        }
+      );
     });
   };
 
@@ -231,7 +371,7 @@ const Reveal = (() => {
 
 
 /* ══════════════════════════════════════════
-   SKILL BARS
+   SKILL BARS — animated on scroll entry
    ══════════════════════════════════════════ */
 const Skills = (() => {
   let triggered = false;
@@ -239,19 +379,25 @@ const Skills = (() => {
   const animate = () => {
     if (triggered) return;
     triggered = true;
-    $$('.si-fill').forEach((bar, i) => {
+
+    $$('.sk-fill').forEach((bar, i) => {
       const pct = bar.dataset.pct || '0';
-      setTimeout(() => { bar.style.width = pct + '%'; }, i * 70);
+      setTimeout(() => { bar.style.width = pct + '%'; }, i * 75);
     });
   };
 
   const init = () => {
-    const section = $('#skills');
+    const section = $('#stack');
     if (!section) return;
-    const observer = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting) { animate(); observer.disconnect(); }
-    }, { threshold: 0.18 });
-    observer.observe(section);
+
+    if (typeof IntersectionObserver !== 'undefined') {
+      const observer = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting) { animate(); observer.disconnect(); }
+      }, { threshold: 0.15 });
+      observer.observe(section);
+    } else {
+      animate();
+    }
   };
 
   return { init };
@@ -263,8 +409,10 @@ const Skills = (() => {
    ══════════════════════════════════════════ */
 const Projects = (() => {
   const init = () => {
-    const filters = $$('#proj-filters .fb');
-    const cards   = $$('#proj-grid .proj-card');
+    const filters = $$('#proj-filters .pf');
+    const items   = $$('#proj-grid .proj-item');
+
+    if (!filters.length || !items.length) return;
 
     filters.forEach(btn => {
       btn.addEventListener('click', () => {
@@ -272,14 +420,21 @@ const Projects = (() => {
         btn.classList.add('active');
         const f = btn.dataset.f;
 
-        cards.forEach((card, i) => {
-          const tags = card.dataset.t || '';
-          const show = f === 'all' || tags.includes(f);
-          /* Staggered fade */
+        items.forEach((item, i) => {
+          const tags = item.dataset.t || '';
+          const show = f === 'all' || tags.split(',').some(t => t.trim() === f);
+
           setTimeout(() => {
-            card.style.transition = 'opacity .4s ease, transform .4s cubic-bezier(0.16,1,0.3,1)';
-            card.style.opacity    = show ? '1' : '0.12';
-            card.style.transform  = show ? 'translateX(0)' : 'translateX(8px)';
+            item.style.transition = 'opacity .4s ease, transform .4s cubic-bezier(0.16,1,0.3,1)';
+            if (show) {
+              item.style.opacity   = '1';
+              item.style.transform = 'translateX(0)';
+              item.style.pointerEvents = '';
+            } else {
+              item.style.opacity   = '0.1';
+              item.style.transform = 'translateX(6px)';
+              item.style.pointerEvents = 'none';
+            }
           }, i * 40);
         });
       });
@@ -291,133 +446,94 @@ const Projects = (() => {
 
 
 /* ══════════════════════════════════════════
-   CANVAS PETAL SYSTEM
-   Falling sakura petals over hero illustration
-   ══════════════════════════════════════════ */
-const Petals = (() => {
-  let canvas, ctx, W, H, petals = [], rafId, active = false;
-
-  const COUNT  = 24;
-  const COLORS = ['#cc5878','#d06888','#e07888','#b84068','#d4607a','#e890a0'];
-
-  class Petal {
-    constructor() { this.reset(true); }
-
-    reset(randomY = false) {
-      this.x      = Math.random() * W;
-      this.y      = randomY ? Math.random() * H : -16;
-      this.r      = Math.random() * 5 + 3;
-      this.rx     = this.r;
-      this.ry     = this.r * 0.45;
-      this.rot    = Math.random() * Math.PI * 2;
-      this.vx     = (Math.random() - 0.5) * 0.5;
-      this.vy     = Math.random() * 0.7 + 0.35;
-      this.vr     = (Math.random() - 0.5) * 0.035;
-      this.alpha  = Math.random() * 0.32 + 0.15;
-      this.color  = COLORS[Math.floor(Math.random() * COLORS.length)];
-      this.phase  = Math.random() * Math.PI * 2;
-      this.wobble = Math.random() * 0.008 + 0.003;
-    }
-
-    update(t) {
-      this.x   += this.vx + Math.sin(t * this.wobble + this.phase) * 0.4;
-      this.y   += this.vy;
-      this.rot += this.vr;
-      /* Slight tumble on ry */
-      this.ry = Math.abs(Math.sin(this.rot)) * this.r * 0.5 + 1;
-      if (this.y > H + 20) this.reset();
-    }
-
-    draw() {
-      ctx.save();
-      ctx.translate(this.x, this.y);
-      ctx.rotate(this.rot);
-      ctx.globalAlpha = this.alpha;
-      ctx.fillStyle   = this.color;
-      ctx.beginPath();
-      ctx.ellipse(0, 0, this.rx, this.ry, 0, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
-    }
-  }
-
-  const resize = () => {
-    const parent = canvas.parentElement;
-    W = canvas.width  = parent.offsetWidth;
-    H = canvas.height = parent.offsetHeight;
-  };
-
-  const loop = t => {
-    if (!active) return;
-    ctx.clearRect(0, 0, W, H);
-    petals.forEach(p => { p.update(t); p.draw(); });
-    rafId = requestAnimationFrame(loop);
-  };
-
-  const init = () => {
-    canvas = $('#petal-canvas');
-    if (!canvas) return;
-    ctx = canvas.getContext('2d');
-    resize();
-    window.addEventListener('resize', resize, { passive: true });
-    for (let i = 0; i < COUNT; i++) petals.push(new Petal());
-    active = true;
-    requestAnimationFrame(loop);
-  };
-
-  return { init };
-})();
-
-
-/* ══════════════════════════════════════════
-   PARALLAX — subtle depth on about visual
-   ══════════════════════════════════════════ */
-const Parallax = (() => {
-  const items = [];
-
-  const onScroll = () => {
-    const scrollY = window.scrollY;
-    items.forEach(({ el, speed }) => {
-      const rect   = el.getBoundingClientRect();
-      const center = rect.top + rect.height / 2 - window.innerHeight / 2;
-      el.style.transform = `translateY(${center * speed * -0.08}px)`;
-    });
-  };
-
-  const init = () => {
-    $$('[data-parallax]').forEach(el => {
-      items.push({ el, speed: parseFloat(el.dataset.parallax) || 0.2 });
-    });
-    if (!items.length) return;
-    window.addEventListener('scroll', onScroll, { passive: true });
-  };
-
-  return { init };
-})();
-
-
-/* ══════════════════════════════════════════
-   MAGNETIC BUTTONS — subtle pull-toward effect
+   MAGNETIC BUTTONS — subtle pull-toward
    ══════════════════════════════════════════ */
 const Magnetic = (() => {
   const init = () => {
-    if (window.matchMedia('(hover:none)').matches) return;
+    if (window.matchMedia('(hover: none)').matches) return;
 
     $$('.btn-primary, .nav-cta, .ld-enter').forEach(btn => {
+      let resetTimer;
+
       btn.addEventListener('mousemove', e => {
+        clearTimeout(resetTimer);
         const rect = btn.getBoundingClientRect();
-        const cx   = rect.left + rect.width  / 2;
-        const cy   = rect.top  + rect.height / 2;
-        const dx   = (e.clientX - cx) * 0.25;
-        const dy   = (e.clientY - cy) * 0.25;
-        btn.style.transform = `translate(${dx}px,${dy}px)`;
+        const cx = rect.left + rect.width  / 2;
+        const cy = rect.top  + rect.height / 2;
+        const dx = (e.clientX - cx) * 0.22;
+        const dy = (e.clientY - cy) * 0.22;
+        btn.style.transition = 'transform .2s ease';
+        btn.style.transform  = `translate(${dx}px,${dy}px)`;
       });
+
       btn.addEventListener('mouseleave', () => {
         btn.style.transition = 'transform .5s cubic-bezier(0.16,1,0.3,1)';
         btn.style.transform  = 'translate(0,0)';
-        setTimeout(() => { btn.style.transition = ''; }, 500);
+        resetTimer = setTimeout(() => { btn.style.transition = ''; }, 520);
       });
     });
+  };
+
+  return { init };
+})();
+
+
+/* ══════════════════════════════════════════
+   CINEMATIC INK LINE REVEALS
+   Horizontal border lines slice in on scroll
+   ══════════════════════════════════════════ */
+const InkLines = (() => {
+  const init = () => {
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+
+    // Eyebrow rules slice in from left
+    $$('.eyebrow-rule').forEach(rule => {
+      gsap.from(rule, {
+        scaleX: 0,
+        transformOrigin: 'left center',
+        duration: 1.2,
+        ease: 'expo.out',
+        scrollTrigger: {
+          trigger: rule,
+          start: 'top 92%',
+          once: true,
+        },
+      });
+    });
+
+    // Credential grid reveal — stagger items
+    const credItems = $$('.credential-item');
+    if (credItems.length) {
+      gsap.from(credItems, {
+        y: 20,
+        opacity: 0,
+        duration: .9,
+        stagger: 0.08,
+        ease: 'expo.out',
+        scrollTrigger: {
+          trigger: '.credential-grid',
+          start: 'top 88%',
+          once: true,
+        },
+      });
+    }
+
+    // About tags — stagger pop-in
+    const tags = $$('.about-tags .tag');
+    if (tags.length) {
+      gsap.from(tags, {
+        y: 12,
+        opacity: 0,
+        duration: .7,
+        stagger: 0.04,
+        ease: 'expo.out',
+        scrollTrigger: {
+          trigger: '.about-tags',
+          start: 'top 90%',
+          once: true,
+        },
+      });
+    }
   };
 
   return { init };
@@ -430,14 +546,14 @@ const Magnetic = (() => {
 const Marquee = (() => {
   const init = () => {
     const strip = $('.marquee-strip');
-    const inner = $('.marquee-inner');
-    if (!strip || !inner) return;
+    const track = $('.marquee-track');
+    if (!strip || !track) return;
 
     strip.addEventListener('mouseenter', () => {
-      inner.style.animationPlayState = 'paused';
+      track.style.animationPlayState = 'paused';
     });
     strip.addEventListener('mouseleave', () => {
-      inner.style.animationPlayState = 'running';
+      track.style.animationPlayState = 'running';
     });
   };
 
@@ -446,44 +562,45 @@ const Marquee = (() => {
 
 
 /* ══════════════════════════════════════════
-   SECTION COUNTER — animated number count-up
+   GSAP HERO SLASH ENTRANCE
+   Crimson slash/line reveals slicing in
    ══════════════════════════════════════════ */
-const Counter = (() => {
-  const countUp = (el, target, duration = 1200) => {
-    const start = performance.now();
-    const isText = isNaN(parseInt(target));
-    if (isText) return; /* Skip non-numeric like "BSc" */
+const HeroEntrance = (() => {
+  const init = () => {
+    if (typeof gsap === 'undefined') return;
 
-    const num = parseInt(target);
-    const suffix = target.replace(/[0-9]/g, '');
+    // After loader exits, the GSAP hero animations are already driven by CSS.
+    // This module wires up ScrollTrigger for any post-hero elements that
+    // need slicing-in line treatments.
 
-    const step = now => {
-      const elapsed = now - start;
-      const progress = Math.min(elapsed / duration, 1);
-      /* Ease out expo */
-      const eased = 1 - Math.pow(2, -10 * progress);
-      const current = Math.round(eased * num);
-      el.textContent = current + suffix;
-      if (progress < 1) requestAnimationFrame(step);
-      else el.textContent = target;
-    };
-    requestAnimationFrame(step);
+    // Horizontal rule under section eyebrows — already handled in InkLines.
+    // Nothing additional needed at hero level (CSS keyframes handle loader/entry).
   };
 
+  return { init };
+})();
+
+
+/* ══════════════════════════════════════════
+   CONTACT LINKS — hover line wipe
+   ══════════════════════════════════════════ */
+const ContactInteractions = (() => {
   const init = () => {
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        const vals = entry.target.querySelectorAll('.stat-val, .ccs-v');
-        vals.forEach(el => {
-          const raw = el.textContent.trim();
-          countUp(el, raw);
+    $$('.contact-link').forEach(link => {
+      const arrow = link.querySelector('.cl-arrow');
+      if (arrow) {
+        link.addEventListener('mouseenter', () => {
+          if (typeof gsap !== 'undefined') {
+            gsap.to(arrow, { x: 6, duration: .3, ease: 'expo.out' });
+          }
         });
-        observer.unobserve(entry.target);
-      });
-    }, { threshold: 0.3 });
-
-    $$('.about-stats, .cc-stats').forEach(el => observer.observe(el));
+        link.addEventListener('mouseleave', () => {
+          if (typeof gsap !== 'undefined') {
+            gsap.to(arrow, { x: 0, duration: .4, ease: 'expo.out' });
+          }
+        });
+      }
+    });
   };
 
   return { init };
@@ -491,78 +608,30 @@ const Counter = (() => {
 
 
 /* ══════════════════════════════════════════
-   CURSOR TRAIL INK EFFECT on hero
-   Subtle ink-spread on mouse move over hero canvas
+   REPO CARD HOVER — GSAP enhanced
    ══════════════════════════════════════════ */
-const InkTrail = (() => {
-  let canvas, ctx, W, H, drops = [];
-  let active = false;
+const RepoCards = (() => {
+  const enhanceCards = () => {
+    if (typeof gsap === 'undefined') return;
 
-  class Drop {
-    constructor(x, y) {
-      this.x = x; this.y = y;
-      this.r = 0;
-      this.maxR = Math.random() * 22 + 8;
-      this.alpha = 0.12;
-      this.growing = true;
-    }
-    update() {
-      if (this.growing) {
-        this.r += 1.2;
-        if (this.r >= this.maxR) this.growing = false;
-      } else {
-        this.alpha -= 0.003;
-      }
-      return this.alpha > 0;
-    }
-    draw() {
-      ctx.save();
-      ctx.globalAlpha = this.alpha;
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(200,16,46,1)';
-      ctx.fill();
-      ctx.restore();
-    }
-  }
-
-  const loop = () => {
-    if (!active) return;
-    ctx.clearRect(0, 0, W, H);
-    drops = drops.filter(d => {
-      const alive = d.update();
-      if (alive) d.draw();
-      return alive;
+    $$('.repo-card').forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        gsap.to(card, { y: -3, duration: .3, ease: 'expo.out' });
+      });
+      card.addEventListener('mouseleave', () => {
+        gsap.to(card, { y: 0, duration: .4, ease: 'expo.out' });
+      });
     });
-    requestAnimationFrame(loop);
   };
 
+  // Called after GitHub cards are rendered
   const init = () => {
-    const heroCanvas = document.createElement('canvas');
-    heroCanvas.id = 'ink-canvas';
-    heroCanvas.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:5;mix-blend-mode:multiply;';
-    const heroSection = $('#hero .hero-canvas');
-    if (!heroSection) return;
-    heroSection.appendChild(heroCanvas);
-    canvas = heroCanvas;
-    ctx = canvas.getContext('2d');
+    // MutationObserver watches for new cards being added
+    const grid = $('#gh-grid');
+    if (!grid) return;
 
-    const resize = () => {
-      W = canvas.width  = heroSection.offsetWidth;
-      H = canvas.height = heroSection.offsetHeight;
-    };
-    resize();
-    window.addEventListener('resize', resize, { passive: true });
-
-    heroSection.addEventListener('mousemove', e => {
-      const rect = heroSection.getBoundingClientRect();
-      if (drops.length < 30) {
-        drops.push(new Drop(e.clientX - rect.left, e.clientY - rect.top));
-      }
-    });
-
-    active = true;
-    requestAnimationFrame(loop);
+    const observer = new MutationObserver(() => { enhanceCards(); });
+    observer.observe(grid, { childList: true });
   };
 
   return { init };
@@ -574,17 +643,19 @@ const InkTrail = (() => {
    ══════════════════════════════════════════ */
 const Main = {
   init() {
+    SmoothScroll.init();
     Nav.init();
     Reveal.init();
     Skills.init();
     Projects.init();
-    Petals.init();
     Parallax.init();
     Magnetic.init();
     Marquee.init();
-    Counter.init();
-    InkTrail.init();
-    /* GitHub module self-initialises via github.js */
+    InkLines.init();
+    HeroEntrance.init();
+    ContactInteractions.init();
+    RepoCards.init();
+    // GitHub module self-initialises via github.js
   }
 };
 

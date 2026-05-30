@@ -4,117 +4,110 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Benyamin Mahamed — Software Developer</title>
-<meta name="description" content="Software Developer. Full-stack engineer with a passion for AI, computer vision, and building things that go live. London, UK.">
+<meta name="description" content="Full-stack software engineer. Django, Python, PostgreSQL, AI/ML. BSc Computer Science, University of Westminster. London, UK.">
 
-<!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
 
-<!-- GSAP + Lenis via CDN — both tiny, justified for cinematic motion -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/SplitText.min.js" defer></script>
+<!--
+  TYPOGRAPHY:
+  — Cormorant Garamond: high-contrast editorial serif for display headings
+  — DM Mono: technical mono for labels, indices, tags
+  — DM Sans: clean modern sans for body and UI copy
+-->
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+
+<!-- GSAP + ScrollTrigger -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<!-- Lenis smooth scroll -->
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
 
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════
-     GRAIN OVERLAY — persistent atmospheric layer
-     ═══════════════════════════════════════════ -->
-<div class="grain" aria-hidden="true"></div>
-<div class="cursor" aria-hidden="true"></div>
-<div class="cursor-trail" aria-hidden="true"></div>
+<!-- ═══ PAPER GRAIN OVERLAY ═══ -->
+<div class="paper-grain" aria-hidden="true"></div>
+
+<!-- ═══ CUSTOM CURSOR ═══ -->
+<div class="cursor-dot"  aria-hidden="true"></div>
+<div class="cursor-ring" aria-hidden="true"></div>
 
 <!-- ═══════════════════════════════════════════
      LOADER
      ═══════════════════════════════════════════ -->
-<div id="loader" role="status" aria-label="Loading">
-  <div class="ld-inner">
-    <div class="ld-mon-wrap">
-      <!-- Spinning outer ring -->
-      <svg class="ld-ring" viewBox="0 0 200 200" aria-hidden="true">
-        <circle cx="100" cy="100" r="88" fill="none" stroke="#c8102e" stroke-width="1"
-                stroke-dasharray="6 18" stroke-linecap="round"/>
-        <circle cx="100" cy="12" r="4" fill="#c8102e"/>
-        <circle cx="100" cy="188" r="2.5" fill="#c8102e" opacity=".3"/>
-        <circle cx="12" cy="100" r="2.5" fill="#c8102e" opacity=".3"/>
-        <circle cx="188" cy="100" r="2.5" fill="#c8102e" opacity=".3"/>
-      </svg>
-      <!-- Hannya emblem -->
-      <svg class="ld-hannya" viewBox="0 0 100 100" aria-hidden="true">
-        <circle cx="50" cy="50" r="46" fill="none" stroke="#c8102e" stroke-width="0.8" opacity=".4"/>
-        <!-- Left horn -->
-        <path d="M26 44 Q20 26 28 16 Q32 24 33 38Z" fill="#c8102e" opacity=".85"/>
-        <!-- Right horn -->
-        <path d="M74 44 Q80 26 72 16 Q68 24 67 38Z" fill="#c8102e" opacity=".85"/>
-        <!-- Face -->
-        <path d="M18 54 Q16 34 50 30 Q84 34 82 54 L78 72 Q72 88 50 90 Q28 88 22 72Z"
-              fill="#0a0806" stroke="#c8102e" stroke-width="1.2"/>
-        <!-- Eyes -->
-        <ellipse cx="36" cy="54" rx="11" ry="8" fill="#050402" stroke="#c8102e" stroke-width="1"/>
-        <ellipse cx="64" cy="54" rx="11" ry="8" fill="#050402" stroke="#c8102e" stroke-width="1"/>
-        <circle cx="36" cy="55" r="5" fill="#c8102e" opacity=".9"/>
-        <circle cx="64" cy="55" r="5" fill="#c8102e" opacity=".9"/>
-        <circle cx="36" cy="55" r="2.5" fill="#0a0806"/>
-        <circle cx="64" cy="55" r="2.5" fill="#0a0806"/>
-        <!-- Brow arches -->
-        <path d="M24 46 Q36 38 48 44" fill="none" stroke="#c8102e" stroke-width="1.5" stroke-linecap="round" opacity=".7"/>
-        <path d="M76 46 Q64 38 52 44" fill="none" stroke="#c8102e" stroke-width="1.5" stroke-linecap="round" opacity=".7"/>
-        <!-- Nose -->
-        <path d="M44 62 Q50 72 56 62" fill="none" stroke="#5a3010" stroke-width="1" opacity=".8"/>
-        <!-- Mouth -->
-        <path d="M30 76 Q50 70 70 76" fill="none" stroke="#c8102e" stroke-width="1.5" stroke-linecap="round"/>
-        <!-- Fangs -->
-        <path d="M37 76 L35 85 L41 83Z" fill="#f0e8d0"/>
-        <path d="M63 76 L65 85 L59 83Z" fill="#f0e8d0"/>
-        <path d="M50 72 L48 81 L52 81Z" fill="#e0d8c0" opacity=".9"/>
-      </svg>
+<div id="loader" role="status" aria-label="Loading portfolio">
+  <div class="ld-wrap">
+    <div class="ld-ink-line" aria-hidden="true"></div>
+    <div class="ld-content">
+      <p class="ld-index">001</p>
+      <h1 class="ld-name">Benyamin<br>Mahamed</h1>
+      <p class="ld-sub">Software Developer · London · 2026</p>
+      <div class="ld-progress">
+        <div class="ld-bar-track">
+          <div class="ld-bar-fill" id="ld-bar"></div>
+        </div>
+        <span class="ld-pct" id="ld-pct">0%</span>
+      </div>
+      <button class="ld-enter" id="ld-enter" aria-label="Enter portfolio">
+        <span class="ld-enter-line"></span>
+        Enter
+        <span class="ld-enter-arrow">→</span>
+      </button>
     </div>
-    <p class="ld-name">BENYAMIN MAHAMED</p>
-    <p class="ld-role">Software Developer · London</p>
-    <div class="ld-bar-wrap">
-      <div class="ld-bar-track"><div class="ld-bar-fill" id="ld-bar"></div></div>
-      <p class="ld-status" id="ld-status">Initialising…</p>
-    </div>
-    <button class="ld-enter" id="ld-enter" aria-label="Enter portfolio">Enter →</button>
+    <div class="ld-vert" aria-hidden="true">PORTFOLIO · 2026 · CS GRADUATE · LONDON</div>
   </div>
 </div>
 
 <!-- ═══════════════════════════════════════════
      NAVIGATION
      ═══════════════════════════════════════════ -->
-<nav id="nav" aria-label="Main navigation">
-  <a class="nav-logo" href="#hero" aria-label="Home">
-    <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
-      <circle cx="12" cy="12" r="11" fill="none" stroke="#c8102e" stroke-width="1.2"/>
-      <circle cx="12" cy="12" r="5.5" fill="none" stroke="#c8102e" stroke-width=".8"/>
-      <line x1="12" y1="1" x2="12" y2="23" stroke="#c8102e" stroke-width=".8"/>
-      <line x1="1" y1="12" x2="23" y2="12" stroke="#c8102e" stroke-width=".8"/>
-    </svg>
-    <span>BM</span>
-  </a>
-  <ul class="nav-links" role="list">
-    <li><a href="#about">About</a></li>
-    <li><a href="#projects">Projects</a></li>
-    <li><a href="#github">Archive</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <a href="#contact" class="nav-cta">Hire Me</a>
-  <button class="nav-burger" id="nav-burger" aria-label="Toggle menu" aria-expanded="false">
-    <span></span><span></span>
-  </button>
+<nav id="nav" aria-label="Primary navigation">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#hero" aria-label="Return to top">
+      <span class="nav-logo-mark">BM</span>
+      <span class="nav-logo-rule" aria-hidden="true"></span>
+      <span class="nav-logo-sub">Software Developer</span>
+    </a>
+
+    <ul class="nav-links" role="list">
+      <li><a href="#about"    class="nav-link"><span class="nav-num">01</span>About</a></li>
+      <li><a href="#projects" class="nav-link"><span class="nav-num">02</span>Projects</a></li>
+      <li><a href="#stack"    class="nav-link"><span class="nav-num">03</span>Stack</a></li>
+      <li><a href="#archive"  class="nav-link"><span class="nav-num">04</span>Archive</a></li>
+      <li><a href="#contact"  class="nav-link"><span class="nav-num">05</span>Contact</a></li>
+    </ul>
+
+    <a href="#contact" class="nav-cta" aria-label="Hire Benyamin">
+      <span class="nav-cta-dot" aria-hidden="true"></span>
+      <span>Available Now</span>
+    </a>
+
+    <button class="nav-burger" id="nav-burger" aria-label="Toggle navigation" aria-expanded="false">
+      <span class="burger-line"></span>
+      <span class="burger-line"></span>
+    </button>
+  </div>
 </nav>
 
 <!-- Mobile menu -->
-<div class="mobile-menu" id="mobile-menu" aria-hidden="true">
-  <ul role="list">
-    <li><a href="#about" class="mm-link">About</a></li>
-    <li><a href="#projects" class="mm-link">Projects</a></li>
-    <li><a href="#github" class="mm-link">Archive</a></li>
-    <li><a href="#contact" class="mm-link">Contact</a></li>
-  </ul>
+<div class="mobile-menu" id="mobile-menu" role="dialog" aria-hidden="true" aria-label="Navigation menu">
+  <div class="mm-inner">
+    <nav>
+      <ul class="mm-list" role="list">
+        <li><a href="#about"    class="mm-link"><em>01</em> About</a></li>
+        <li><a href="#projects" class="mm-link"><em>02</em> Projects</a></li>
+        <li><a href="#stack"    class="mm-link"><em>03</em> Stack</a></li>
+        <li><a href="#archive"  class="mm-link"><em>04</em> Archive</a></li>
+        <li><a href="#contact"  class="mm-link"><em>05</em> Contact</a></li>
+      </ul>
+    </nav>
+    <div class="mm-meta">
+      <span>Benyamin Mahamed</span>
+      <span>London · UK · 2026</span>
+    </div>
+  </div>
 </div>
 
 <!-- ═══════════════════════════════════════════
@@ -122,541 +115,616 @@
      ═══════════════════════════════════════════ -->
 <section id="hero" class="hero">
 
-  <!-- Left: sakura + samurai illustration -->
-  <div class="hero-canvas" aria-hidden="true">
-    <svg class="hero-svg" viewBox="0 0 600 900" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-      <defs>
-        <radialGradient id="sky" cx="55%" cy="25%" r="75%">
-          <stop offset="0%" stop-color="#f0ddd4"/>
-          <stop offset="60%" stop-color="#d8c0b4"/>
-          <stop offset="100%" stop-color="#b89888"/>
-        </radialGradient>
-        <filter id="ink-blur">
-          <feGaussianBlur stdDeviation="1.8"/>
-        </filter>
-      </defs>
+  <!-- Vertical divider rule -->
+  <div class="hero-rule" aria-hidden="true"></div>
 
-      <!-- Sky -->
-      <rect width="600" height="900" fill="url(#sky)"/>
+  <!-- Left: editorial typographic panel -->
+  <div class="hero-left">
+    <div class="hero-index-col" aria-hidden="true">
+      <span class="hero-seq">001</span>
+      <span class="hero-vert-label">Software Engineer · Full-Stack · AI/ML</span>
+    </div>
 
-      <!-- Atmospheric mist -->
-      <ellipse cx="300" cy="800" rx="420" ry="140" fill="#dcc8b8" opacity=".45"/>
-      <ellipse cx="180" cy="840" rx="360" ry="110" fill="#c8b4a0" opacity=".35"/>
-      <ellipse cx="450" cy="860" rx="280" ry="90" fill="#d4bfae" opacity=".3"/>
-
-      <!-- Distant mountain silhouettes -->
-      <path d="M0 700 Q100 640 180 660 Q260 620 320 615 Q390 600 450 618 Q520 610 580 590 L600 590 L600 900 L0 900Z"
-            fill="#b09080" opacity=".3"/>
-      <!-- Temple pagoda silhouette -->
-      <g opacity=".28" fill="#7a6050">
-        <rect x="448" y="562" width="10" height="28"/>
-        <path d="M440 572 L458 572 L453 562 L445 562Z"/>
-        <path d="M442 578 L460 578 L456 572 L446 572Z"/>
-        <path d="M444 584 L462 584 L459 578 L447 578Z"/>
-      </g>
-
-      <!-- Red sun disc -->
-      <circle cx="430" cy="290" r="95" fill="#c8102e" opacity=".18"/>
-      <circle cx="430" cy="290" r="75" fill="#c8102e" opacity=".16"/>
-      <circle cx="430" cy="290" r="55" fill="#c8102e" opacity=".22"/>
-
-      <!-- Ground -->
-      <path d="M0 770 Q160 754 320 762 Q480 770 600 752 L600 900 L0 900Z" fill="#9a8470" opacity=".4"/>
-
-      <!-- ── CHERRY BLOSSOM TREE ── -->
-      <!-- Trunk — gnarled ink strokes -->
-      <path d="M115 900 Q120 820 124 760 Q127 705 122 655 Q118 610 132 565 Q143 525 140 478 Q138 438 150 395"
-            fill="none" stroke="#3a2410" stroke-width="20" stroke-linecap="round" filter="url(#ink-blur)"/>
-      <path d="M115 900 Q120 820 124 760 Q127 705 122 655 Q118 610 132 565 Q143 525 140 478 Q138 438 150 395"
-            fill="none" stroke="#5a3820" stroke-width="13" stroke-linecap="round"/>
-
-      <!-- Primary branches -->
-      <path d="M145 460 Q185 420 230 392 Q280 360 330 330" fill="none" stroke="#3a2410" stroke-width="10" stroke-linecap="round"/>
-      <path d="M145 460 Q185 420 230 392 Q280 360 330 330" fill="none" stroke="#5a3820" stroke-width="7" stroke-linecap="round"/>
-      <path d="M140 505 Q112 474 82 452 Q52 430 22 410" fill="none" stroke="#3a2410" stroke-width="9" stroke-linecap="round"/>
-      <path d="M140 505 Q112 474 82 452 Q52 430 22 410" fill="none" stroke="#5a3820" stroke-width="6" stroke-linecap="round"/>
-      <path d="M144 545 Q175 514 212 492 Q256 468 302 455" fill="none" stroke="#3a2410" stroke-width="8" stroke-linecap="round"/>
-      <path d="M144 545 Q175 514 212 492 Q256 468 302 455" fill="none" stroke="#5a3820" stroke-width="5.5" stroke-linecap="round"/>
-      <path d="M132 610 Q98 592 68 574 Q38 557 12 540" fill="none" stroke="#3a2410" stroke-width="7" stroke-linecap="round"/>
-      <path d="M132 610 Q98 592 68 574 Q38 557 12 540" fill="none" stroke="#5a3820" stroke-width="5" stroke-linecap="round"/>
-      <path d="M140 638 Q170 614 202 600 Q244 585 280 577" fill="none" stroke="#3a2410" stroke-width="6" stroke-linecap="round"/>
-
-      <!-- Sub-branches -->
-      <path d="M230 392 Q258 362 275 336 Q294 308 312 282" fill="none" stroke="#3a2410" stroke-width="5" stroke-linecap="round"/>
-      <path d="M330 330 Q360 304 382 278 Q404 255 422 235" fill="none" stroke="#3a2410" stroke-width="4" stroke-linecap="round"/>
-      <path d="M302 455 Q336 432 368 416 Q398 400 426 392" fill="none" stroke="#3a2410" stroke-width="4" stroke-linecap="round"/>
-      <path d="M150 395 Q162 360 177 328 Q194 292 208 258" fill="none" stroke="#3a2410" stroke-width="5.5" stroke-linecap="round"/>
-      <path d="M208 258 Q226 230 246 206 Q264 185 280 162" fill="none" stroke="#3a2410" stroke-width="3.5" stroke-linecap="round"/>
-      <path d="M22 410 Q4 383 -8 356" fill="none" stroke="#3a2410" stroke-width="3.5" stroke-linecap="round"/>
-
-      <!-- ── BLOSSOM CLOUDS ── -->
-      <!-- Deep pink base, lighter overlay — ink-watercolour feel -->
-      <g class="blossoms">
-        <!-- Cluster: far upper right (422,235) -->
-        <g><circle cx="422" cy="222" r="30" fill="#c84068" opacity=".82"/><circle cx="450" cy="212" r="23" fill="#d05070" opacity=".75"/><circle cx="398" cy="228" r="20" fill="#c84068" opacity=".7"/><circle cx="440" cy="240" r="16" fill="#b83858" opacity=".7"/><circle cx="408" cy="246" r="14" fill="#c04060" opacity=".65"/></g>
-        <!-- Cluster: right upper (330,330) -->
-        <g><circle cx="334" cy="316" r="34" fill="#d06078" opacity=".8"/><circle cx="364" cy="306" r="26" fill="#d87080" opacity=".72"/><circle cx="305" cy="322" r="23" fill="#c85870" opacity=".72"/><circle cx="354" cy="335" r="18" fill="#b84868" opacity=".68"/><circle cx="315" cy="342" r="16" fill="#c85870" opacity=".62"/><circle cx="375" cy="332" r="14" fill="#c05070" opacity=".6"/></g>
-        <!-- Cluster: mid sub-branch (275,336) -->
-        <g><circle cx="278" cy="322" r="28" fill="#cc5878" opacity=".78"/><circle cx="306" cy="310" r="21" fill="#d46880" opacity=".7"/><circle cx="254" cy="330" r="18" fill="#c45068" opacity=".7"/><circle cx="295" cy="340" r="15" fill="#bc4860" opacity=".65"/></g>
-        <!-- Cluster: left branch (22,410) -->
-        <g><circle cx="18" cy="396" r="32" fill="#d06878" opacity=".78"/><circle cx="50" cy="384" r="26" fill="#d87880" opacity=".7"/><circle cx="-6" cy="408" r="20" fill="#c85870" opacity=".68"/><circle cx="38" cy="416" r="17" fill="#c06070" opacity=".62"/></g>
-        <!-- Cluster: mid left (230,392) -->
-        <g><circle cx="234" cy="378" r="30" fill="#d06880" opacity=".8"/><circle cx="262" cy="366" r="24" fill="#d87880" opacity=".72"/><circle cx="208" cy="386" r="21" fill="#c85870" opacity=".72"/><circle cx="252" cy="396" r="17" fill="#bc5068" opacity=".66"/></g>
-        <!-- Cluster: mid right (426,392) -->
-        <g><circle cx="428" cy="378" r="26" fill="#cc6078" opacity=".75"/><circle cx="454" cy="368" r="20" fill="#d47080" opacity=".68"/><circle cx="406" cy="386" r="18" fill="#c45870" opacity=".68"/></g>
-        <!-- Cluster: right mid (368,416) -->
-        <g><circle cx="370" cy="402" r="25" fill="#d06880" opacity=".76"/><circle cx="396" cy="392" r="19" fill="#d87888" opacity=".68"/><circle cx="348" cy="410" r="17" fill="#c85878" opacity=".68"/><circle cx="386" cy="420" r="14" fill="#bc5070" opacity=".62"/></g>
-        <!-- Cluster: far left low (68,574) -->
-        <g><circle cx="66" cy="560" r="28" fill="#cc6078" opacity=".75"/><circle cx="94" cy="548" r="22" fill="#d47080" opacity=".68"/><circle cx="42" cy="568" r="19" fill="#c45870" opacity=".68"/><circle cx="82" cy="578" r="15" fill="#bc5068" opacity=".62"/></g>
-        <!-- Cluster: mid lower (212,492) -->
-        <g><circle cx="215" cy="478" r="27" fill="#d06880" opacity=".77"/><circle cx="241" cy="466" r="21" fill="#d87888" opacity=".68"/><circle cx="190" cy="486" r="19" fill="#c85878" opacity=".68"/><circle cx="230" cy="498" r="14" fill="#bc5070" opacity=".62"/></g>
-        <!-- Cluster: trunk upper (177,328) -->
-        <g><circle cx="180" cy="314" r="30" fill="#d46880" opacity=".8"/><circle cx="208" cy="302" r="24" fill="#dc7888" opacity=".72"/><circle cx="154" cy="322" r="20" fill="#cc5878" opacity=".72"/><circle cx="198" cy="332" r="16" fill="#c05070" opacity=".66"/></g>
-        <!-- Cluster: trunk high (208,258) -->
-        <g><circle cx="210" cy="244" r="26" fill="#cc5878" opacity=".78"/><circle cx="235" cy="232" r="20" fill="#d46880" opacity=".7"/><circle cx="186" cy="252" r="18" fill="#c44868" opacity=".7"/></g>
-        <!-- Cluster: tree top (280,162) -->
-        <g><circle cx="282" cy="148" r="28" fill="#d06880" opacity=".8"/><circle cx="308" cy="137" r="22" fill="#d87888" opacity=".72"/><circle cx="258" cy="156" r="19" fill="#c85878" opacity=".72"/><circle cx="298" cy="166" r="15" fill="#c05070" opacity=".65"/></g>
-        <!-- Scatter fills -->
-        <g opacity=".68">
-          <circle cx="118" cy="448" r="20" fill="#cc6078"/><circle cx="143" cy="436" r="16" fill="#d06880"/><circle cx="100" cy="458" r="14" fill="#c05070"/>
-          <circle cx="278" cy="577" r="19" fill="#d06880"/><circle cx="300" cy="567" r="15" fill="#d87888"/><circle cx="258" cy="585" r="13" fill="#c85878"/>
-          <circle cx="165" cy="598" r="16" fill="#cc6078"/><circle cx="185" cy="588" r="12" fill="#d46880"/>
-        </g>
-      </g>
-
-      <!-- Highlight tints — watercolour light -->
-      <g fill="#fce0e8" opacity=".35">
-        <circle cx="330" cy="308" r="12"/><circle cx="420" cy="214" r="9"/><circle cx="18" cy="388" r="10"/>
-        <circle cx="178" cy="306" r="9"/><circle cx="280" cy="140" r="9"/><circle cx="212" cy="470" r="8"/>
-      </g>
-
-      <!-- Falling petals -->
-      <g class="petals" fill="#cc5878" opacity=".55">
-        <ellipse cx="78" cy="685" rx="5.5" ry="2.5" transform="rotate(-28 78 685)"/>
-        <ellipse cx="195" cy="705" rx="4.5" ry="2.2" transform="rotate(18 195 705)"/>
-        <ellipse cx="345" cy="665" rx="5" ry="2.4" transform="rotate(-42 345 665)"/>
-        <ellipse cx="462" cy="692" rx="4" ry="2" transform="rotate(22 462 692)"/>
-        <ellipse cx="525" cy="645" rx="5" ry="2.5" transform="rotate(-12 525 645)"/>
-        <ellipse cx="158" cy="732" rx="3.8" ry="1.9" transform="rotate(32 158 732)"/>
-        <ellipse cx="388" cy="728" rx="4" ry="2" transform="rotate(-32 388 728)"/>
-        <ellipse cx="55" cy="715" rx="3.2" ry="1.6" transform="rotate(12 55 715)"/>
-        <ellipse cx="278" cy="748" rx="4" ry="2" transform="rotate(-22 278 748)"/>
-        <ellipse cx="432" cy="645" rx="3.5" ry="1.8" transform="rotate(38 432 645)"/>
-        <ellipse cx="562" cy="702" rx="4" ry="2" transform="rotate(-16 562 702)"/>
-        <ellipse cx="112" cy="652" rx="3.2" ry="1.6" transform="rotate(42 112 652)"/>
-        <ellipse cx="242" cy="668" rx="3.5" ry="1.8" transform="rotate(-8 242 668)"/>
-        <ellipse cx="498" cy="718" rx="3" ry="1.5" transform="rotate(28 498 718)"/>
-      </g>
-
-      <!-- ── SAMURAI SILHOUETTE ── -->
-      <g transform="translate(372,565)" class="samurai-fig">
-        <!-- Shadow -->
-        <ellipse cx="32" cy="178" rx="40" ry="8" fill="#7a6050" opacity=".28"/>
-        <!-- Legs/hakama -->
-        <rect x="15" y="118" width="16" height="54" rx="5" fill="#1a1208"/>
-        <rect x="35" y="118" width="16" height="54" rx="5" fill="#1a1208"/>
-        <ellipse cx="23" cy="172" rx="11" ry="4.5" fill="#221808"/>
-        <ellipse cx="43" cy="172" rx="11" ry="4.5" fill="#221808"/>
-        <!-- Hakama plates -->
-        <path d="M9 98 Q32 108 54 98 L60 118 L4 118Z" fill="#242010"/>
-        <line x1="19" y1="103" x2="17" y2="118" stroke="#1a1608" stroke-width="1"/>
-        <line x1="30" y1="105" x2="30" y2="118" stroke="#1a1608" stroke-width="1"/>
-        <line x1="41" y1="103" x2="43" y2="118" stroke="#1a1608" stroke-width="1"/>
-        <!-- Do (chest) -->
-        <rect x="10" y="56" width="48" height="44" rx="3" fill="#282010"/>
-        <rect x="12" y="58" width="44" height="40" rx="2" fill="#342818"/>
-        <line x1="12" y1="66" x2="56" y2="66" stroke="#221a08" stroke-width="1.2"/>
-        <line x1="12" y1="74" x2="56" y2="74" stroke="#221a08" stroke-width="1.2"/>
-        <line x1="12" y1="82" x2="56" y2="82" stroke="#221a08" stroke-width="1.2"/>
-        <line x1="12" y1="90" x2="56" y2="90" stroke="#221a08" stroke-width="1.2"/>
-        <line x1="34" y1="56" x2="34" y2="98" stroke="#c8102e" stroke-width="1.2" opacity=".7"/>
-        <!-- Shoulder guards -->
-        <path d="M-2 60 Q-10 48 -7 36 Q-2 28 10 33 L10 62Z" fill="#282010"/>
-        <line x1="-8" y1="44" x2="8" y2="44" stroke="#1a1208" stroke-width=".9"/>
-        <line x1="-9" y1="50" x2="9" y2="50" stroke="#1a1208" stroke-width=".9"/>
-        <line x1="-8" y1="56" x2="10" y2="56" stroke="#1a1208" stroke-width=".9"/>
-        <path d="M70 60 Q78 48 75 36 Q70 28 58 33 L58 62Z" fill="#282010"/>
-        <line x1="78" y1="44" x2="62" y2="44" stroke="#1a1208" stroke-width=".9"/>
-        <line x1="79" y1="50" x2="61" y2="50" stroke="#1a1208" stroke-width=".9"/>
-        <line x1="78" y1="56" x2="58" y2="56" stroke="#1a1208" stroke-width=".9"/>
-        <!-- Arm guards -->
-        <rect x="-14" y="62" width="13" height="34" rx="6.5" fill="#282010"/>
-        <rect x="69" y="62" width="13" height="34" rx="6.5" fill="#282010"/>
-        <!-- Helmet -->
-        <path d="M7 33 Q9 6 34 2 Q59 6 61 33 L57 40 Q34 44 11 40Z" fill="#282010"/>
-        <path d="M9 31 Q11 8 34 4 Q57 8 59 31 L55 38 Q34 42 13 38Z" fill="#342818"/>
-        <line x1="12" y1="18" x2="56" y2="18" stroke="#221a08" stroke-width="1"/>
-        <line x1="10" y1="24" x2="58" y2="24" stroke="#221a08" stroke-width="1"/>
-        <line x1="10" y1="30" x2="58" y2="30" stroke="#221a08" stroke-width="1"/>
-        <!-- Maedate crest — crimson -->
-        <path d="M34 2 Q29 -12 34 -20 Q39 -12 34 2Z" fill="#c8102e" opacity=".9"/>
-        <path d="M34 -20 Q26 -30 28 -36 Q34 -32 34 -20Z" fill="#c8102e" opacity=".72"/>
-        <path d="M34 -20 Q42 -30 40 -36 Q34 -32 34 -20Z" fill="#c8102e" opacity=".72"/>
-        <!-- Neck guard -->
-        <path d="M7 36 Q3 50 5 56 L13 56 L13 40Z" fill="#282010"/>
-        <path d="M61 36 Q65 50 63 56 L55 56 L55 40Z" fill="#282010"/>
-        <!-- Mask -->
-        <path d="M15 35 Q17 47 34 49 Q51 47 53 35 L49 31 Q34 35 19 31Z" fill="#1a1208" stroke="#6a4020" stroke-width=".8"/>
-        <ellipse cx="25" cy="32" rx="5" ry="4" fill="#0a0806"/>
-        <ellipse cx="43" cy="32" rx="5" ry="4" fill="#0a0806"/>
-        <circle cx="25" cy="32" r="2.2" fill="#c8102e" opacity=".82"/>
-        <circle cx="43" cy="32" r="2.2" fill="#c8102e" opacity=".82"/>
-        <!-- Katana 1 — across back -->
-        <g transform="rotate(-26,34,72)">
-          <rect x="-68" y="64" width="125" height="4" rx="1.5" fill="#221808"/>
-          <rect x="-68" y="64.5" width="125" height="2.5" rx="1" fill="#c0b898" opacity=".65"/>
-          <rect x="56" y="62" width="11" height="8" rx="2" fill="#7a5828"/>
-          <rect x="57" y="65" width="22" height="2" rx="1" fill="#5a3818"/>
-        </g>
-        <!-- Katana 2 — at hip -->
-        <g transform="rotate(-8,34,102)">
-          <rect x="-42" y="100" width="94" height="3.5" rx="1.5" fill="#221808"/>
-          <rect x="-42" y="100.5" width="94" height="2" rx="1" fill="#c0b898" opacity=".6"/>
-          <rect x="50" y="98" width="8" height="7" rx="1.5" fill="#7a5828"/>
-        </g>
-      </g>
-
-      <!-- Red seal — bottom right -->
-      <g transform="translate(530,836)">
-        <rect width="52" height="52" fill="#c8102e" opacity=".82"/>
-        <rect x="4" y="4" width="44" height="44" fill="none" stroke="rgba(140,10,30,.5)" stroke-width="1"/>
-        <text x="26" y="22" font-family="serif" font-size="9" fill="rgba(255,255,255,.75)" text-anchor="middle">侍</text>
-        <text x="26" y="36" font-family="serif" font-size="9" fill="rgba(255,255,255,.75)" text-anchor="middle">道</text>
-        <text x="26" y="50" font-family="serif" font-size="7.5" fill="rgba(255,255,255,.5)" text-anchor="middle">2026</text>
-      </g>
-    </svg>
-
-    <!-- Floating petal canvas (JS-driven) -->
-    <canvas id="petal-canvas" aria-hidden="true"></canvas>
-  </div>
-
-  <!-- Right: editorial content -->
-  <div class="hero-editorial">
-
-    <div class="hero-vert-kanji" aria-hidden="true">侍 · 開発者 · ロンドン</div>
-
-    <div class="hero-content">
-      <div class="hero-eyebrow" aria-hidden="true">
-        <span class="eyebrow-line"></span>
-        <span class="eyebrow-txt">Portfolio · 2026</span>
-      </div>
-
-      <div class="status-pill">
-        <span class="status-dot" aria-hidden="true"></span>
-        <span>Open to Graduate Roles</span>
+    <div class="hero-text">
+      <div class="hero-eyebrow">
+        <span class="hero-eyebrow-rule" aria-hidden="true"></span>
+        <span class="mono-label">Portfolio · 2026</span>
       </div>
 
       <h1 class="hero-h1">
-        <span class="h1-line" data-reveal>Software</span>
-        <span class="h1-line h1-accent" data-reveal>Developer.</span>
+        <span class="h1-line-wrap"><span class="h1-line">Full-Stack</span></span>
+        <span class="h1-line-wrap h1-italic"><span class="h1-line">Software</span></span>
+        <span class="h1-line-wrap"><span class="h1-line">Engineer.</span></span>
       </h1>
 
-      <p class="hero-degree" data-reveal>BSc Computer Science · Westminster</p>
+      <div class="hero-meta">
+        <div class="status-badge">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span>Open to Graduate Roles — London</span>
+        </div>
+        <p class="hero-degree">BSc Computer Science · University of Westminster</p>
+      </div>
 
-      <p class="hero-desc" data-reveal>
-        Full-stack engineer. AI &amp; computer vision. I build things that go live — from legal news platforms to real-time lane detection on embedded hardware.
+      <p class="hero-desc">
+        I architect and ship production systems — from a live editorial platform serving 1,000+ users to real-time computer vision on embedded hardware. Backend-first, AI-capable, always deploying.
       </p>
 
-      <div class="hero-actions" data-reveal>
-        <a href="#projects" class="btn-primary">View Projects</a>
-        <a href="https://github.com/BenyaminMahamed" target="_blank" rel="noopener" class="btn-ghost">GitHub →</a>
+      <div class="hero-actions">
+        <a href="#projects" class="btn-primary">
+          <span>View Production Work</span>
+          <span class="btn-arrow" aria-hidden="true">→</span>
+        </a>
+        <a href="https://github.com/BenyaminMahamed" target="_blank" rel="noopener" class="btn-outline">
+          GitHub Archive
+        </a>
+      </div>
+
+      <!-- Ink slash decorative accent -->
+      <div class="hero-accent-slash" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <!-- Right: image asset panel -->
+  <div class="hero-right">
+    <!--
+      ┌─────────────────────────────────────────────────────────────────────┐
+      │  ASSET SLOT: assets/hero-ink.jpg                                    │
+      │  Prompt: "Ultra-high-contrast Sumi-e ink wash. A solitary figure    │
+      │  standing in vast negative white space. Sparse, gestural            │
+      │  brushstrokes. Ink bleeds at edges. Dramatic black on pure white.   │
+      │  No colour. Traditional Japanese kakejiku scroll composition.       │
+      │  1200×1600px minimum. Portrait orientation."                        │
+      │  Source: Unsplash search "sumi-e ink wash" or Midjourney prompt     │
+      └─────────────────────────────────────────────────────────────────────┘
+    -->
+    <div class="hero-img-panel" id="hero-img-panel">
+      <div class="asset-slot asset-slot--hero" aria-label="Sumi-e ink wash illustration panel">
+        <div class="asset-slot-inner">
+          <!-- CSS ink art visible until real asset loaded -->
+          <div class="css-ink-art" aria-hidden="true">
+            <div class="ink-s s1"></div>
+            <div class="ink-s s2"></div>
+            <div class="ink-s s3"></div>
+            <div class="ink-s s4"></div>
+            <div class="ink-d d1"></div>
+            <div class="ink-d d2"></div>
+          </div>
+          <div class="asset-slot-label">
+            <span class="mono-label crimson">ASSET REQUIRED</span>
+            <code>assets/hero-ink.jpg</code>
+            <p>Sumi-e ink wash · 1200×1600px</p>
+          </div>
+        </div>
+        <!-- Replace this div with: <img src="assets/hero-ink.jpg" alt="Ink wash illustration" class="hero-img"> -->
+      </div>
+
+      <!-- Crimson accent frame -->
+      <div class="panel-frame-line" aria-hidden="true"></div>
+      <!-- Coordinates badge -->
+      <div class="panel-badge" aria-hidden="true">
+        <span class="mono-label">51.5074° N · 0.1278° W</span>
       </div>
     </div>
 
-    <!-- Scroll cue -->
-    <div class="scroll-cue" aria-hidden="true">
-      <span class="sc-line"></span>
-      <span class="sc-label">Scroll</span>
+    <!-- Scroll indicator -->
+    <div class="scroll-indicator" aria-hidden="true">
+      <div class="scroll-line"></div>
+      <span class="mono-label">Scroll</span>
     </div>
   </div>
+
 </section>
 
 <!-- ═══════════════════════════════════════════
      MARQUEE STRIP
      ═══════════════════════════════════════════ -->
 <div class="marquee-strip" aria-hidden="true">
-  <div class="marquee-inner">
-    <span class="mq-item">Django · PostgreSQL</span><span class="mq-sep">侍</span>
-    <span class="mq-item">Python · OpenCV</span><span class="mq-sep">侍</span>
-    <span class="mq-item">Lane Detection · Raspberry Pi</span><span class="mq-sep">侍</span>
-    <span class="mq-item">Live Platform · Blueprint Brief</span><span class="mq-sep">侍</span>
-    <span class="mq-item">JavaScript · HTML/CSS</span><span class="mq-sep">侍</span>
-    <span class="mq-item">Git · Linux · Bash</span><span class="mq-sep">侍</span>
-    <span class="mq-item">BSc CS · Westminster · London</span><span class="mq-sep">侍</span>
-    <!-- Duplicate for seamless loop -->
-    <span class="mq-item">Django · PostgreSQL</span><span class="mq-sep">侍</span>
-    <span class="mq-item">Python · OpenCV</span><span class="mq-sep">侍</span>
-    <span class="mq-item">Lane Detection · Raspberry Pi</span><span class="mq-sep">侍</span>
-    <span class="mq-item">Live Platform · Blueprint Brief</span><span class="mq-sep">侍</span>
-    <span class="mq-item">JavaScript · HTML/CSS</span><span class="mq-sep">侍</span>
-    <span class="mq-item">Git · Linux · Bash</span><span class="mq-sep">侍</span>
-    <span class="mq-item">BSc CS · Westminster · London</span><span class="mq-sep">侍</span>
+  <div class="marquee-track">
+    <span class="mq">Django · PostgreSQL</span><span class="mq-sep">◆</span>
+    <span class="mq">Python · OpenCV · NumPy</span><span class="mq-sep">◆</span>
+    <span class="mq">Raspberry Pi 5 · Computer Vision</span><span class="mq-sep">◆</span>
+    <span class="mq">The Blueprint Brief · 1,000+ Users</span><span class="mq-sep">◆</span>
+    <span class="mq">JavaScript · HTML · CSS</span><span class="mq-sep">◆</span>
+    <span class="mq">Git · Linux · Bash · REST APIs</span><span class="mq-sep">◆</span>
+    <span class="mq">RAG · FAISS · Gemini 2.0</span><span class="mq-sep">◆</span>
+    <span class="mq">BSc Computer Science · Westminster</span><span class="mq-sep">◆</span>
+    <!-- duplicate for seamless loop -->
+    <span class="mq">Django · PostgreSQL</span><span class="mq-sep">◆</span>
+    <span class="mq">Python · OpenCV · NumPy</span><span class="mq-sep">◆</span>
+    <span class="mq">Raspberry Pi 5 · Computer Vision</span><span class="mq-sep">◆</span>
+    <span class="mq">The Blueprint Brief · 1,000+ Users</span><span class="mq-sep">◆</span>
+    <span class="mq">JavaScript · HTML · CSS</span><span class="mq-sep">◆</span>
+    <span class="mq">Git · Linux · Bash · REST APIs</span><span class="mq-sep">◆</span>
+    <span class="mq">RAG · FAISS · Gemini 2.0</span><span class="mq-sep">◆</span>
+    <span class="mq">BSc Computer Science · Westminster</span><span class="mq-sep">◆</span>
   </div>
 </div>
 
 <!-- ═══════════════════════════════════════════
      ABOUT
      ═══════════════════════════════════════════ -->
-<section id="about">
-  <div class="about-wrap">
+<section id="about" class="section-about">
+  <div class="section-wrap">
+    <div class="about-grid">
 
-    <!-- Left: large editorial image / mask panel -->
-    <div class="about-visual" data-parallax="0.3">
-      <svg class="about-mask-svg" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <defs>
-          <radialGradient id="amg" cx="50%" cy="35%" r="65%">
-            <stop offset="0%" stop-color="#2a1c10"/>
-            <stop offset="100%" stop-color="#0a0806"/>
-          </radialGradient>
-          <radialGradient id="rgl" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#c8102e" stop-opacity=".22"/>
-            <stop offset="100%" stop-color="#c8102e" stop-opacity="0"/>
-          </radialGradient>
-        </defs>
-        <rect width="400" height="500" fill="#0a0806"/>
-        <circle cx="200" cy="240" r="185" fill="url(#rgl)"/>
-        <circle cx="200" cy="240" r="158" fill="none" stroke="#c8102e" stroke-width=".5" opacity=".15"/>
-        <circle cx="200" cy="240" r="142" fill="none" stroke="#c8102e" stroke-width=".4" opacity=".1"/>
-        <!-- Left horn -->
-        <path d="M86 148 Q70 110 78 78 Q84 54 96 44 Q100 64 100 92 Q100 120 100 143Z" fill="#c8102e" opacity=".86"/>
-        <path d="M90 148 Q76 115 83 84 Q87 62 96 50 Q99 68 100 94 Q100 120 100 143Z" fill="#9a0820" opacity=".9"/>
-        <path d="M96 44 Q100 37 102 44 Q100 54 96 50Z" fill="#e8102e"/>
-        <!-- Right horn -->
-        <path d="M314 148 Q330 110 322 78 Q316 54 304 44 Q300 64 300 92 Q300 120 300 143Z" fill="#c8102e" opacity=".86"/>
-        <path d="M310 148 Q324 115 317 84 Q313 62 304 50 Q301 68 300 94 Q300 120 300 143Z" fill="#9a0820" opacity=".9"/>
-        <path d="M304 44 Q300 37 298 44 Q300 54 304 50Z" fill="#e8102e"/>
-        <!-- Face -->
-        <path d="M74 188 Q68 142 90 116 Q116 90 200 88 Q284 90 310 116 Q332 142 326 188 L316 298 Q306 378 280 412 Q256 442 200 446 Q144 442 120 412 Q94 378 84 298Z" fill="url(#amg)" stroke="#c8102e" stroke-width="1.5"/>
-        <!-- Brow ridges -->
-        <path d="M95 162 Q120 142 162 152" fill="none" stroke="#5a3010" stroke-width="3.5" stroke-linecap="round"/>
-        <path d="M305 162 Q280 142 238 152" fill="none" stroke="#5a3010" stroke-width="3.5" stroke-linecap="round"/>
-        <path d="M97 157 Q120 139 158 149" fill="none" stroke="#c8102e" stroke-width="1.5" stroke-linecap="round" opacity=".6"/>
-        <path d="M303 157 Q280 139 242 149" fill="none" stroke="#c8102e" stroke-width="1.5" stroke-linecap="round" opacity=".6"/>
-        <!-- Eye sockets -->
-        <ellipse cx="146" cy="193" rx="35" ry="27" fill="#050402" stroke="#c8102e" stroke-width="1.5"/>
-        <ellipse cx="254" cy="193" rx="35" ry="27" fill="#050402" stroke="#c8102e" stroke-width="1.5"/>
-        <circle cx="146" cy="195" r="16" fill="#c8102e" opacity=".85"/>
-        <circle cx="254" cy="195" r="16" fill="#c8102e" opacity=".85"/>
-        <circle cx="146" cy="196" r="8" fill="#0a0806"/>
-        <circle cx="254" cy="196" r="8" fill="#0a0806"/>
-        <circle cx="152" cy="189" r="5" fill="rgba(255,100,60,.45)"/>
-        <circle cx="260" cy="189" r="5" fill="rgba(255,100,60,.45)"/>
-        <!-- Cheek lacquer marks -->
-        <circle cx="94" cy="228" r="9" fill="#c8102e" opacity=".55"/>
-        <circle cx="306" cy="228" r="9" fill="#c8102e" opacity=".55"/>
-        <!-- Nose -->
-        <path d="M174 204 Q180 228 174 244 Q184 262 200 264 Q216 262 226 244 Q220 228 226 204" fill="#1c1008" stroke="#6a3818" stroke-width=".8"/>
-        <ellipse cx="177" cy="250" rx="14" ry="10" fill="#3a1c08"/>
-        <ellipse cx="223" cy="250" rx="14" ry="10" fill="#3a1c08"/>
-        <!-- Mouth -->
-        <path d="M116 302 Q158 288 200 291 Q242 288 284 302" fill="none" stroke="#c8102e" stroke-width="2" stroke-linecap="round"/>
-        <path d="M133 302 Q163 292 200 294 Q237 292 267 302 Q260 313 237 310 Q218 307 200 308 Q182 307 163 310 Q140 313 133 302Z" fill="#4a2010"/>
-        <!-- Fangs -->
-        <path d="M146 308 L140 338 L156 333Z" fill="#f0e8d0"/>
-        <path d="M254 308 L260 338 L244 333Z" fill="#f0e8d0"/>
-        <path d="M178 303 L174 331 L184 328Z" fill="#e8e0c8" opacity=".88"/>
-        <path d="M222 303 L226 331 L216 328Z" fill="#e8e0c8" opacity=".88"/>
-        <!-- Small teeth -->
-        <g fill="#d8d0b8" opacity=".7">
-          <rect x="156" y="311" width="8" height="12" rx="2"/>
-          <rect x="169" y="313" width="8" height="10" rx="2"/>
-          <rect x="196" y="311" width="8" height="11" rx="2" transform="translate(-4,0)"/>
-          <rect x="209" y="313" width="8" height="10" rx="2"/>
-          <rect x="220" y="311" width="8" height="12" rx="2"/>
-        </g>
-        <path d="M143 316 Q200 330 257 316 L254 332 Q200 346 146 332Z" fill="#050402"/>
-        <!-- Forehead kamon -->
-        <circle cx="200" cy="130" r="20" fill="none" stroke="#c8102e" stroke-width="1" opacity=".5"/>
-        <circle cx="200" cy="130" r="10" fill="none" stroke="#c8102e" stroke-width=".8" opacity=".4"/>
-        <line x1="200" y1="110" x2="200" y2="150" stroke="#c8102e" stroke-width=".8" opacity=".4"/>
-        <line x1="180" y1="130" x2="220" y2="130" stroke="#c8102e" stroke-width=".8" opacity=".4"/>
-        <!-- Chin armour -->
-        <path d="M144 392 Q172 410 200 412 Q228 410 256 392" fill="none" stroke="#c8102e" stroke-width="1" opacity=".38"/>
-        <rect x="166" y="402" width="24" height="19" rx="4" fill="#1c1008" stroke="#c8102e" stroke-width=".8" opacity=".48"/>
-        <rect x="194" y="402" width="24" height="19" rx="4" fill="#1c1008" stroke="#c8102e" stroke-width=".8" opacity=".48"/>
-        <rect x="136" y="396" width="28" height="21" rx="4" fill="#1c1008" stroke="#c8102e" stroke-width=".8" opacity=".48"/>
-        <rect x="226" y="396" width="28" height="21" rx="4" fill="#1c1008" stroke="#c8102e" stroke-width=".8" opacity=".48"/>
-      </svg>
-      <div class="about-location-badge">London · UK</div>
-    </div>
-
-    <!-- Right: editorial text -->
-    <div class="about-text">
-      <div class="section-eyebrow" data-reveal>
-        <span class="se-num">01</span>
-        <span class="se-line"></span>
-        <span class="se-label">About</span>
-      </div>
-      <h2 class="section-title" data-reveal>The<br><em>Player Card.</em></h2>
-
-      <p class="about-p" data-reveal>
-        CS graduate from the <strong>University of Westminster</strong>, London. I build full-stack platforms, train computer vision systems, and write clean, purposeful code.
-      </p>
-      <p class="about-p" data-reveal style="--delay:.12s">
-        My dissertation focused on real-time lane detection using OpenCV on a Raspberry Pi 5. I co-founded <strong>The Blueprint Brief</strong> — a live legal news platform built with Django and PostgreSQL, serving real users.
-      </p>
-
-      <div class="about-stats" data-reveal style="--delay:.2s">
-        <div class="stat-item">
-          <span class="stat-val">3+</span>
-          <span class="stat-label">Projects</span>
+      <!-- Left: image panel -->
+      <div class="about-visual" data-gsap-reveal>
+        <!--
+          ┌──────────────────────────────────────────────────────────────────┐
+          │  ASSET SLOT: assets/about-portrait.jpg                          │
+          │  Prompt: "Nakazawa-style high-contrast ink line art portrait.    │
+          │  Sparse, precise ink lines on warm cream/off-white paper.        │
+          │  Strong silhouette. Large negative space. Black ink only.        │
+          │  No fill colours. 800×1000px portrait orientation."             │
+          │  Alternative: Abstract Japanese calligraphy brushstroke panel.   │
+          └──────────────────────────────────────────────────────────────────┘
+        -->
+        <div class="asset-slot asset-slot--portrait" aria-label="Portrait panel">
+          <div class="asset-slot-inner">
+            <div class="css-ink-art" aria-hidden="true">
+              <div class="ink-s s5"></div>
+              <div class="ink-s s6"></div>
+            </div>
+            <div class="asset-slot-label">
+              <span class="mono-label crimson">ASSET REQUIRED</span>
+              <code>assets/about-portrait.jpg</code>
+              <p>Line art portrait · 800×1000px</p>
+            </div>
+          </div>
+          <!-- Replace with: <img src="assets/about-portrait.jpg" alt="Portrait" class="about-portrait-img"> -->
         </div>
-        <div class="stat-item">
-          <span class="stat-val">7+</span>
-          <span class="stat-label">Languages</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-val">1</span>
-          <span class="stat-label">Live Platform</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-val">BSc</span>
-          <span class="stat-label">CS Degree</span>
+
+        <div class="about-img-caption">
+          <span class="mono-label">London, United Kingdom</span>
+          <span class="mono-label">BSc Computer Science · 2026</span>
         </div>
       </div>
+
+      <!-- Right: editorial text block -->
+      <div class="about-content">
+        <div class="section-eyebrow" data-gsap-reveal>
+          <span class="mono-label crimson">01 — About</span>
+          <span class="eyebrow-rule" aria-hidden="true"></span>
+        </div>
+
+        <h2 class="section-title" data-gsap-reveal>
+          Engineer.<br>
+          <em>Builder.</em><br>
+          Architect.
+        </h2>
+
+        <div class="about-body" data-gsap-reveal data-delay="0.1">
+          <p>
+            CS graduate from the <strong>University of Westminster</strong>, London. I engineer production systems — not prototypes. My work spans the full stack: backend architecture, database design, computer vision pipelines, and AI integration.
+          </p>
+          <p>
+            I co-founded <strong>The Blueprint Brief</strong>, a live editorial platform currently serving over 1,000 registered users — built entirely with Django and PostgreSQL, deployed and maintained in production. My final year dissertation produced a real-time autonomous navigation system running on embedded hardware at ~14 FPS.
+          </p>
+        </div>
+
+        <!-- Credential grid -->
+        <div class="credential-grid" data-gsap-reveal data-delay="0.2">
+          <div class="credential-item">
+            <span class="cred-val" data-countup>1,000+</span>
+            <span class="cred-label">Platform Users</span>
+          </div>
+          <div class="credential-item">
+            <span class="cred-val">7+</span>
+            <span class="cred-label">Languages</span>
+          </div>
+          <div class="credential-item">
+            <span class="cred-val">4+</span>
+            <span class="cred-label">Production Projects</span>
+          </div>
+          <div class="credential-item">
+            <span class="cred-val">BSc</span>
+            <span class="cred-label">CS Honours</span>
+          </div>
+        </div>
+
+        <!-- Skill tags -->
+        <div class="about-tags" data-gsap-reveal data-delay="0.3">
+          <span class="tag">Full-Stack Development</span>
+          <span class="tag">AI / ML Engineering</span>
+          <span class="tag">Computer Vision</span>
+          <span class="tag">Embedded Systems</span>
+          <span class="tag">RESTful APIs</span>
+          <span class="tag">Database Architecture</span>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
 
 <!-- ═══════════════════════════════════════════
-     SKILLS
+     FEATURED PROJECTS
      ═══════════════════════════════════════════ -->
-<section id="skills">
-  <div class="wrap">
-    <div class="section-eyebrow" data-reveal>
-      <span class="se-num">02</span>
-      <span class="se-line"></span>
-      <span class="se-label">Skills</span>
-    </div>
-    <h2 class="section-title" data-reveal>Scouting<br><em>Report.</em></h2>
+<section id="projects" class="section-projects">
 
-    <div class="skills-grid">
-      <div class="skill-group" data-reveal>
-        <p class="sg-title">Backend &amp; Core</p>
-        <div class="skill-item"><div class="si-head"><span>Python</span><span>90</span></div><div class="si-track"><div class="si-fill" data-pct="90"></div></div></div>
-        <div class="skill-item"><div class="si-head"><span>Django</span><span>82</span></div><div class="si-track"><div class="si-fill" data-pct="82"></div></div></div>
-        <div class="skill-item"><div class="si-head"><span>SQL / PostgreSQL</span><span>72</span></div><div class="si-track"><div class="si-fill" data-pct="72"></div></div></div>
-        <p class="sg-title" style="margin-top:2.5rem">AI / Computer Vision</p>
-        <div class="skill-item"><div class="si-head"><span>OpenCV</span><span>78</span></div><div class="si-track"><div class="si-fill" data-pct="78"></div></div></div>
-        <div class="skill-item"><div class="si-head"><span>NumPy</span><span>74</span></div><div class="si-track"><div class="si-fill" data-pct="74"></div></div></div>
+  <div class="projects-header-band">
+    <div class="section-wrap">
+      <div class="section-eyebrow" data-gsap-reveal>
+        <span class="mono-label crimson">02 — Production Applications</span>
+        <span class="eyebrow-rule" aria-hidden="true"></span>
       </div>
-      <div class="skill-group" data-reveal style="--delay:.14s">
-        <p class="sg-title">Frontend</p>
-        <div class="skill-item"><div class="si-head"><span>HTML / CSS</span><span>80</span></div><div class="si-track"><div class="si-fill" data-pct="80"></div></div></div>
-        <div class="skill-item"><div class="si-head"><span>JavaScript</span><span>70</span></div><div class="si-track"><div class="si-fill" data-pct="70"></div></div></div>
-        <p class="sg-title" style="margin-top:2.5rem">DevOps &amp; Tools</p>
-        <div class="skill-item"><div class="si-head"><span>Git / GitHub</span><span>75</span></div><div class="si-track"><div class="si-fill" data-pct="75"></div></div></div>
-        <div class="skill-item"><div class="si-head"><span>Bash / Linux</span><span>60</span></div><div class="si-track"><div class="si-fill" data-pct="60"></div></div></div>
-        <div class="skill-item"><div class="si-head"><span>MicroPython</span><span>65</span></div><div class="si-track"><div class="si-fill" data-pct="65"></div></div></div>
+      <div class="projects-header-row">
+        <h2 class="section-title" data-gsap-reveal>Featured<br><em>Architecture.</em></h2>
+        <div class="proj-filters" id="proj-filters" data-gsap-reveal data-delay="0.1"
+             role="group" aria-label="Filter projects">
+          <button class="pf active" data-f="all">All</button>
+          <button class="pf" data-f="python">Python</button>
+          <button class="pf" data-f="django">Django</button>
+          <button class="pf" data-f="opencv">Computer Vision</button>
+          <button class="pf" data-f="ai">AI / RAG</button>
+        </div>
       </div>
     </div>
   </div>
-</section>
 
-<!-- ═══════════════════════════════════════════
-     SELECTED PROJECTS
-     ═══════════════════════════════════════════ -->
-<section id="projects">
-  <div class="wrap">
-    <div class="section-eyebrow" data-reveal>
-      <span class="se-num">03</span>
-      <span class="se-line"></span>
-      <span class="se-label">Selected Work</span>
-    </div>
-    <div class="projects-hdr">
-      <h2 class="section-title" data-reveal>Game<br><em>Tape.</em></h2>
-      <div class="filter-row" data-reveal style="--delay:.1s" id="proj-filters">
-        <button class="fb active" data-f="all">All</button>
-        <button class="fb" data-f="python">Python</button>
-        <button class="fb" data-f="django">Django</button>
-        <button class="fb" data-f="opencv">OpenCV</button>
-        <button class="fb" data-f="javascript">JS</button>
-      </div>
-    </div>
+  <div class="section-wrap">
+    <div class="proj-list" id="proj-grid">
 
-    <div id="proj-grid" class="proj-grid">
+      <!-- ── PROJECT 01: THE BLUEPRINT BRIEF ── FEATURED / LIVE ── -->
+      <article class="proj-item proj-item--featured" data-t="python,django,javascript,html,sql" data-gsap-proj>
 
-      <!-- PROJECT 01 — Featured -->
-      <article class="proj-card featured" data-t="python,django,javascript,html,sql" data-reveal>
-        <div class="pc-num"><span>01</span></div>
-        <div class="pc-body">
-          <header class="pc-head">
-            <h3 class="pc-title">The Blueprint Brief</h3>
-            <span class="pc-badge live" aria-label="Status: live">Live</span>
-          </header>
-          <p class="pc-desc">Co-founded student legal news platform. Full CMS, articles, newsletters. Real users running right now on a production Django + PostgreSQL stack.</p>
-          <ul class="pc-tags" aria-label="Technologies">
-            <li>Django</li><li>PostgreSQL</li><li>Python</li><li>HTML/CSS</li><li>JavaScript</li>
+        <div class="proj-visual">
+          <!--
+            ┌──────────────────────────────────────────────────────────────────┐
+            │  ASSET SLOT: assets/blueprint-brief.jpg                         │
+            │  Use: High-resolution browser screenshot of theblueprintbrief.com│
+            │  Or a mockup showing the editorial interface.                    │
+            │  Convert to high-contrast with warm tint if desired. 800×600px.  │
+            └──────────────────────────────────────────────────────────────────┘
+          -->
+          <div class="proj-img-panel">
+            <div class="asset-slot asset-slot--proj">
+              <div class="asset-slot-label">
+                <span class="mono-label crimson">LIVE PLATFORM</span>
+                <code>assets/blueprint-brief.jpg</code>
+              </div>
+              <!-- Replace with: <img src="assets/blueprint-brief.jpg" alt="The Blueprint Brief platform"> -->
+            </div>
+            <a href="https://theblueprintbrief.com" target="_blank" rel="noopener"
+               class="proj-visit-overlay" aria-label="Visit The Blueprint Brief live">
+              <span>Visit Live →</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="proj-data">
+          <div class="proj-meta-row">
+            <span class="proj-index mono-label">01</span>
+            <span class="proj-status proj-status--live">
+              <span class="status-dot" aria-hidden="true"></span>
+              Live Production
+            </span>
+          </div>
+
+          <h3 class="proj-title">The Blueprint<br>Brief</h3>
+
+          <p class="proj-desc">
+            Co-founded and architected a full-stack editorial CMS serving 1,000+ registered users in production. Sole engineer responsible for all backend systems, infrastructure, DNS, and transactional email delivery pipelines.
+          </p>
+
+          <div class="proj-highlights">
+            <div class="highlight-item">
+              <span class="hi-val">1,000+</span>
+              <span class="hi-label">Registered Users</span>
+            </div>
+            <div class="highlight-item">
+              <span class="hi-val">100%</span>
+              <span class="hi-label">Solo-Engineered</span>
+            </div>
+          </div>
+
+          <ul class="proj-tags" aria-label="Technologies used">
+            <li>Django</li><li>PostgreSQL</li><li>Python</li>
+            <li>CKEditor 5</li><li>JavaScript</li><li>Linux</li>
           </ul>
-          <a href="https://theblueprintbrief.com" target="_blank" rel="noopener" class="pc-link">Visit Live Site <span aria-hidden="true">→</span></a>
+
+          <div class="proj-links">
+            <a href="https://theblueprintbrief.com" target="_blank" rel="noopener" class="proj-link proj-link--primary">
+              Visit Live Platform <span aria-hidden="true">→</span>
+            </a>
+          </div>
         </div>
       </article>
 
-      <!-- PROJECT 02 -->
-      <article class="proj-card" data-t="python,opencv,numpy,bash" data-reveal style="--delay:.08s">
-        <div class="pc-num"><span>02</span></div>
-        <div class="pc-body">
-          <header class="pc-head">
-            <h3 class="pc-title">Autonomous Navigation System</h3>
-            <span class="pc-badge diss" aria-label="Status: dissertation">Dissertation</span>
-          </header>
-          <p class="pc-desc">Real-time lane detection on Raspberry Pi 5. Canny edge detection, Hough transforms, HSV masking — running at edge on embedded hardware.</p>
-          <ul class="pc-tags" aria-label="Technologies">
-            <li>Python</li><li>OpenCV</li><li>NumPy</li><li>Bash</li><li>Git</li>
+      <!-- ── PROJECT 02: AUTONOMOUS NAV SYSTEM ── -->
+      <article class="proj-item" data-t="python,opencv,numpy,bash,embedded" data-gsap-proj>
+        <div class="proj-visual">
+          <!--
+            ┌──────────────────────────────────────────────────────────────────┐
+            │  ASSET SLOT: assets/autonomous-nav.jpg                          │
+            │  Use: Clean architectural diagram of the CV pipeline, or a photo │
+            │  of the PiCar-X hardware setup. High-contrast, near-monochrome. │
+            │  800×600px.                                                      │
+            └──────────────────────────────────────────────────────────────────┘
+          -->
+          <div class="proj-img-panel">
+            <div class="asset-slot asset-slot--proj">
+              <div class="asset-slot-label">
+                <span class="mono-label">DISSERTATION</span>
+                <code>assets/autonomous-nav.jpg</code>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="proj-data">
+          <div class="proj-meta-row">
+            <span class="proj-index mono-label">02</span>
+            <span class="proj-status proj-status--diss">Final Year Dissertation</span>
+          </div>
+
+          <h3 class="proj-title">Autonomous<br>Navigation System</h3>
+
+          <p class="proj-desc">
+            Real-time lane detection and obstacle avoidance running on Raspberry Pi 5. Classical computer vision pipeline — Canny edge detection, Hough Transform, proportional steering controller. ~10ms latency at ~14 FPS across a 10,298-frame live session.
+          </p>
+
+          <ul class="proj-tags" aria-label="Technologies used">
+            <li>Python</li><li>OpenCV</li><li>NumPy</li>
+            <li>Raspberry Pi 5</li><li>Multithreading</li><li>Linux</li>
           </ul>
-          <a href="https://github.com/BenyaminMahamed/FINALYEARPROJECT" target="_blank" rel="noopener" class="pc-link">View Repo <span aria-hidden="true">→</span></a>
+
+          <div class="proj-links">
+            <a href="https://github.com/BenyaminMahamed/FINALYEARPROJECT" target="_blank" rel="noopener" class="proj-link">
+              View Repository <span aria-hidden="true">→</span>
+            </a>
+          </div>
         </div>
       </article>
 
-      <!-- PROJECT 03 -->
-      <article class="proj-card" data-t="python,django,javascript,html,sql" data-reveal style="--delay:.16s">
-        <div class="pc-num"><span>03</span></div>
-        <div class="pc-body">
-          <header class="pc-head">
-            <h3 class="pc-title">Sky TV Voting App</h3>
-            <span class="pc-badge grp" aria-label="Status: group project">Group</span>
-          </header>
-          <p class="pc-desc">Django voting workflow — auth, profile management, session handling, portal dashboard and confirmation flows. Full-stack team collaboration.</p>
-          <ul class="pc-tags" aria-label="Technologies">
+      <!-- ── PROJECT 03: LEXIS RAG ── -->
+      <article class="proj-item" data-t="python,django,ai,rag,faiss" data-gsap-proj>
+        <div class="proj-visual">
+          <!--
+            ┌──────────────────────────────────────────────────────────────────┐
+            │  ASSET SLOT: assets/lexis-rag.jpg                               │
+            │  Use: Clean screenshot of the Lexis interface, or a minimal      │
+            │  system diagram showing the RAG pipeline flow. 800×600px.        │
+            └──────────────────────────────────────────────────────────────────┘
+          -->
+          <div class="proj-img-panel">
+            <div class="asset-slot asset-slot--proj">
+              <div class="asset-slot-label">
+                <span class="mono-label">AI SYSTEM</span>
+                <code>assets/lexis-rag.jpg</code>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="proj-data">
+          <div class="proj-meta-row">
+            <span class="proj-index mono-label">03</span>
+            <span class="proj-status proj-status--personal">Personal Project</span>
+          </div>
+
+          <h3 class="proj-title">Lexis — AI<br>Research Assistant</h3>
+
+          <p class="proj-desc">
+            Custom RAG pipeline built without LangChain abstractions. PDFs ingested page-by-page with PyMuPDF, chunked into overlapping 500-word windows, embedded with all-MiniLM-L6-v2, and indexed in FAISS. Four query modes — every response cites exact source chunks and page numbers.
+          </p>
+
+          <ul class="proj-tags" aria-label="Technologies used">
+            <li>Django</li><li>FAISS</li><li>Sentence-Transformers</li>
+            <li>PyMuPDF</li><li>Gemini 2.0 Flash</li><li>SQLite</li>
+          </ul>
+
+          <div class="proj-links">
+            <a href="https://github.com/BenyaminMahamed/AI-Research-Assistant" target="_blank" rel="noopener" class="proj-link">
+              View Repository <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <!-- ── PROJECT 04: SKY TV VOTING PLATFORM ── -->
+      <article class="proj-item" data-t="python,django,javascript,html,sql" data-gsap-proj>
+        <div class="proj-visual">
+          <!--
+            ┌──────────────────────────────────────────────────────────────────┐
+            │  ASSET SLOT: assets/sky-voting.jpg                              │
+            │  Use: Screenshot of the voting platform UI. 800×600px.          │
+            └──────────────────────────────────────────────────────────────────┘
+          -->
+          <div class="proj-img-panel">
+            <div class="asset-slot asset-slot--proj">
+              <div class="asset-slot-label">
+                <span class="mono-label">GROUP PROJECT</span>
+                <code>assets/sky-voting.jpg</code>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="proj-data">
+          <div class="proj-meta-row">
+            <span class="proj-index mono-label">04</span>
+            <span class="proj-status proj-status--group">Team · First Class</span>
+          </div>
+
+          <h3 class="proj-title">Sky TV<br>Voting Platform</h3>
+
+          <p class="proj-desc">
+            Led a team of four. Django voting workflow with full authentication, profile management, session handling, and portal dashboard. Selected to present to a panel of Sky engineers. Awarded 84% — First Class.
+          </p>
+
+          <ul class="proj-tags" aria-label="Technologies used">
             <li>Python</li><li>Django</li><li>SQL</li><li>HTML/CSS</li><li>JavaScript</li>
           </ul>
-          <a href="https://github.com/simonepietraroia/Sky-TV-Project" target="_blank" rel="noopener" class="pc-link">View Repo <span aria-hidden="true">→</span></a>
+
+          <div class="proj-links">
+            <a href="https://github.com/simonepietraroia/Sky-TV-Project" target="_blank" rel="noopener" class="proj-link">
+              View Repository <span aria-hidden="true">→</span>
+            </a>
+          </div>
         </div>
       </article>
 
-    </div>
+    </div><!-- /proj-list -->
   </div>
 </section>
 
 <!-- ═══════════════════════════════════════════
-     LIVE GITHUB ARCHIVE
+     TECHNICAL ECOSYSTEM
      ═══════════════════════════════════════════ -->
-<section id="github">
-  <div class="wrap">
-    <div class="section-eyebrow" data-reveal>
-      <span class="se-num">04</span>
-      <span class="se-line"></span>
-      <span class="se-label">Live Archive</span>
+<section id="stack" class="section-stack">
+  <div class="section-wrap">
+    <div class="section-eyebrow" data-gsap-reveal>
+      <span class="mono-label crimson">03 — Technical Ecosystem</span>
+      <span class="eyebrow-rule" aria-hidden="true"></span>
     </div>
-    <div class="gh-hdr-row">
-      <h2 class="section-title" data-reveal>GitHub<br><em>Archive.</em></h2>
-      <div class="gh-controls" data-reveal style="--delay:.1s">
-        <div class="gh-search-wrap">
-          <input type="search" id="gh-search" class="gh-search" placeholder="Search repos…" aria-label="Search repositories">
+
+    <div class="stack-grid">
+
+      <div class="stack-intro">
+        <h2 class="section-title" data-gsap-reveal>Core<br><em>Competencies.</em></h2>
+        <p class="stack-desc" data-gsap-reveal data-delay="0.1">
+          A production-proven stack built through real deployment — not coursework alone. Every skill listed has shipped to live users or embedded hardware.
+        </p>
+
+        <!--
+          ┌──────────────────────────────────────────────────────────────────┐
+          │  ASSET SLOT: assets/stack-texture.jpg                           │
+          │  Use: Close-up photograph of a traditional Japanese calligraphy  │
+          │  brush on washi paper, or abstract ink-on-paper texture.         │
+          │  Warm tones. 800×600px. Optional but elevates this panel.        │
+          └──────────────────────────────────────────────────────────────────┘
+        -->
+        <div class="stack-img-panel" data-gsap-reveal data-delay="0.2">
+          <div class="asset-slot asset-slot--stack" aria-label="Stack texture panel">
+            <div class="asset-slot-label">
+              <span class="mono-label crimson">ASSET REQUIRED</span>
+              <code>assets/stack-texture.jpg</code>
+              <p>Washi paper texture · 800×600px</p>
+            </div>
+          </div>
         </div>
-        <div class="gh-lang-filters" id="gh-lang-filters" role="group" aria-label="Filter by language">
-          <button class="gh-fb active" data-lang="all">All</button>
+      </div>
+
+      <div class="stack-tables">
+
+        <div class="stack-category" data-gsap-reveal data-delay="0.05">
+          <h3 class="stack-cat-title">Backend &amp; Core</h3>
+          <div class="skill-rows">
+            <div class="skill-row">
+              <span class="sk-name">Python</span>
+              <div class="sk-track"><div class="sk-fill" data-pct="90"></div></div>
+              <span class="sk-val mono-label">90</span>
+            </div>
+            <div class="skill-row">
+              <span class="sk-name">Django / DRF</span>
+              <div class="sk-track"><div class="sk-fill" data-pct="82"></div></div>
+              <span class="sk-val mono-label">82</span>
+            </div>
+            <div class="skill-row">
+              <span class="sk-name">PostgreSQL / SQL</span>
+              <div class="sk-track"><div class="sk-fill" data-pct="72"></div></div>
+              <span class="sk-val mono-label">72</span>
+            </div>
+            <div class="skill-row">
+              <span class="sk-name">REST API Design</span>
+              <div class="sk-track"><div class="sk-fill" data-pct="78"></div></div>
+              <span class="sk-val mono-label">78</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="stack-category" data-gsap-reveal data-delay="0.1">
+          <h3 class="stack-cat-title">AI / Computer Vision</h3>
+          <div class="skill-rows">
+            <div class="skill-row">
+              <span class="sk-name">OpenCV</span>
+              <div class="sk-track"><div class="sk-fill" data-pct="78"></div></div>
+              <span class="sk-val mono-label">78</span>
+            </div>
+            <div class="skill-row">
+              <span class="sk-name">FAISS / RAG</span>
+              <div class="sk-track"><div class="sk-fill" data-pct="72"></div></div>
+              <span class="sk-val mono-label">72</span>
+            </div>
+            <div class="skill-row">
+              <span class="sk-name">NumPy / SciPy</span>
+              <div class="sk-track"><div class="sk-fill" data-pct="74"></div></div>
+              <span class="sk-val mono-label">74</span>
+            </div>
+            <div class="skill-row">
+              <span class="sk-name">Embedded / IoT</span>
+              <div class="sk-track"><div class="sk-fill" data-pct="65"></div></div>
+              <span class="sk-val mono-label">65</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="stack-category" data-gsap-reveal data-delay="0.15">
+          <h3 class="stack-cat-title">Frontend &amp; DevOps</h3>
+          <div class="skill-rows">
+            <div class="skill-row">
+              <span class="sk-name">JavaScript / HTML / CSS</span>
+              <div class="sk-track"><div class="sk-fill" data-pct="76"></div></div>
+              <span class="sk-val mono-label">76</span>
+            </div>
+            <div class="skill-row">
+              <span class="sk-name">Git / GitHub</span>
+              <div class="sk-track"><div class="sk-fill" data-pct="80"></div></div>
+              <span class="sk-val mono-label">80</span>
+            </div>
+            <div class="skill-row">
+              <span class="sk-name">Linux / Bash</span>
+              <div class="sk-track"><div class="sk-fill" data-pct="68"></div></div>
+              <span class="sk-val mono-label">68</span>
+            </div>
+            <div class="skill-row">
+              <span class="sk-name">Java</span>
+              <div class="sk-track"><div class="sk-fill" data-pct="60"></div></div>
+              <span class="sk-val mono-label">60</span>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /stack-tables -->
+    </div><!-- /stack-grid -->
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     GITHUB ARCHIVE
+     ═══════════════════════════════════════════ -->
+<section id="archive" class="section-archive">
+  <div class="section-wrap">
+    <div class="section-eyebrow" data-gsap-reveal>
+      <span class="mono-label crimson">04 — Live GitHub Archive</span>
+      <span class="eyebrow-rule" aria-hidden="true"></span>
+    </div>
+
+    <div class="archive-header">
+      <h2 class="section-title" data-gsap-reveal>Repository<br><em>Index.</em></h2>
+
+      <div class="archive-controls" data-gsap-reveal data-delay="0.1">
+        <div class="archive-search-wrap">
+          <input type="search" id="gh-search" class="archive-search"
+                 placeholder="Search repositories…" aria-label="Search GitHub repositories">
+        </div>
+        <div class="archive-lang-filters" id="gh-lang-filters"
+             role="group" aria-label="Filter by language">
+          <button class="af active" data-lang="all">All</button>
         </div>
       </div>
     </div>
-    <div id="gh-grid" class="gh-grid" aria-live="polite" aria-label="GitHub repositories">
-      <div class="gh-loading" id="gh-loading">
-        <div class="gh-loader-ring" aria-hidden="true"></div>
-        <span>Fetching repositories…</span>
+
+    <div id="gh-grid" class="archive-grid" aria-live="polite" aria-label="GitHub repositories">
+      <div class="archive-loading" id="gh-loading">
+        <div class="archive-spinner" aria-hidden="true"></div>
+        <span class="mono-label">Fetching repositories…</span>
       </div>
     </div>
-    <div class="gh-footer" data-reveal>
-      <a href="https://github.com/BenyaminMahamed" target="_blank" rel="noopener" class="btn-ghost">
+
+    <div class="archive-footer" data-gsap-reveal>
+      <a href="https://github.com/BenyaminMahamed" target="_blank" rel="noopener" class="btn-outline">
         View Full GitHub Profile →
       </a>
     </div>
@@ -666,109 +734,104 @@
 <!-- ═══════════════════════════════════════════
      CONTACT
      ═══════════════════════════════════════════ -->
-<section id="contact">
-  <!-- Atmospheric background illustration -->
-  <div class="contact-bg" aria-hidden="true">
-    <svg viewBox="0 0 1400 700" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-      <rect width="1400" height="700" fill="#0a0806"/>
-      <radialGradient id="cgr" cx="72%" cy="50%" r="48%">
-        <stop offset="0%" stop-color="#c8102e" stop-opacity=".1"/>
-        <stop offset="100%" stop-color="#c8102e" stop-opacity="0"/>
-      </radialGradient>
-      <rect width="1400" height="700" fill="url(#cgr)"/>
-      <!-- Partial red sun right edge -->
-      <circle cx="1100" cy="350" r="210" fill="#c8102e" opacity=".07"/>
-      <circle cx="1100" cy="350" r="158" fill="#c8102e" opacity=".06"/>
-      <!-- Sparse blossom branches top right corner -->
-      <g fill="none" stroke="#2a1c10" stroke-linecap="round" opacity=".35">
-        <path d="M1240 0 Q1252 90 1260 158 Q1265 220 1244 272" stroke-width="2"/>
-        <path d="M1260 158 Q1308 136 1360 125" stroke-width="1.5"/>
-        <path d="M1255 196 Q1214 179 1192 168" stroke-width="1.5"/>
-        <path d="M1244 272 Q1284 258 1332 252" stroke-width="1.5"/>
-        <path d="M1252 118 Q1270 105 1295 98" stroke-width="1.2"/>
-      </g>
-      <g fill="#c8102e" opacity=".16">
-        <circle cx="1340" cy="126" r="9"/><circle cx="1358" cy="119" r="6.5"/>
-        <circle cx="1198" cy="165" r="8"/><circle cx="1185" cy="174" r="5.5"/>
-        <circle cx="1316" cy="254" r="8"/><circle cx="1334" cy="249" r="5.5"/>
-        <circle cx="1270" cy="108" r="5.5"/><circle cx="1256" cy="200" r="5"/>
-        <circle cx="1294" cy="99" r="5"/>
-      </g>
-    </svg>
-  </div>
+<section id="contact" class="section-contact">
 
-  <div class="contact-inner">
-    <div class="contact-left">
-      <div class="section-eyebrow" data-reveal>
-        <span class="se-num">05</span>
-        <span class="se-line" style="background:rgba(255,255,255,.06)"></span>
-        <span class="se-label">Contact</span>
-      </div>
-      <h2 class="contact-title" data-reveal>Let's Build<br><em>Something.</em></h2>
-      <p class="contact-sub" data-reveal>
-        CS graduate in London — open to graduate software engineering, AI/ML, and full-stack roles.
-      </p>
-
-      <div class="contact-links" data-reveal style="--delay:.1s">
-        <a href="https://github.com/BenyaminMahamed" target="_blank" rel="noopener" class="c-link">
-          <span class="cl-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-          </span>
-          <span class="cl-body">
-            <span class="cl-label">GitHub</span>
-            <span class="cl-value">BenyaminMahamed</span>
-          </span>
-          <span class="cl-arr" aria-hidden="true">→</span>
-        </a>
-        <a href="https://www.linkedin.com/in/benyamin-mahamed/" target="_blank" rel="noopener" class="c-link">
-          <span class="cl-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-          </span>
-          <span class="cl-body">
-            <span class="cl-label">LinkedIn</span>
-            <span class="cl-value">benyamin-mahamed</span>
-          </span>
-          <span class="cl-arr" aria-hidden="true">→</span>
-        </a>
-        <a href="https://theblueprintbrief.com" target="_blank" rel="noopener" class="c-link">
-          <span class="cl-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-          </span>
-          <span class="cl-body">
-            <span class="cl-label">Live Platform</span>
-            <span class="cl-value">theblueprintbrief.com</span>
-          </span>
-          <span class="cl-arr" aria-hidden="true">→</span>
-        </a>
-      </div>
-
-      <div class="avail-badge" data-reveal style="--delay:.22s">
-        <span class="avail-dot" aria-hidden="true"></span>
-        <span><strong>Available now</strong> — seeking graduate roles in London</span>
+  <!--
+    ┌──────────────────────────────────────────────────────────────────────┐
+    │  ASSET SLOT: assets/contact-landscape.jpg                           │
+    │  Prompt: "Abstract Japanese mountain landscape silhouette. Sumi-e    │
+    │  ink wash. Extreme horizontal format. Misty mountains receding into  │
+    │  white distance. Black ink on pale cream/white background. Very      │
+    │  sparse and minimal. 2400×600px landscape orientation."             │
+    └──────────────────────────────────────────────────────────────────────┘
+  -->
+  <div class="contact-landscape-band">
+    <div class="asset-slot asset-slot--landscape" aria-label="Mountain landscape illustration">
+      <div class="asset-slot-label">
+        <span class="mono-label crimson">ASSET REQUIRED</span>
+        <code>assets/contact-landscape.jpg</code>
+        <p>Sumi-e landscape · 2400×600px</p>
       </div>
     </div>
+    <!-- Replace with: <img src="assets/contact-landscape.jpg" alt="Ink wash mountain landscape" class="landscape-img"> -->
+  </div>
 
-    <div class="contact-card" data-reveal style="--delay:.15s" aria-label="Profile card">
-      <svg class="cc-kamon" viewBox="0 0 90 90" aria-hidden="true">
-        <circle cx="45" cy="45" r="42" fill="none" stroke="#c8102e" stroke-width="1.2"/>
-        <circle cx="45" cy="45" r="30" fill="none" stroke="#c8102e" stroke-width=".7" opacity=".5"/>
-        <g transform="translate(45,45)" fill="none" stroke="#c8102e" stroke-width="1">
-          <line x1="0" y1="-32" x2="0" y2="32"/>
-          <line x1="-32" y1="0" x2="32" y2="0"/>
-          <line x1="-22" y1="-22" x2="22" y2="22"/>
-          <line x1="22" y1="-22" x2="-22" y2="22"/>
-        </g>
-        <circle cx="45" cy="45" r="10" fill="none" stroke="#c8102e" stroke-width="1"/>
-        <circle cx="45" cy="45" r="4" fill="#c8102e"/>
-      </svg>
-      <p class="cc-name">Benyamin Mahamed</p>
-      <p class="cc-role">Software Developer</p>
-      <p class="cc-uni">University of Westminster · London</p>
-      <div class="cc-divider" aria-hidden="true"></div>
-      <div class="cc-stats">
-        <div class="ccs"><span class="ccs-v">3+</span><span class="ccs-l">Projects</span></div>
-        <div class="ccs"><span class="ccs-v">BSc</span><span class="ccs-l">Degree</span></div>
-        <div class="ccs"><span class="ccs-v">LDN</span><span class="ccs-l">Location</span></div>
+  <div class="section-wrap">
+    <div class="contact-grid">
+
+      <div class="contact-left">
+        <div class="section-eyebrow" data-gsap-reveal>
+          <span class="mono-label crimson">05 — Contact</span>
+          <span class="eyebrow-rule" aria-hidden="true"></span>
+        </div>
+
+        <h2 class="contact-title" data-gsap-reveal>
+          Let's Build<br><em>Something</em><br>Production-Grade.
+        </h2>
+
+        <p class="contact-sub" data-gsap-reveal data-delay="0.1">
+          BSc CS graduate in London. Seeking graduate software engineering, AI/ML, and full-stack roles. Available immediately.
+        </p>
+
+        <div class="avail-strip" data-gsap-reveal data-delay="0.18">
+          <span class="avail-dot" aria-hidden="true"></span>
+          <strong>Available Now</strong> — London · Open to Hybrid / On-site
+        </div>
+      </div>
+
+      <div class="contact-right" data-gsap-reveal data-delay="0.12">
+
+        <div class="contact-links">
+          <a href="https://github.com/BenyaminMahamed" target="_blank" rel="noopener" class="contact-link">
+            <div class="cl-left">
+              <span class="cl-platform mono-label">GitHub</span>
+              <span class="cl-handle">BenyaminMahamed</span>
+            </div>
+            <span class="cl-arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a href="https://www.linkedin.com/in/benyamin-mahamed/" target="_blank" rel="noopener" class="contact-link">
+            <div class="cl-left">
+              <span class="cl-platform mono-label">LinkedIn</span>
+              <span class="cl-handle">benyamin-mahamed</span>
+            </div>
+            <span class="cl-arrow" aria-hidden="true">→</span>
+          </a>
+
+          <a href="https://theblueprintbrief.com" target="_blank" rel="noopener" class="contact-link contact-link--featured">
+            <div class="cl-left">
+              <span class="cl-platform mono-label">Live Platform</span>
+              <span class="cl-handle">theblueprintbrief.com</span>
+            </div>
+            <span class="cl-arrow" aria-hidden="true">→</span>
+          </a>
+        </div>
+
+        <!-- Profile card -->
+        <div class="profile-card">
+          <div class="pc-header">
+            <div class="pc-rule" aria-hidden="true"></div>
+            <span class="mono-label">Profile</span>
+          </div>
+          <p class="pc-name">Benyamin Mahamed</p>
+          <p class="pc-role">Software Developer · Full-Stack · AI/ML</p>
+          <p class="pc-uni">University of Westminster · London · 2026</p>
+          <div class="pc-metrics">
+            <div class="pc-metric">
+              <span class="pm-val">1,000+</span>
+              <span class="pm-label">Platform Users</span>
+            </div>
+            <div class="pc-metric">
+              <span class="pm-val">4+</span>
+              <span class="pm-label">Live Projects</span>
+            </div>
+            <div class="pc-metric">
+              <span class="pm-val">LDN</span>
+              <span class="pm-label">Location</span>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -777,17 +840,21 @@
 <!-- ═══════════════════════════════════════════
      FOOTER
      ═══════════════════════════════════════════ -->
-<footer>
-  <p class="footer-copy">Benyamin Mahamed · 2026</p>
-  <p class="footer-mark" aria-hidden="true">侍</p>
-  <nav class="footer-links" aria-label="Footer navigation">
-    <a href="https://github.com/BenyaminMahamed" target="_blank" rel="noopener">GitHub</a>
-    <a href="https://www.linkedin.com/in/benyamin-mahamed/" target="_blank" rel="noopener">LinkedIn</a>
-    <a href="https://theblueprintbrief.com" target="_blank" rel="noopener">Blueprint Brief</a>
-  </nav>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-left">
+      <span class="footer-name">Benyamin Mahamed</span>
+      <span class="mono-label">Software Developer · London · 2026</span>
+    </div>
+    <div class="footer-rule" aria-hidden="true"></div>
+    <nav class="footer-nav" aria-label="Footer navigation">
+      <a href="https://github.com/BenyaminMahamed"  target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/benyamin-mahamed/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://theblueprintbrief.com" target="_blank" rel="noopener">Blueprint Brief</a>
+    </nav>
+  </div>
 </footer>
 
-<!-- Scripts — defer keeps render unblocked -->
 <script src="js/main.js" defer></script>
 <script src="js/github.js" defer></script>
 </body>
