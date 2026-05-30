@@ -3,1290 +3,792 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Benyamin Mahamed — Portfolio JAM</title>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
-<style>
-:root {
-  --px : 'Press Start 2P', monospace;
-  --vt : 'VT323', monospace;
-  --wood-1: #c07808;
-  --wood-2: #8a4e02;
-  --wood-3: #5a2c00;
-  --content-bg: #0a0a0f;
-  --content-bg2: #0e0e18;
-  --blue-dark : #04102a;
-  --blue-mid  : #0a1c52;
-  --blue-hi   : #1a3aaa;
-  --team-blue : #1255cc;
-  --team-red  : #cc1122;
-  --gold      : #c8a228;
-  --gold-hi   : #f0c840;
-  --gold-dk   : #7a5a08;
-  --fire-r    : #cc1100;
-  --fire-o    : #ff5500;
-  --fire-a    : #ff9900;
-  --fire-y    : #ffdd00;
-  --teal      : #00ccaa;
-  --purple    : #cc44ff;
-  --white     : #f0f0f0;
-  --off-w     : #d0d0b8;
-  --gray      : #7080a0;
-  --black     : #06060e;
-  --j1: #1255cc;
-  --j2: #ffffff;
-}
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{background:var(--black);color:var(--white);font-family:var(--vt);overflow-x:hidden;}
-body::after{
-  content:'';position:fixed;inset:0;z-index:9000;pointer-events:none;
-  background:repeating-linear-gradient(0deg,transparent 0,transparent 2px,rgba(0,0,0,.12) 2px,rgba(0,0,0,.12) 3px);
-}
+<title>Benyamin Mahamed — Software Developer</title>
+<meta name="description" content="Software Developer. Full-stack engineer with a passion for AI, computer vision, and building things that go live. London, UK.">
 
-/* ── KEYFRAMES ── */
-@keyframes ns{0%{background-position:0 0;}25%{background-position:-20px 15px;}50%{background-position:18px -12px;}75%{background-position:-8px 30px;}}
-@keyframes breathe{0%,100%{opacity:.15;}50%{opacity:.95;}}
-@keyframes bob{from{transform:translateY(0)}to{transform:translateY(-6px)}}
-@keyframes flick{from{transform:scaleY(1)}to{transform:scaleY(1.5) scaleX(.6)}}
-@keyframes bargrow{0%{width:0%}55%{width:80%}88%{width:93%}100%{width:100%}}
-@keyframes psglow{0%,100%{box-shadow:0 4px 0 var(--gold-dk),0 0 6px rgba(200,160,40,.15);}50%{box-shadow:0 4px 0 var(--gold-dk),0 0 28px rgba(200,160,40,.9),0 0 50px rgba(255,180,0,.15);}}
-@keyframes tglow{from{text-shadow:0 0 4px rgba(0,200,160,.4);opacity:.7;}to{text-shadow:0 0 16px rgba(0,220,180,1),0 0 32px rgba(0,180,140,.3);opacity:1;}}
-@keyframes fblaze{from{filter:drop-shadow(3px 3px 0 #000) drop-shadow(-2px -1px 0 #000) drop-shadow(0 0 10px rgba(255,60,0,.5));}to{filter:drop-shadow(3px 3px 0 #000) drop-shadow(-2px -1px 0 #000) drop-shadow(0 0 36px rgba(255,200,0,1)) drop-shadow(0 0 60px rgba(255,60,0,.4));}}
-@keyframes firestrip{from{box-shadow:0 0 3px rgba(255,80,0,.2);}to{box-shadow:0 0 18px rgba(255,80,0,.5);border-color:var(--fire-a);}}
-@keyframes tickscroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-@keyframes led{50%{opacity:.1;}}
-@keyframes fshift{from{filter:brightness(1);}to{filter:brightness(1.5) saturate(1.3);}}
-@keyframes flare{from{text-shadow:2px 2px 0 #440000,0 0 8px rgba(255,160,0,.3);}to{text-shadow:2px 2px 0 #660000,0 0 24px rgba(255,160,0,.8);}}
-@keyframes fadein{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
 
-/* ══ LOADING SCREEN — CRT ARCADE CABINET ══ */
+<!-- GSAP + Lenis via CDN — both tiny, justified for cinematic motion -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/SplitText.min.js" defer></script>
 
-/* Extra keyframes for loading screen only */
-@keyframes crt-flicker{0%,100%{opacity:1;}92%{opacity:1;}93%{opacity:.85;}94%{opacity:1;}97%{opacity:.92;}98%{opacity:1;}}
-@keyframes scanline-drift{from{transform:translateY(0)}to{transform:translateY(6px)}}
-@keyframes marquee-glow{0%,100%{text-shadow:0 0 8px var(--gold),0 0 20px rgba(200,162,40,.4);}50%{text-shadow:0 0 20px var(--gold-hi),0 0 50px rgba(240,200,64,.8),0 0 80px rgba(200,162,40,.3);}}
-@keyframes title-slam{0%{opacity:0;transform:scale(2.5);filter:blur(12px);}60%{opacity:1;transform:scale(.96);filter:blur(0);}80%{transform:scale(1.04);}100%{transform:scale(1);}}
-@keyframes sub-rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
-@keyframes bar-fill{from{width:0}to{width:100%}}
-@keyframes ps-pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.6;transform:scale(.97);}}
-@keyframes sprite-bob{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
-@keyframes ball-bounce{0%,100%{transform:translateY(0) rotate(0deg);}40%{transform:translateY(-22px) rotate(-30deg);}60%{transform:translateY(-22px) rotate(30deg);}}
-@keyframes fire-flick{0%,100%{transform:scaleY(1) scaleX(1);}50%{transform:scaleY(1.3) scaleX(.8);}}
-@keyframes cabinet-on{from{filter:brightness(0) saturate(0);}to{filter:brightness(1) saturate(1);}}
-@keyframes coin-blink{0%,49%{opacity:1;}50%,100%{opacity:0;}}
-
-#loading-screen{
-  position:fixed;inset:0;z-index:8000;
-  display:flex;align-items:center;justify-content:center;
-  background:#010108;
-  animation:cabinet-on .4s ease-out forwards;
-}
-
-/* Full-screen CRT effect layers */
-#loading-screen::before{
-  content:'';position:absolute;inset:0;pointer-events:none;z-index:100;
-  background:
-    repeating-linear-gradient(0deg,transparent 0px,transparent 3px,rgba(0,0,0,.18) 3px,rgba(0,0,0,.18) 4px);
-  animation:scanline-drift 8s linear infinite;
-}
-#loading-screen::after{
-  content:'';position:absolute;inset:0;pointer-events:none;z-index:101;
-  background:radial-gradient(ellipse 90% 80% at 50% 50%,transparent 55%,rgba(0,0,0,.75) 100%);
-  animation:crt-flicker 6s ease-in-out infinite;
-}
-
-/* Cabinet wrapper — the actual "screen" */
-.cab-wrap{
-  position:relative;z-index:2;
-  width:min(520px,92vw);
-  display:flex;flex-direction:column;
-  align-items:center;gap:0;
-}
-
-/* ── MARQUEE HEADER ── */
-.cab-marquee{
-  width:100%;
-  background:linear-gradient(180deg,#0a0a0a,#111118);
-  border:3px solid var(--gold-dk);
-  border-bottom:none;
-  padding:10px 0 8px;
-  text-align:center;
-  position:relative;overflow:hidden;
-}
-.cab-marquee::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:3px;
-  background:linear-gradient(90deg,var(--fire-r),var(--fire-o),var(--fire-a),var(--fire-y),var(--fire-a),var(--fire-o),var(--fire-r));
-}
-/* Flanking LED dots */
-.cab-marquee::after{
-  content:'● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ●';
-  position:absolute;bottom:4px;left:0;right:0;
-  font-size:5px;color:var(--gold-dk);letter-spacing:4px;text-align:center;
-  animation:breathe 1.8s ease-in-out infinite;
-}
-.cab-name{
-  font-family:var(--px);font-size:clamp(8px,1.5vw,11px);
-  letter-spacing:8px;
-  background:linear-gradient(180deg,#fff 0%,var(--gold-hi) 40%,var(--gold) 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  animation:marquee-glow 2.5s ease-in-out infinite;
-  filter:drop-shadow(0 0 2px rgba(200,162,40,.5));
-}
-
-/* ── CRT SCREEN BEZEL ── */
-.cab-bezel{
-  width:100%;
-  background:linear-gradient(160deg,#1a1a24,#0d0d16,#111120);
-  border:3px solid var(--gold-dk);
-  border-top:4px solid #2a2a3a;
-  border-bottom:4px solid #050508;
-  padding:4px;
-  position:relative;
-}
-/* Bezel corner screws */
-.cab-bezel::before,.cab-bezel::after{
-  content:'✦ ✦';position:absolute;
-  font-size:7px;color:rgba(200,162,40,.25);
-  pointer-events:none;
-}
-.cab-bezel::before{top:6px;left:8px;}
-.cab-bezel::after{bottom:6px;right:8px;}
-
-/* ── THE SCREEN ITSELF ── */
-.cab-screen{
-  width:100%;
-  background:
-    radial-gradient(ellipse 100% 100% at 50% 50%,#0d1a3a 0%,#060e22 60%,#020610 100%);
-  border:2px solid #000;
-  box-shadow:inset 0 0 40px rgba(0,0,180,.15),inset 0 0 80px rgba(0,0,0,.6);
-  padding:clamp(18px,3.5vh,30px) clamp(16px,4vw,32px) clamp(14px,2.5vh,24px);
-  display:flex;flex-direction:column;align-items:center;
-  gap:clamp(10px,1.8vh,16px);
-  position:relative;overflow:hidden;
-  border-radius:4px;
-}
-/* Phosphor glow tint */
-.cab-screen::before{
-  content:'';position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(ellipse 70% 60% at 50% 40%,rgba(20,60,200,.08) 0%,transparent 70%);
-}
-/* Screen glare */
-.cab-screen::after{
-  content:'';position:absolute;top:0;left:10%;width:40%;height:35%;pointer-events:none;
-  background:linear-gradient(160deg,rgba(255,255,255,.025) 0%,transparent 70%);
-  border-radius:0 0 50% 50%;
-}
-
-/* ── TITLE BLOCK ── */
-.cab-presents{
-  font-family:var(--px);font-size:clamp(5px,.8vw,7px);
-  color:var(--teal);letter-spacing:6px;text-align:center;
-  animation:tglow 2s ease-in-out infinite alternate, sub-rise .6s ease-out .2s both;
-  position:relative;z-index:1;width:100%;
-}
-.cab-title-row{
-  display:flex;align-items:flex-start;justify-content:center;
-  gap:6px;position:relative;z-index:1;width:100%;
-}
-.cab-title{
-  font-family:var(--px);font-size:clamp(26px,5.5vw,52px);
-  line-height:1.25;letter-spacing:2px;text-transform:uppercase;
-  text-align:center;
-  display:block;position:relative;z-index:1;
-  background:linear-gradient(180deg,#fff 0%,#fff 8%,#ffe800 20%,#ff8800 46%,#ff2200 70%,#880000 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  filter:drop-shadow(4px 4px 0 #000) drop-shadow(-2px -1px 0 #000) drop-shadow(0 0 20px rgba(255,80,0,.7));
-  animation:fblaze 2s ease-in-out infinite alternate, title-slam .5s cubic-bezier(.2,1.4,.4,1) .05s both;
-}
-.cab-tm{font-family:var(--px);font-size:7px;color:var(--gold-hi);margin-top:8px;flex-shrink:0;}
-.cab-season{
-  font-family:var(--px);font-size:clamp(5px,.75vw,7px);color:var(--gold);letter-spacing:8px;
-  text-align:center;width:100%;
-  animation:sub-rise .5s ease-out .35s both;position:relative;z-index:1;
-}
-
-/* ── SPRITES ROW ── */
-.cab-sprites{
-  display:flex;align-items:flex-end;justify-content:center;
-  gap:0;width:100%;position:relative;z-index:1;
-}
-.sprite-wrap{display:flex;flex-direction:column;align-items:center;position:relative;}
-.sprite-svg{width:52px;height:78px;animation:sprite-bob .8s ease-in-out infinite;}
-.sprite-wrap.p2 .sprite-svg{animation-delay:.4s;}
-.sprite-fire{display:flex;gap:2px;margin-top:-2px;}
-.sf2{width:0;height:0;border-left:3px solid transparent;border-right:3px solid transparent;border-bottom:9px solid var(--fire-o);animation:fire-flick .3s ease-in-out infinite alternate;}
-.sf2:nth-child(2){border-bottom-color:var(--fire-a);animation-delay:.1s;}
-.sf2:nth-child(3){animation-delay:.2s;}
-
-/* Ball in the middle */
-.cab-ball{
-  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
-  padding-bottom:6px;
-}
-.ball-svg{width:28px;height:28px;animation:ball-bounce 1s cubic-bezier(.4,0,.6,1) infinite;}
-
-/* ── PROGRESS BAR ── */
-.cab-bar-section{width:100%;position:relative;z-index:1;}
-.cab-bar-label{
-  font-family:var(--px);font-size:clamp(5px,.7vw,6px);
-  color:var(--gold);letter-spacing:3px;margin-bottom:4px;text-align:center;
-  animation:breathe 1.1s ease-in-out infinite;
-}
-.cab-bar-out{
-  width:100%;height:14px;
-  border:2px solid var(--gold-dk);
-  box-shadow:0 0 0 1px #000,0 0 8px rgba(200,162,40,.2);
-  background:#010106;overflow:hidden;position:relative;
-}
-.cab-bar-in{
-  height:100%;width:0;
-  background:linear-gradient(90deg,var(--fire-r) 0%,var(--fire-o) 40%,var(--fire-a) 70%,var(--fire-y) 100%);
-  animation:bar-fill 3s ease-out forwards;
-  position:relative;
-}
-.cab-bar-in::after{
-  content:'';position:absolute;inset:0;
-  background:repeating-linear-gradient(90deg,transparent 0,transparent 10px,rgba(0,0,0,.25) 10px,rgba(0,0,0,.25) 11px);
-}
-/* Bar glow trailing edge */
-.cab-bar-in::before{
-  content:'';position:absolute;top:0;right:0;bottom:0;width:20px;
-  background:linear-gradient(90deg,transparent,rgba(255,240,0,.6));
-}
-.cab-boot-log{
-  font-family:var(--px);font-size:5px;color:rgba(0,200,160,.6);
-  letter-spacing:1px;text-align:left;width:100%;margin-top:3px;
-  min-height:10px;
-}
-
-/* ── PRESS START ── */
-.cab-ps-wrap{width:100%;position:relative;z-index:1;}
-.cab-ps-btn{
-  font-family:var(--px);font-size:clamp(9px,1.6vw,13px);
-  color:#000;
-  background:linear-gradient(180deg,var(--gold-hi) 0%,var(--gold) 50%,var(--gold-dk) 100%);
-  border:none;
-  outline:3px solid var(--gold-dk);
-  outline-offset:2px;
-  box-shadow:
-    0 5px 0 var(--gold-dk),
-    0 0 0 5px #000,
-    0 0 0 7px var(--gold-dk),
-    0 0 0 9px #000,
-    0 0 30px rgba(200,162,40,.25);
-  padding:clamp(10px,1.8vh,16px) 0;
-  letter-spacing:5px;text-transform:uppercase;
-  cursor:pointer;width:100%;text-align:center;display:block;
-  animation:ps-pulse 1.4s ease-in-out infinite;
-  transition:transform .08s,box-shadow .08s;
-}
-.cab-ps-btn:hover{
-  transform:translateY(-2px);
-  box-shadow:0 7px 0 var(--gold-dk),0 0 0 5px #000,0 0 0 7px var(--gold-dk),0 0 0 9px #000,0 0 50px rgba(200,162,40,.5);
-}
-.cab-ps-btn:active{transform:translateY(3px);box-shadow:0 2px 0 var(--gold-dk),0 0 0 5px #000,0 0 0 7px var(--gold-dk),0 0 0 9px #000;}
-
-/* ── COIN FOOTER ── */
-.cab-coin{
-  font-family:var(--px);font-size:5px;
-  color:rgba(200,162,40,.4);letter-spacing:4px;text-align:center;
-  animation:coin-blink 1.1s step-start infinite;
-  position:relative;z-index:1;
-}
-
-/* ── BOTTOM CONTROL PANEL ── */
-.cab-panel{
-  width:100%;
-  background:linear-gradient(180deg,#0c0c14,#07070e);
-  border:3px solid var(--gold-dk);
-  border-top:none;
-  padding:8px 16px;
-  display:flex;align-items:center;justify-content:space-between;
-}
-.cab-panel-led{display:flex;gap:6px;align-items:center;}
-.led{width:9px;height:9px;border-radius:50%;border:1px solid rgba(0,0,0,.5);}
-.led.r{background:#cc1122;box-shadow:0 0 6px rgba(200,20,30,.8);animation:led .7s ease-in-out infinite;}
-.led.g{background:#00cc44;box-shadow:0 0 6px rgba(0,200,60,.8);animation:led .7s ease-in-out infinite .35s;}
-.led.b{background:#2244ff;box-shadow:0 0 6px rgba(30,60,255,.8);animation:led .7s ease-in-out infinite .1s;}
-.cab-panel-credit{font-family:var(--px);font-size:5px;color:var(--gold);letter-spacing:2px;}
-.cab-panel-joy{display:flex;gap:6px;align-items:center;}
-.joy-btn{width:12px;height:12px;border-radius:50%;border:2px solid rgba(255,255,255,.1);}
-.joy-btn.y{background:#cc9900;}
-.joy-btn.b{background:#0044cc;}
-.joy-btn.r{background:#cc0022;}
-.joy-btn.g{background:#008822;}
-
-#flash{position:fixed;inset:0;z-index:7999;background:#fff;opacity:0;pointer-events:none;transition:opacity .12s;}
-
-/* ══ MAIN PORTFOLIO ══ */
-#main-portfolio{opacity:0;pointer-events:none;transition:opacity .5s;}
-#main-portfolio.visible{opacity:1;pointer-events:all;}
-
-/* TOP BAR */
-.top-bar{display:grid;grid-template-columns:1fr auto 1fr;background:var(--black);border-bottom:4px solid var(--gold);}
-.tb-side{font-family:var(--px);font-size:clamp(6px,.85vw,8px);color:var(--gold);letter-spacing:2px;padding:10px 18px;display:flex;align-items:center;}
-.tb-side.r{justify-content:flex-end;}
-.tb-mid{background:linear-gradient(180deg,var(--blue-hi),var(--blue-mid));border-left:3px solid var(--gold);border-right:3px solid var(--gold);padding:7px 28px;text-align:center;}
-.tb-name{font-family:var(--px);font-size:clamp(8px,1.35vw,12px);color:var(--fire-a);letter-spacing:3px;text-shadow:2px 2px 0 #440000,0 0 14px rgba(255,160,0,.5);}
-.tb-sub{font-family:var(--vt);font-size:20px;color:var(--teal);letter-spacing:4px;}
-
-/* ══ HERO ══ */
-.hero{
-  display:grid;grid-template-columns:1fr;
-  background:repeating-linear-gradient(90deg,rgba(0,0,0,.20) 0,rgba(0,0,0,.20) 1px,transparent 1px,transparent 14px),
-    linear-gradient(180deg,var(--wood-1) 0%,var(--wood-2) 50%,var(--wood-3) 100%);
-  border-bottom:4px solid var(--gold);
-}
-.hero-edge{display:none;}
-
-.hero-content{display:flex;flex-direction:column;background:var(--content-bg);position:relative;overflow:hidden;}
-.hero-content::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:10;background:repeating-linear-gradient(0deg,transparent 0,transparent 2px,rgba(0,0,0,.08) 2px,rgba(0,0,0,.08) 3px);}
-
-/* Hero header */
-.hero-hdr{
-  background:linear-gradient(90deg,#0a0a18,#141428,#0a0a18);
-  border-bottom:3px solid var(--gold);
-  padding:7px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;
-}
-.hero-hdr-title{font-family:var(--px);font-size:clamp(7px,1.05vw,9px);letter-spacing:2px;background:linear-gradient(180deg,#fff 0%,#f0d040 40%,#c0900c 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(2px 2px 0 #000);}
-.hero-hdr-sub{font-family:var(--vt);font-size:19px;color:var(--teal);letter-spacing:3px;}
-
-/* Select grid — 2 cols, each with an integrated vertical label on the left */
-.select-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  border-bottom:3px solid var(--gold);
-  background:var(--content-bg);
-}
-.select-col{
-  display:grid;
-  grid-template-columns:36px 1fr;
-  border-right:2px solid rgba(200,162,40,.15);
-}
-.select-col:last-child{border-right:none;}
-
-/* The vertical label strip — identical styling to the red/purple hero edges */
-.col-edge{
-  display:flex;align-items:center;justify-content:center;
-  border-right:3px solid rgba(200,162,40,.2);
-  background:rgba(0,0,0,.35);
-}
-.col-edge-lbl{
-  font-family:var(--px);
-  font-size:clamp(9px,1.1vw,12px);
-  line-height:1.8;
-  text-align:center;
-  text-transform:uppercase;
-  filter:drop-shadow(2px 2px 0 rgba(0,0,0,.9));
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-}
-.select-col.lang .col-edge-lbl{color:#ff8c00;}
-.select-col.proj .col-edge-lbl{color:var(--purple);}
-
-.col-items{padding:10px 14px;}
-
-.select-item{font-family:var(--vt);font-size:clamp(17px,2vw,21px);letter-spacing:1px;text-transform:uppercase;line-height:1.3;padding:2px 0;cursor:pointer;transition:color .1s,background .1s,padding-left .1s;display:flex;align-items:center;gap:8px;}
-.select-col.lang .select-item{color:#eec800;}
-.select-col.lang .select-item:hover,.select-col.lang .select-item.active{color:#fff;background:rgba(238,200,0,.08);padding-left:6px;}
-.select-col.proj .select-item{color:var(--purple);}
-.select-col.proj .select-item:hover{color:#fff;}
-.select-col.proj .select-item.feat{color:var(--fire-a);}
-.cli-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
-.proj-hdr-lbl{font-family:var(--px);font-size:6px;color:rgba(200,162,40,.4);letter-spacing:2px;padding-bottom:5px;margin-bottom:5px;border-bottom:1px solid rgba(200,162,40,.12);}
-
-/* Player row */
-.player-row{display:grid;grid-template-columns:1fr 1fr 1fr;border-top:3px solid var(--gold);}
-.player-card{border-right:2px solid rgba(200,162,40,.15);display:flex;flex-direction:column;background:linear-gradient(180deg,#0c1a50,#060e2a);}
-.player-card:last-child{border-right:none;}
-.pc-banner{padding:6px 10px;display:flex;align-items:center;gap:7px;border-bottom:2px solid rgba(0,0,0,.5);}
-.pc-banner.blue{background:var(--team-blue);}
-.pc-banner.dark{background:#1a0a3a;border-bottom:2px solid var(--purple);}
-.pc-banner.red{background:#2a0808;border-bottom:2px solid var(--fire-o);}
-.pc-banner-name{font-family:var(--px);font-size:6px;color:#fff;letter-spacing:1px;}
-/* Portrait — square, large character */
-.pc-portrait{
-  display:flex;align-items:center;justify-content:center;
-  padding:12px;
-  position:relative;
-  background:linear-gradient(180deg,#0c1a50,#060e28);
-  aspect-ratio:1/1;
-}
-.pc-portrait.blue-border{box-shadow:inset 0 0 0 3px var(--team-blue);}
-#player-svg{width:100%;max-width:180px;height:auto;overflow:visible;}
-
-/* Stats grid below portrait — fixed font size */
-.pc-stats{background:#060610;border-top:2px solid var(--gold);padding:6px 10px;display:grid;grid-template-columns:1fr 1fr;gap:2px 6px;}
-.pstat{font-family:var(--px);font-size:6px;color:var(--off-w);white-space:nowrap;}
-.pstat b{color:var(--fire-a);}
-
-/* Customise panel */
-.custom-panel{display:flex;flex-direction:column;background:#06060e;}
-.custom-inner{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 10px;gap:7px;}
-.custom-ttl{font-family:var(--px);font-size:6px;color:var(--teal);letter-spacing:2px;}
-.sw-lbl{font-family:var(--px);font-size:5px;color:var(--gray);letter-spacing:1px;margin-top:2px;}
-.sw-row{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;}
-.swatch{width:16px;height:16px;border:2px solid rgba(255,255,255,.1);cursor:pointer;flex-shrink:0;transition:transform .1s,border-color .1s;}
-.swatch:hover,.swatch.sel{transform:scale(1.3);border-color:var(--gold-hi);}
-.rand-btn{font-family:var(--px);font-size:6px;color:#000;background:var(--gold);border:2px solid var(--gold-dk);padding:5px 10px;cursor:pointer;letter-spacing:1px;margin-top:4px;}
-.rand-btn:hover{filter:brightness(1.15);}
-
-/* CTA panel */
-.cta-panel-inner{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 12px;gap:10px;background:linear-gradient(180deg,var(--blue-mid),var(--black));}
-.cta-ps{width:100%;border:3px solid var(--gold);box-shadow:0 0 0 2px #000,0 0 0 4px var(--gold-dk);padding:3px;}
-.cta-ps-btn{font-family:var(--px);font-size:clamp(6px,.9vw,9px);color:#000;background:linear-gradient(180deg,var(--gold-hi),var(--gold));border:2px solid var(--gold-dk);box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 3px 0 var(--gold-dk);padding:9px 0;width:100%;text-align:center;letter-spacing:3px;text-transform:uppercase;cursor:pointer;display:block;animation:psglow 1.8s ease-in-out infinite;transition:transform .1s;text-decoration:none;}
-.cta-ps-btn:hover{transform:translateY(-1px);}
-.cta-links{display:flex;flex-direction:column;gap:6px;width:100%;}
-.cta-btn{font-family:var(--px);font-size:clamp(5px,.7vw,7px);padding:8px 0;text-align:center;width:100%;text-decoration:none;letter-spacing:2px;text-transform:uppercase;display:block;transition:filter .1s,transform .1s;}
-.cta-btn:hover{filter:brightness(1.1);transform:translateY(-1px);}
-.cta-gold{color:#000;background:linear-gradient(180deg,var(--gold-hi),var(--gold));border:2px solid var(--gold-dk);box-shadow:0 3px 0 var(--gold-dk);}
-.cta-wire{color:var(--teal);background:transparent;border:2px solid var(--teal);}
-
-/* On fire bar + nameplate */
-.on-fire{width:100%;text-align:center;border-top:2px solid var(--fire-o);border-bottom:2px solid var(--fire-o);background:rgba(160,40,0,.1);padding:6px 0;font-family:var(--px);font-size:clamp(6px,.9vw,7px);color:var(--fire-a);letter-spacing:3px;text-shadow:0 0 8px rgba(255,140,0,.7);animation:firestrip 1.4s ease-in-out infinite alternate;}
-.nameplate{width:100%;text-align:center;background:linear-gradient(90deg,var(--black),var(--blue-mid),var(--black));border-top:3px solid var(--gold);padding:8px 20px;display:flex;flex-direction:column;align-items:center;gap:3px;}
-.np-name{font-family:var(--px);font-size:clamp(9px,1.45vw,13px);color:var(--gold-hi);letter-spacing:4px;text-shadow:2px 2px 0 #3a2800,0 0 16px rgba(200,162,40,.6);}
-.np-role{font-family:var(--vt);font-size:22px;color:var(--teal);letter-spacing:5px;}
-.np-deg{font-family:var(--px);font-size:clamp(5px,.8vw,7px);color:var(--fire-a);letter-spacing:2px;}
-
-/* ══ TICKER ══ */
-.ticker-wrap{background:var(--black);border-top:3px solid var(--gold);border-bottom:3px solid var(--gold);padding:6px 0;overflow:hidden;position:relative;}
-.ticker-chip{position:absolute;left:0;top:0;bottom:0;width:44px;background:var(--gold);display:flex;align-items:center;justify-content:center;z-index:2;}
-.ticker-chip span{font-family:var(--px);font-size:6px;color:#000;letter-spacing:1px;}
-/* Two copies inside .ticker-inner; animation runs translateX(-50%) so the seam is invisible */
-.ticker-inner{display:flex;gap:2.5rem;white-space:nowrap;padding-left:54px;animation:tickscroll 35s linear infinite;will-change:transform;}
-.tick{font-family:var(--vt);font-size:19px;color:var(--gray);letter-spacing:2px;text-transform:uppercase;}
-.tick .hi{color:var(--fire-a);}
-.tick .sep{color:var(--teal);margin:0 6px;}
-
-/* ══ SECTION HEADERS ══ */
-section{border-bottom:3px solid var(--gold);}
-.sec-hdr{display:flex;align-items:stretch;background:linear-gradient(90deg,var(--gold),var(--gold-hi),var(--gold));border-bottom:3px solid var(--gold-dk);}
-.sec-num{background:#000;padding:10px 18px;font-family:var(--px);font-size:9px;color:var(--gold);letter-spacing:2px;border-right:3px solid var(--gold);display:flex;align-items:center;}
-.sec-ttl{flex:1;padding:10px 18px;font-family:var(--px);font-size:clamp(7px,1.15vw,10px);color:#000;letter-spacing:3px;display:flex;align-items:center;}
-.sec-side{padding:10px 14px;font-family:var(--vt);font-size:19px;color:#000;letter-spacing:2px;border-left:3px solid #000;display:flex;align-items:center;}
-.reveal{opacity:0;transform:translateY(12px);transition:opacity .5s,transform .5s;}
-.reveal.visible{opacity:1;transform:translateY(0);}
-
-/* ══ STATS ══ */
-#stats{background:var(--content-bg2);}
-.stats-grid{display:grid;grid-template-columns:repeat(5,1fr);border:3px solid var(--gold);border-top:none;margin:0 20px 20px;}
-.stat-cell{border-right:3px solid var(--gold);padding:18px 8px;text-align:center;background:linear-gradient(180deg,var(--blue-hi),var(--blue-dark));position:relative;overflow:hidden;transition:background .15s;}
-.stat-cell:last-child{border-right:none;}
-.stat-cell:hover{background:var(--blue-hi);}
-.stat-cell::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--fire-a);opacity:0;transition:opacity .15s;}
-.stat-cell:hover::before{opacity:1;}
-.stat-abbr{font-family:var(--px);font-size:6px;color:var(--gold);letter-spacing:3px;margin-bottom:8px;display:block;}
-.stat-value{font-family:var(--px);font-size:22px;color:var(--white);text-shadow:2px 2px 0 rgba(0,0,0,.6);line-height:1;display:block;}
-.stat-label{font-family:var(--vt);font-size:16px;color:var(--gray);letter-spacing:2px;margin-top:6px;display:block;text-transform:uppercase;}
-
-/* ══ PROJECTS ══ */
-#projects{background:repeating-linear-gradient(90deg,rgba(0,0,0,.14) 0,rgba(0,0,0,.14) 1px,transparent 1px,transparent 14px),linear-gradient(180deg,var(--wood-2) 0%,var(--wood-3) 100%);}
-.projects-inner{padding:0 20px 20px;}
-.project-row{display:grid;grid-template-columns:68px 1fr;border:3px solid var(--gold);margin-bottom:10px;background:rgba(4,8,28,.95);overflow:hidden;transition:transform .12s;position:relative;}
-.project-row::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--fire-r),var(--fire-o),var(--fire-a),var(--fire-y));opacity:0;transition:opacity .15s;}
-.project-row:hover{transform:translateX(4px);}
-.project-row:hover::before{opacity:1;}
-.project-row.feat{border-color:var(--fire-o);}
-.project-row.feat::before{opacity:1;}
-.proj-num{background:linear-gradient(180deg,var(--gold),var(--gold-hi));display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 4px;border-right:3px solid var(--gold);flex-shrink:0;}
-.proj-num.feat{background:linear-gradient(180deg,var(--fire-o),var(--fire-a));}
-.proj-jersey{font-family:var(--px);font-size:17px;color:#000;line-height:1;}
-.proj-lbl{font-family:var(--px);font-size:5px;color:#000;letter-spacing:1px;margin-top:4px;text-align:center;}
-.proj-body{padding:10px 14px;}
-.proj-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:4px;flex-wrap:wrap;}
-.proj-title{font-family:var(--px);font-size:clamp(6px,.9vw,8px);color:var(--white);letter-spacing:1px;text-transform:uppercase;}
-/* Consistent status badge */
-.proj-status{font-family:var(--px);font-size:6px;letter-spacing:1px;padding:2px 6px;border:1px solid currentColor;}
-.proj-status.live{color:var(--fire-a);border-color:var(--fire-o);background:rgba(255,100,0,.06);}
-.proj-status.diss{color:var(--teal);border-color:rgba(0,200,160,.4);background:rgba(0,200,160,.04);}
-.proj-status.group{color:var(--purple);border-color:rgba(180,50,240,.35);background:rgba(180,50,240,.04);}
-.proj-status.cw{color:var(--gray);border-color:rgba(100,120,160,.35);background:rgba(100,120,160,.04);}
-.proj-desc{font-family:var(--vt);font-size:18px;color:var(--gray);line-height:1.45;margin-bottom:7px;}
-.proj-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:7px;}
-.tag{font-family:var(--px);font-size:5px;color:var(--teal);border:1px solid rgba(0,180,160,.3);padding:2px 6px;background:rgba(0,220,200,.03);letter-spacing:1px;}
-.tag.f{color:var(--fire-a);border-color:rgba(255,140,0,.3);background:rgba(255,100,0,.04);}
-.proj-link{font-family:var(--px);font-size:6px;color:var(--teal);text-decoration:none;letter-spacing:2px;transition:color .1s;}
-.proj-link:hover{color:var(--gold-hi);}
-.proj-link.f{color:var(--fire-a);}
-.proj-link.f:hover{color:var(--fire-y);}
-
-/* GitHub feed */
-.gh-feed{margin:0 20px 20px;border:3px solid var(--teal);background:rgba(2,6,20,.98);overflow:hidden;}
-.gh-hdr{background:var(--teal);padding:7px 14px;display:flex;align-items:center;justify-content:space-between;}
-.gh-hdr-txt{font-family:var(--px);font-size:6px;color:#000;letter-spacing:2px;}
-.gh-hdr-live{display:flex;align-items:center;gap:5px;}
-.gh-dot{width:7px;height:7px;background:var(--fire-o);border-radius:50%;animation:led .9s ease-in-out infinite;flex-shrink:0;}
-.gh-hdr-live span{font-family:var(--px);font-size:5px;color:#000;letter-spacing:1px;}
-.gh-body{padding:3px 0;}
-.gh-row{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:10px;padding:7px 14px;border-bottom:1px solid rgba(0,200,180,.06);transition:background .1s;}
-.gh-row:last-child{border-bottom:none;}
-.gh-row:hover{background:rgba(0,200,180,.04);}
-.gh-name{font-family:var(--vt);font-size:18px;color:var(--teal);text-decoration:none;letter-spacing:1px;transition:color .1s;}
-.gh-name:hover{color:var(--gold-hi);}
-.gh-desc{font-family:var(--vt);font-size:14px;color:var(--gray);margin-top:1px;}
-.gh-lang{font-family:var(--px);font-size:5px;color:var(--fire-a);border:1px solid rgba(255,140,0,.35);padding:2px 5px;white-space:nowrap;}
-.gh-stars{font-family:var(--vt);font-size:16px;color:var(--gold-hi);white-space:nowrap;}
-.gh-load{font-family:var(--vt);font-size:18px;color:var(--teal);text-align:center;padding:16px;animation:breathe 1.4s ease-in-out infinite;}
-.gh-error{font-family:var(--vt);font-size:18px;color:var(--gray);text-align:center;padding:16px;}
-.gh-error a{color:var(--teal);text-decoration:none;}
-
-/* ══ SKILLS ══ */
-#skills{background:var(--content-bg2);}
-.skills-board{margin:0 20px 20px;border:3px solid var(--gold);overflow:hidden;}
-.skills-thead{display:grid;grid-template-columns:18px 2fr 1fr 120px 36px;background:linear-gradient(90deg,var(--blue-hi),var(--blue-dark));border-bottom:3px solid var(--gold);padding:7px 14px;gap:10px;align-items:center;}
-.skills-thead span{font-family:var(--px);font-size:5px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;}
-.skills-thead span:last-child{text-align:right;}
-.skills-cat{background:linear-gradient(90deg,var(--blue-hi),var(--blue-mid));border-bottom:1px solid rgba(200,162,40,.18);padding:5px 14px;display:flex;align-items:center;justify-content:space-between;}
-.sc-lbl{font-family:var(--px);font-size:5px;color:var(--gold);letter-spacing:3px;}
-.sc-cnt{font-family:var(--vt);font-size:15px;color:rgba(200,162,40,.35);}
-.skill-row{display:grid;grid-template-columns:18px 2fr 1fr 120px 36px;align-items:center;gap:10px;padding:8px 14px;border-bottom:1px solid rgba(200,162,40,.07);background:linear-gradient(90deg,rgba(8,22,60,.7),rgba(4,10,40,.8));transition:background .1s;}
-.skill-row:last-child{border-bottom:none;}
-.skill-row:hover{background:rgba(200,162,40,.04);}
-.sk-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
-.sk-name{font-family:var(--vt);font-size:20px;color:var(--white);letter-spacing:1px;text-transform:uppercase;}
-.sk-cat{font-family:var(--vt);font-size:16px;color:var(--gray);letter-spacing:1px;}
-.sk-bar-wrap{height:10px;background:#020810;border:1px solid rgba(18,36,100,.8);overflow:hidden;}
-.sk-bar{height:100%;background:linear-gradient(90deg,var(--fire-r),var(--fire-o),var(--fire-a),var(--fire-y));width:0;transition:width 1.2s cubic-bezier(.2,.8,.3,1);position:relative;}
-.sk-bar::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0,transparent 8px,rgba(0,0,0,.26) 8px,rgba(0,0,0,.26) 9px);}
-/* Rating — consistent size */
-.sk-rtg{font-family:var(--px);font-size:9px;color:var(--gold-hi);text-align:right;}
-
-/* ══ CONTACT ══ */
-#contact{border-bottom:3px solid var(--fire-o);background:repeating-linear-gradient(90deg,rgba(0,0,0,.14) 0,rgba(0,0,0,.14) 1px,transparent 1px,transparent 14px),linear-gradient(180deg,var(--wood-2),var(--wood-3));}
-.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:0 20px 20px;}
-.contact-heading{font-family:var(--px);font-size:clamp(9px,1.7vw,13px);line-height:1.9;text-transform:uppercase;margin-bottom:10px;}
-.contact-heading .l1{color:var(--white);display:block;text-shadow:2px 2px 0 rgba(0,0,0,.7);}
-.contact-heading .l2{color:var(--fire-a);display:block;animation:flare 2.5s ease-in-out infinite alternate;}
-.contact-sub{font-family:var(--vt);font-size:20px;color:rgba(240,240,220,.65);line-height:1.45;margin-bottom:14px;}
-.contact-links{display:flex;flex-direction:column;gap:8px;}
-.contact-link{display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(4,8,30,.92);border:2px solid rgba(200,162,40,.18);text-decoration:none;transition:border-color .1s,transform .1s;position:relative;overflow:hidden;}
-.contact-link::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--fire-o),var(--fire-y));opacity:0;transition:opacity .14s;}
-.contact-link:hover{border-color:var(--fire-o);transform:translateX(4px);}
-.contact-link:hover::before{opacity:1;}
-.cl-icon{width:34px;height:34px;background:rgba(255,100,0,.06);border:2px solid rgba(255,100,0,.14);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.cl-icon svg{width:16px;height:16px;fill:var(--fire-a);}
-.cl-icon-emoji{font-size:16px;line-height:1;}
-.cl-lbl{font-family:var(--px);font-size:5px;color:var(--gray);letter-spacing:2px;display:block;margin-bottom:2px;}
-.cl-val{font-family:var(--vt);font-size:18px;color:var(--white);letter-spacing:1px;}
-.cl-arrow{margin-left:auto;font-family:var(--px);font-size:8px;color:var(--fire-a);opacity:0;transition:opacity .14s;flex-shrink:0;}
-.contact-link:hover .cl-arrow{opacity:1;}
-
-/* Trophy card */
-.trophy-card{background:linear-gradient(160deg,var(--blue-hi),var(--blue-dark));border:3px solid var(--gold);padding:22px 18px;text-align:center;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;}
-.trophy-card::before{content:'';position:absolute;inset:7px;border:1px solid rgba(200,162,40,.1);pointer-events:none;}
-.trophy-firebar{position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--fire-r),var(--fire-o),var(--fire-a),var(--fire-y),var(--fire-a),var(--fire-o),var(--fire-r));animation:fshift 2s ease-in-out infinite alternate;}
-.trophy-badge-lbl{font-family:var(--px);font-size:6px;color:#000;background:var(--fire-a);padding:3px 12px;letter-spacing:3px;position:relative;z-index:1;}
-.trophy-name{font-family:var(--px);font-size:clamp(11px,1.55vw,15px);color:var(--gold-hi);text-shadow:2px 2px 0 #3a2800,0 0 16px rgba(200,162,40,.6);animation:flare 2.5s ease-in-out infinite alternate;line-height:1.7;letter-spacing:3px;text-transform:uppercase;position:relative;z-index:1;}
-.trophy-role{font-family:var(--vt);font-size:21px;color:var(--teal);letter-spacing:5px;position:relative;z-index:1;}
-.trophy-div{width:90px;height:2px;background:linear-gradient(90deg,transparent,var(--fire-o),var(--fire-y),var(--fire-o),transparent);position:relative;z-index:1;}
-.trophy-uni{font-family:var(--vt);font-size:16px;color:rgba(255,255,255,.35);letter-spacing:2px;text-transform:uppercase;position:relative;z-index:1;}
-.trophy-stats{display:flex;justify-content:center;border:3px solid var(--gold);overflow:hidden;position:relative;z-index:1;width:100%;}
-.trophy-stat{text-align:center;padding:10px 14px;background:rgba(4,10,36,.9);border-right:3px solid var(--gold);flex:1;}
-.trophy-stat:last-child{border-right:none;}
-.t-val{font-family:var(--px);font-size:16px;color:var(--white);text-shadow:2px 2px 0 rgba(0,0,0,.5);display:block;line-height:1;}
-.t-lbl{font-family:var(--px);font-size:5px;color:var(--gold);letter-spacing:2px;display:block;margin-top:5px;}
-
-/* ══ FOOTER ══ */
-footer{background:var(--black);border-top:3px solid var(--teal);padding:12px 20px;text-align:center;}
-footer p{font-family:var(--px);font-size:6px;color:var(--gray);letter-spacing:2px;text-transform:uppercase;}
-footer span{color:var(--teal);}
-
-/* ══ RESPONSIVE ══ */
-@media(max-width:860px){
-  .hero{grid-template-columns:1fr;}
-  .hero-edge{display:none;}
-  .player-row{grid-template-columns:1fr 1fr;}
-  .custom-panel{display:none;}
-  .stats-grid{grid-template-columns:repeat(3,1fr);}
-  .stat-cell:nth-child(4),.stat-cell:nth-child(5){border-top:3px solid var(--gold);}
-  .contact-grid{grid-template-columns:1fr;}
-  .skills-thead,.skill-row{grid-template-columns:18px 2fr 100px 32px;}
-  .skills-thead span:nth-child(3),.skill-row .sk-cat{display:none;}
-  .select-grid{grid-template-columns:1fr;}
-  .select-col.proj{display:none;}
-}
-@media(max-width:520px){
-  .player-row{grid-template-columns:1fr;}
-  .player-card:nth-child(3){display:none;}
-  .stats-grid{grid-template-columns:repeat(2,1fr);}
-  .stat-cell:nth-child(3){border-top:3px solid var(--gold);}
-}
-</style>
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<!-- ════ LOADING SCREEN — CRT ARCADE CABINET ════ -->
-<div id="loading-screen">
+<!-- ═══════════════════════════════════════════
+     GRAIN OVERLAY — persistent atmospheric layer
+     ═══════════════════════════════════════════ -->
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor" aria-hidden="true"></div>
+<div class="cursor-trail" aria-hidden="true"></div>
 
-  <div class="cab-wrap">
-
-    <!-- MARQUEE HEADER -->
-    <div class="cab-marquee">
-      <div class="cab-name">BENYAMIN&nbsp;&nbsp;MAHAMED</div>
+<!-- ═══════════════════════════════════════════
+     LOADER
+     ═══════════════════════════════════════════ -->
+<div id="loader" role="status" aria-label="Loading">
+  <div class="ld-inner">
+    <div class="ld-mon-wrap">
+      <!-- Spinning outer ring -->
+      <svg class="ld-ring" viewBox="0 0 200 200" aria-hidden="true">
+        <circle cx="100" cy="100" r="88" fill="none" stroke="#c8102e" stroke-width="1"
+                stroke-dasharray="6 18" stroke-linecap="round"/>
+        <circle cx="100" cy="12" r="4" fill="#c8102e"/>
+        <circle cx="100" cy="188" r="2.5" fill="#c8102e" opacity=".3"/>
+        <circle cx="12" cy="100" r="2.5" fill="#c8102e" opacity=".3"/>
+        <circle cx="188" cy="100" r="2.5" fill="#c8102e" opacity=".3"/>
+      </svg>
+      <!-- Hannya emblem -->
+      <svg class="ld-hannya" viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="50" r="46" fill="none" stroke="#c8102e" stroke-width="0.8" opacity=".4"/>
+        <!-- Left horn -->
+        <path d="M26 44 Q20 26 28 16 Q32 24 33 38Z" fill="#c8102e" opacity=".85"/>
+        <!-- Right horn -->
+        <path d="M74 44 Q80 26 72 16 Q68 24 67 38Z" fill="#c8102e" opacity=".85"/>
+        <!-- Face -->
+        <path d="M18 54 Q16 34 50 30 Q84 34 82 54 L78 72 Q72 88 50 90 Q28 88 22 72Z"
+              fill="#0a0806" stroke="#c8102e" stroke-width="1.2"/>
+        <!-- Eyes -->
+        <ellipse cx="36" cy="54" rx="11" ry="8" fill="#050402" stroke="#c8102e" stroke-width="1"/>
+        <ellipse cx="64" cy="54" rx="11" ry="8" fill="#050402" stroke="#c8102e" stroke-width="1"/>
+        <circle cx="36" cy="55" r="5" fill="#c8102e" opacity=".9"/>
+        <circle cx="64" cy="55" r="5" fill="#c8102e" opacity=".9"/>
+        <circle cx="36" cy="55" r="2.5" fill="#0a0806"/>
+        <circle cx="64" cy="55" r="2.5" fill="#0a0806"/>
+        <!-- Brow arches -->
+        <path d="M24 46 Q36 38 48 44" fill="none" stroke="#c8102e" stroke-width="1.5" stroke-linecap="round" opacity=".7"/>
+        <path d="M76 46 Q64 38 52 44" fill="none" stroke="#c8102e" stroke-width="1.5" stroke-linecap="round" opacity=".7"/>
+        <!-- Nose -->
+        <path d="M44 62 Q50 72 56 62" fill="none" stroke="#5a3010" stroke-width="1" opacity=".8"/>
+        <!-- Mouth -->
+        <path d="M30 76 Q50 70 70 76" fill="none" stroke="#c8102e" stroke-width="1.5" stroke-linecap="round"/>
+        <!-- Fangs -->
+        <path d="M37 76 L35 85 L41 83Z" fill="#f0e8d0"/>
+        <path d="M63 76 L65 85 L59 83Z" fill="#f0e8d0"/>
+        <path d="M50 72 L48 81 L52 81Z" fill="#e0d8c0" opacity=".9"/>
+      </svg>
     </div>
-
-    <!-- CRT BEZEL -->
-    <div class="cab-bezel">
-      <div class="cab-screen">
-
-        <!-- TITLE -->
-        <div class="cab-presents">PRESENTS</div>
-        <div class="cab-title-row">
-          <span class="cab-title">PORTFOLIO<br>JAM</span>
-          <span class="cab-tm">™</span>
-        </div>
-        <div class="cab-season">SEASON &nbsp;·&nbsp; 2026</div>
-
-        <!-- SPRITES -->
-        <div class="cab-sprites">
-          <div class="sprite-wrap p1">
-            <svg class="sprite-svg" viewBox="0 0 52 78" xmlns="http://www.w3.org/2000/svg">
-              <!-- Fire halo -->
-              <ellipse cx="26" cy="10" rx="10" ry="5" fill="#ff4400" opacity=".5">
-                <animate attributeName="ry" values="5;9;5" dur=".5s" repeatCount="indefinite"/>
-                <animate attributeName="opacity" values=".5;.15;.5" dur=".5s" repeatCount="indefinite"/>
-              </ellipse>
-              <ellipse cx="26" cy="7" rx="6" ry="4" fill="#ff8800" opacity=".8">
-                <animate attributeName="ry" values="4;7;4" dur=".4s" repeatCount="indefinite"/>
-              </ellipse>
-              <!-- Head -->
-              <circle cx="26" cy="20" r="11" fill="#c8824a"/>
-              <ellipse cx="26" cy="10" rx="10" ry="5" fill="#120c04"/>
-              <!-- Eyes -->
-              <circle cx="22" cy="19" r="2.5" fill="#fff"/><circle cx="30" cy="19" r="2.5" fill="#fff"/>
-              <circle cx="22.5" cy="19.5" r="1.5" fill="#2a1408"/><circle cx="30.5" cy="19.5" r="1.5" fill="#2a1408"/>
-              <!-- Mouth -->
-              <path d="M22 25 Q26 28 30 25" stroke="#7a4010" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-              <!-- Jersey — team blue -->
-              <rect x="10" y="31" width="32" height="28" rx="3" fill="#1255cc"/>
-              <text x="26" y="50" font-family="'Press Start 2P',monospace" font-size="6" fill="#fff" text-anchor="middle">BM</text>
-              <rect x="10" y="31" width="8" height="28" fill="#fff" opacity=".3"/>
-              <rect x="34" y="31" width="8" height="28" fill="#fff" opacity=".3"/>
-              <!-- Arms -->
-              <rect x="1" y="32" width="10" height="18" rx="5" fill="#1255cc"/>
-              <circle cx="6" cy="51" r="6" fill="#c8824a"/>
-              <rect x="41" y="32" width="10" height="18" rx="5" fill="#1255cc"/>
-              <circle cx="46" cy="51" r="6" fill="#c8824a"/>
-              <!-- Legs -->
-              <rect x="12" y="59" width="10" height="14" rx="3" fill="#0d0d1e"/>
-              <rect x="30" y="59" width="10" height="14" rx="3" fill="#0d0d1e"/>
-              <ellipse cx="17" cy="73" rx="8" ry="4" fill="#080810"/>
-              <ellipse cx="35" cy="73" rx="8" ry="4" fill="#080810"/>
-            </svg>
-            <div class="sprite-fire">
-              <div class="sf2"></div><div class="sf2"></div><div class="sf2"></div>
-            </div>
-          </div>
-
-          <!-- Basketball -->
-          <div class="cab-ball">
-            <svg class="ball-svg" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="14" cy="14" r="13" fill="#cc5500" stroke="#000" stroke-width="1"/>
-              <path d="M14 1 Q14 14 14 27" stroke="#000" stroke-width="1.2" fill="none"/>
-              <path d="M1 14 Q14 14 27 14" stroke="#000" stroke-width="1.2" fill="none"/>
-              <path d="M4 5 Q14 10 24 5" stroke="#000" stroke-width="1" fill="none"/>
-              <path d="M4 23 Q14 18 24 23" stroke="#000" stroke-width="1" fill="none"/>
-              <ellipse cx="14" cy="14" rx="13" ry="13" fill="none" stroke="rgba(255,180,100,.2)" stroke-width="1"/>
-            </svg>
-          </div>
-
-          <div class="sprite-wrap p2">
-            <svg class="sprite-svg" viewBox="0 0 52 78" xmlns="http://www.w3.org/2000/svg">
-              <ellipse cx="26" cy="10" rx="10" ry="5" fill="#ff2200" opacity=".5">
-                <animate attributeName="ry" values="5;9;5" dur=".45s" repeatCount="indefinite"/>
-                <animate attributeName="opacity" values=".5;.15;.5" dur=".45s" repeatCount="indefinite"/>
-              </ellipse>
-              <ellipse cx="26" cy="7" rx="6" ry="4" fill="#ff6600" opacity=".8">
-                <animate attributeName="ry" values="4;7;4" dur=".38s" repeatCount="indefinite"/>
-              </ellipse>
-              <circle cx="26" cy="20" r="11" fill="#c8824a"/>
-              <ellipse cx="26" cy="10" rx="10" ry="5" fill="#120c04"/>
-              <circle cx="22" cy="19" r="2.5" fill="#fff"/><circle cx="30" cy="19" r="2.5" fill="#fff"/>
-              <circle cx="22.5" cy="19.5" r="1.5" fill="#2a1408"/><circle cx="30.5" cy="19.5" r="1.5" fill="#2a1408"/>
-              <path d="M22 25 Q26 28 30 25" stroke="#7a4010" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-              <!-- Red jersey for P2 -->
-              <rect x="10" y="31" width="32" height="28" rx="3" fill="#cc1122"/>
-              <text x="26" y="50" font-family="'Press Start 2P',monospace" font-size="6" fill="#fff" text-anchor="middle">P2</text>
-              <rect x="10" y="31" width="8" height="28" fill="#fff" opacity=".3"/>
-              <rect x="34" y="31" width="8" height="28" fill="#fff" opacity=".3"/>
-              <rect x="1" y="32" width="10" height="18" rx="5" fill="#cc1122"/>
-              <circle cx="6" cy="51" r="6" fill="#c8824a"/>
-              <rect x="41" y="32" width="10" height="18" rx="5" fill="#cc1122"/>
-              <circle cx="46" cy="51" r="6" fill="#c8824a"/>
-              <rect x="12" y="59" width="10" height="14" rx="3" fill="#0d0d1e"/>
-              <rect x="30" y="59" width="10" height="14" rx="3" fill="#0d0d1e"/>
-              <ellipse cx="17" cy="73" rx="8" ry="4" fill="#080810"/>
-              <ellipse cx="35" cy="73" rx="8" ry="4" fill="#080810"/>
-            </svg>
-            <div class="sprite-fire">
-              <div class="sf2"></div><div class="sf2"></div><div class="sf2"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- PROGRESS -->
-        <div class="cab-bar-section">
-          <div class="cab-bar-label" id="bar-label">INITIALISING...</div>
-          <div class="cab-bar-out"><div class="cab-bar-in" id="cab-bar"></div></div>
-          <div class="cab-boot-log" id="boot-log">&nbsp;</div>
-        </div>
-
-        <!-- PRESS START -->
-        <div class="cab-ps-wrap">
-          <button class="cab-ps-btn" id="press-start-btn">▶ &nbsp;PRESS START&nbsp; ◀</button>
-        </div>
-
-        <div class="cab-coin">INSERT COIN TO CONTINUE</div>
-
-      </div><!-- /cab-screen -->
-    </div><!-- /cab-bezel -->
-
-    <!-- CONTROL PANEL -->
-    <div class="cab-panel">
-      <div class="cab-panel-led">
-        <div class="led r"></div>
-        <div class="led g"></div>
-        <div class="led b"></div>
-      </div>
-      <div class="cab-panel-credit">CREDIT &nbsp;01</div>
-      <div class="cab-panel-joy">
-        <div class="joy-btn y"></div>
-        <div class="joy-btn b"></div>
-        <div class="joy-btn r"></div>
-        <div class="joy-btn g"></div>
-      </div>
+    <p class="ld-name">BENYAMIN MAHAMED</p>
+    <p class="ld-role">Software Developer · London</p>
+    <div class="ld-bar-wrap">
+      <div class="ld-bar-track"><div class="ld-bar-fill" id="ld-bar"></div></div>
+      <p class="ld-status" id="ld-status">Initialising…</p>
     </div>
-
-  </div><!-- /cab-wrap -->
-
-</div>
-
-<div id="flash"></div>
-
-<!-- ════ MAIN PORTFOLIO ════ -->
-<div id="main-portfolio">
-
-<!-- TOP BAR -->
-<div class="top-bar">
-  <div class="tb-side">SOFTWARE DEV</div>
-  <div class="tb-mid">
-    <div class="tb-name">BENYAMIN MAHAMED</div>
-    <div class="tb-sub">◀ SELECT YOUR PLAYER ▶</div>
-  </div>
-  <div class="tb-side r">LONDON · UK</div>
-</div>
-
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-content">
-    <div class="hero-hdr">
-      <div class="hero-hdr-title">SELECT LANGUAGE · VIEW PROJECTS</div>
-      <div class="hero-hdr-sub">▶ PORTFOLIO JAM 2026 ◀</div>
-    </div>
-
-    <div class="select-grid">
-      <!-- LANGUAGE column with integrated vertical label -->
-      <div class="select-col lang">
-        <div class="col-edge">
-          <span class="col-edge-lbl">
-            <span>L</span><span>A</span><span>N</span><span>G</span><span>U</span><span>A</span><span>G</span><span>E</span>
-          </span>
-        </div>
-        <div class="col-items">
-          <div class="select-item lang-btn" data-skill="python">    <div class="cli-dot" style="background:#3a9fd5"></div>PYTHON</div>
-          <div class="select-item lang-btn" data-skill="django">    <div class="cli-dot" style="background:#44bb44"></div>DJANGO</div>
-          <div class="select-item lang-btn" data-skill="javascript"><div class="cli-dot" style="background:#e8cc00"></div>JAVASCRIPT</div>
-          <div class="select-item lang-btn" data-skill="html/css">  <div class="cli-dot" style="background:#e44d26"></div>HTML / CSS</div>
-          <div class="select-item lang-btn" data-skill="sql">       <div class="cli-dot" style="background:#aa66ff"></div>SQL</div>
-          <div class="select-item lang-btn" data-skill="opencv">    <div class="cli-dot" style="background:#ff6600"></div>OPENCV</div>
-          <div class="select-item lang-btn" data-skill="numpy">     <div class="cli-dot" style="background:#4ab8ff"></div>NUMPY</div>
-          <div class="select-item lang-btn" data-skill="micropython"><div class="cli-dot" style="background:#00cc88"></div>MICROPYTHON</div>
-          <div class="select-item lang-btn" data-skill="bash">      <div class="cli-dot" style="background:#888"></div>BASH</div>
-          <div class="select-item lang-btn" data-skill="git">       <div class="cli-dot" style="background:#00e8c8"></div>GIT</div>
-        </div>
-      </div>
-      <!-- PROJECTS column with integrated vertical label -->
-      <div class="select-col proj">
-        <div class="col-edge">
-          <span class="col-edge-lbl">
-            <span>P</span><span>R</span><span>O</span><span>J</span><span>E</span><span>C</span><span>T</span><span>S</span>
-          </span>
-        </div>
-        <div class="col-items">
-          <div class="proj-hdr-lbl" id="proj-hdr">ALL PROJECTS</div>
-          <div id="proj-list"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Player cards -->
-    <div class="player-row">
-      <!-- Player card -->
-      <div class="player-card">
-        <div class="pc-banner blue"><span class="pc-banner-name">🔥 WESTMINSTER · BENYAMIN</span></div>
-        <div class="pc-portrait blue-border">
-          <svg id="player-svg" viewBox="0 0 120 180" xmlns="http://www.w3.org/2000/svg">
-            <ellipse cx="60" cy="22" rx="14" ry="8" fill="#ff4400" opacity=".5"><animate attributeName="ry" values="8;14;8" dur=".5s" repeatCount="indefinite"/><animate attributeName="opacity" values=".5;.2;.5" dur=".5s" repeatCount="indefinite"/></ellipse>
-            <ellipse cx="60" cy="18" rx="9" ry="6" fill="#ff8800" opacity=".7"><animate attributeName="ry" values="6;11;6" dur=".4s" repeatCount="indefinite"/></ellipse>
-            <ellipse cx="60" cy="14" rx="5" ry="4" fill="#ffcc00" opacity=".9"><animate attributeName="ry" values="4;8;4" dur=".35s" repeatCount="indefinite"/></ellipse>
-            <circle cx="60" cy="42" r="22" fill="#c8824a"/>
-            <ellipse cx="60" cy="22" rx="18" ry="10" fill="#1a1005"/>
-            <circle cx="52" cy="40" r="4" fill="#fff"/><circle cx="68" cy="40" r="4" fill="#fff"/>
-            <circle cx="53" cy="41" r="2.5" fill="#3a2010"/><circle cx="69" cy="41" r="2.5" fill="#3a2010"/>
-            <path d="M52 52 Q60 58 68 52" stroke="#8b5520" stroke-width="2" fill="none" stroke-linecap="round"/>
-            <path d="M48 36 Q52 33 56 36" stroke="#4a2a08" stroke-width="2" fill="none" stroke-linecap="round"/>
-            <path d="M64 36 Q68 33 72 36" stroke="#4a2a08" stroke-width="2" fill="none" stroke-linecap="round"/>
-            <rect x="28" y="64" width="64" height="62" rx="4" fill="var(--j1)"/>
-            <text x="60" y="101" font-family="'Press Start 2P',monospace" font-size="11" fill="var(--j2)" text-anchor="middle" font-weight="bold">BM</text>
-            <rect x="28" y="64" width="16" height="62" fill="var(--j2)" opacity=".35"/>
-            <rect x="76" y="64" width="16" height="62" fill="var(--j2)" opacity=".35"/>
-            <path d="M46 64 Q60 74 74 64" fill="var(--j2)" opacity=".6"/>
-            <rect x="30" y="126" width="60" height="26" rx="3" fill="var(--j2)"/>
-            <rect x="30" y="126" width="60" height="6" fill="var(--j1)" opacity=".5"/>
-            <rect x="12" y="66" width="18" height="40" rx="8" fill="var(--j1)"/><circle cx="21" cy="108" r="9" fill="#c8824a"/>
-            <rect x="90" y="66" width="18" height="40" rx="8" fill="var(--j1)"/><circle cx="99" cy="108" r="9" fill="#c8824a"/>
-            <rect x="32" y="152" width="22" height="24" rx="5" fill="#1a1a2e"/>
-            <rect x="66" y="152" width="22" height="24" rx="5" fill="#1a1a2e"/>
-            <ellipse cx="43" cy="176" rx="14" ry="6" fill="#111"/>
-            <ellipse cx="77" cy="176" rx="14" ry="6" fill="#111"/>
-            <path d="M36 173 L50 173" stroke="#ffaa00" stroke-width="1.5" stroke-linecap="round"/>
-            <path d="M70 173 L84 173" stroke="#ffaa00" stroke-width="1.5" stroke-linecap="round"/>
-            <circle cx="106" cy="104" r="12" fill="#ff6600"/>
-            <path d="M96 104 Q106 96 116 104" stroke="#8b2200" stroke-width="1.2" fill="none"/>
-            <path d="M96 104 Q106 112 116 104" stroke="#8b2200" stroke-width="1.2" fill="none"/>
-            <line x1="106" y1="92" x2="106" y2="116" stroke="#8b2200" stroke-width="1.2"/>
-          </svg>
-        </div>
-        <div class="pc-stats">
-          <div class="pstat"><b>PY</b> 90</div><div class="pstat"><b>DJ</b> 82</div>
-          <div class="pstat"><b>CV</b> 78</div><div class="pstat"><b>JS</b> 70</div>
-          <div class="pstat"><b>DB</b> 72</div><div class="pstat"><b>GIT</b> 75</div>
-        </div>
-      </div>
-
-      <!-- Customise jersey -->
-      <div class="player-card custom-panel">
-        <div class="pc-banner dark"><span class="pc-banner-name">🎨 CUSTOMISE JERSEY</span></div>
-        <div class="custom-inner">
-          <div class="custom-ttl">JERSEY COLOUR</div>
-          <div class="sw-lbl">PRIMARY</div>
-          <div class="sw-row" id="sw1"></div>
-          <div class="sw-lbl">ACCENT</div>
-          <div class="sw-row" id="sw2"></div>
-          <button class="rand-btn" id="rand-btn">🎲 RANDOMISE</button>
-        </div>
-      </div>
-
-      <!-- CTA panel -->
-      <div class="player-card">
-        <div class="pc-banner red"><span class="pc-banner-name">▶ JOIN IN</span></div>
-        <div class="cta-panel-inner">
-          <div class="cta-ps">
-            <!-- Scrolls to projects instead of re-triggering the loading transition -->
-            <a href="#projects" class="cta-ps-btn">▶ VIEW GAME TAPE ◀</a>
-          </div>
-          <div class="cta-links">
-            <a href="https://github.com/BenyaminMahamed" target="_blank" class="cta-btn cta-gold">▶ GITHUB</a>
-            <a href="#contact" class="cta-btn cta-wire">GET IN TOUCH</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="on-fire">🔥 &nbsp;ON FIRE — SEEKING GRADUATE ROLES — AVAILABLE NOW&nbsp; 🔥</div>
-    <div class="nameplate">
-      <div class="np-name">BENYAMIN MAHAMED</div>
-      <div class="np-role">SOFTWARE DEVELOPER</div>
-      <div class="np-deg">BSc COMPUTER SCIENCE · UNIVERSITY OF WESTMINSTER · LONDON · 2026</div>
-    </div>
+    <button class="ld-enter" id="ld-enter" aria-label="Enter portfolio">Enter →</button>
   </div>
 </div>
 
-<!-- TICKER — two identical halves; animation runs -50% so loop is seamless -->
-<div class="ticker-wrap">
-  <div class="ticker-chip"><span>HOT</span></div>
-  <div class="ticker-inner" aria-hidden="true">
-    <span class="tick"><span class="hi">BLUEPRINT BRIEF</span><span class="sep">▸</span>DJANGO · POSTGRESQL · LIVE PLATFORM</span>
-    <span class="tick"><span class="hi">DISSERTATION</span><span class="sep">▸</span>LANE DETECTION · OPENCV · RASPBERRY PI 5</span>
-    <span class="tick"><span class="hi">SKY TV APP</span><span class="sep">▸</span>DJANGO · FULL STACK · GROUP PROJECT</span>
-    <span class="tick"><span class="hi">IOT DASHBOARD</span><span class="sep">▸</span>MICROPYTHON · PICO W · GOOGLE SHEETS</span>
-    <span class="tick"><span class="hi">SKILLS</span><span class="sep">▸</span>PYTHON · DJANGO · JS · SQL · OPENCV · MICROPYTHON · BASH</span>
+<!-- ═══════════════════════════════════════════
+     NAVIGATION
+     ═══════════════════════════════════════════ -->
+<nav id="nav" aria-label="Main navigation">
+  <a class="nav-logo" href="#hero" aria-label="Home">
+    <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="12" r="11" fill="none" stroke="#c8102e" stroke-width="1.2"/>
+      <circle cx="12" cy="12" r="5.5" fill="none" stroke="#c8102e" stroke-width=".8"/>
+      <line x1="12" y1="1" x2="12" y2="23" stroke="#c8102e" stroke-width=".8"/>
+      <line x1="1" y1="12" x2="23" y2="12" stroke="#c8102e" stroke-width=".8"/>
+    </svg>
+    <span>BM</span>
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#github">Archive</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Hire Me</a>
+  <button class="nav-burger" id="nav-burger" aria-label="Toggle menu" aria-expanded="false">
+    <span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+  <ul role="list">
+    <li><a href="#about" class="mm-link">About</a></li>
+    <li><a href="#projects" class="mm-link">Projects</a></li>
+    <li><a href="#github" class="mm-link">Archive</a></li>
+    <li><a href="#contact" class="mm-link">Contact</a></li>
+  </ul>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     HERO
+     ═══════════════════════════════════════════ -->
+<section id="hero" class="hero">
+
+  <!-- Left: sakura + samurai illustration -->
+  <div class="hero-canvas" aria-hidden="true">
+    <svg class="hero-svg" viewBox="0 0 600 900" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <radialGradient id="sky" cx="55%" cy="25%" r="75%">
+          <stop offset="0%" stop-color="#f0ddd4"/>
+          <stop offset="60%" stop-color="#d8c0b4"/>
+          <stop offset="100%" stop-color="#b89888"/>
+        </radialGradient>
+        <filter id="ink-blur">
+          <feGaussianBlur stdDeviation="1.8"/>
+        </filter>
+      </defs>
+
+      <!-- Sky -->
+      <rect width="600" height="900" fill="url(#sky)"/>
+
+      <!-- Atmospheric mist -->
+      <ellipse cx="300" cy="800" rx="420" ry="140" fill="#dcc8b8" opacity=".45"/>
+      <ellipse cx="180" cy="840" rx="360" ry="110" fill="#c8b4a0" opacity=".35"/>
+      <ellipse cx="450" cy="860" rx="280" ry="90" fill="#d4bfae" opacity=".3"/>
+
+      <!-- Distant mountain silhouettes -->
+      <path d="M0 700 Q100 640 180 660 Q260 620 320 615 Q390 600 450 618 Q520 610 580 590 L600 590 L600 900 L0 900Z"
+            fill="#b09080" opacity=".3"/>
+      <!-- Temple pagoda silhouette -->
+      <g opacity=".28" fill="#7a6050">
+        <rect x="448" y="562" width="10" height="28"/>
+        <path d="M440 572 L458 572 L453 562 L445 562Z"/>
+        <path d="M442 578 L460 578 L456 572 L446 572Z"/>
+        <path d="M444 584 L462 584 L459 578 L447 578Z"/>
+      </g>
+
+      <!-- Red sun disc -->
+      <circle cx="430" cy="290" r="95" fill="#c8102e" opacity=".18"/>
+      <circle cx="430" cy="290" r="75" fill="#c8102e" opacity=".16"/>
+      <circle cx="430" cy="290" r="55" fill="#c8102e" opacity=".22"/>
+
+      <!-- Ground -->
+      <path d="M0 770 Q160 754 320 762 Q480 770 600 752 L600 900 L0 900Z" fill="#9a8470" opacity=".4"/>
+
+      <!-- ── CHERRY BLOSSOM TREE ── -->
+      <!-- Trunk — gnarled ink strokes -->
+      <path d="M115 900 Q120 820 124 760 Q127 705 122 655 Q118 610 132 565 Q143 525 140 478 Q138 438 150 395"
+            fill="none" stroke="#3a2410" stroke-width="20" stroke-linecap="round" filter="url(#ink-blur)"/>
+      <path d="M115 900 Q120 820 124 760 Q127 705 122 655 Q118 610 132 565 Q143 525 140 478 Q138 438 150 395"
+            fill="none" stroke="#5a3820" stroke-width="13" stroke-linecap="round"/>
+
+      <!-- Primary branches -->
+      <path d="M145 460 Q185 420 230 392 Q280 360 330 330" fill="none" stroke="#3a2410" stroke-width="10" stroke-linecap="round"/>
+      <path d="M145 460 Q185 420 230 392 Q280 360 330 330" fill="none" stroke="#5a3820" stroke-width="7" stroke-linecap="round"/>
+      <path d="M140 505 Q112 474 82 452 Q52 430 22 410" fill="none" stroke="#3a2410" stroke-width="9" stroke-linecap="round"/>
+      <path d="M140 505 Q112 474 82 452 Q52 430 22 410" fill="none" stroke="#5a3820" stroke-width="6" stroke-linecap="round"/>
+      <path d="M144 545 Q175 514 212 492 Q256 468 302 455" fill="none" stroke="#3a2410" stroke-width="8" stroke-linecap="round"/>
+      <path d="M144 545 Q175 514 212 492 Q256 468 302 455" fill="none" stroke="#5a3820" stroke-width="5.5" stroke-linecap="round"/>
+      <path d="M132 610 Q98 592 68 574 Q38 557 12 540" fill="none" stroke="#3a2410" stroke-width="7" stroke-linecap="round"/>
+      <path d="M132 610 Q98 592 68 574 Q38 557 12 540" fill="none" stroke="#5a3820" stroke-width="5" stroke-linecap="round"/>
+      <path d="M140 638 Q170 614 202 600 Q244 585 280 577" fill="none" stroke="#3a2410" stroke-width="6" stroke-linecap="round"/>
+
+      <!-- Sub-branches -->
+      <path d="M230 392 Q258 362 275 336 Q294 308 312 282" fill="none" stroke="#3a2410" stroke-width="5" stroke-linecap="round"/>
+      <path d="M330 330 Q360 304 382 278 Q404 255 422 235" fill="none" stroke="#3a2410" stroke-width="4" stroke-linecap="round"/>
+      <path d="M302 455 Q336 432 368 416 Q398 400 426 392" fill="none" stroke="#3a2410" stroke-width="4" stroke-linecap="round"/>
+      <path d="M150 395 Q162 360 177 328 Q194 292 208 258" fill="none" stroke="#3a2410" stroke-width="5.5" stroke-linecap="round"/>
+      <path d="M208 258 Q226 230 246 206 Q264 185 280 162" fill="none" stroke="#3a2410" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M22 410 Q4 383 -8 356" fill="none" stroke="#3a2410" stroke-width="3.5" stroke-linecap="round"/>
+
+      <!-- ── BLOSSOM CLOUDS ── -->
+      <!-- Deep pink base, lighter overlay — ink-watercolour feel -->
+      <g class="blossoms">
+        <!-- Cluster: far upper right (422,235) -->
+        <g><circle cx="422" cy="222" r="30" fill="#c84068" opacity=".82"/><circle cx="450" cy="212" r="23" fill="#d05070" opacity=".75"/><circle cx="398" cy="228" r="20" fill="#c84068" opacity=".7"/><circle cx="440" cy="240" r="16" fill="#b83858" opacity=".7"/><circle cx="408" cy="246" r="14" fill="#c04060" opacity=".65"/></g>
+        <!-- Cluster: right upper (330,330) -->
+        <g><circle cx="334" cy="316" r="34" fill="#d06078" opacity=".8"/><circle cx="364" cy="306" r="26" fill="#d87080" opacity=".72"/><circle cx="305" cy="322" r="23" fill="#c85870" opacity=".72"/><circle cx="354" cy="335" r="18" fill="#b84868" opacity=".68"/><circle cx="315" cy="342" r="16" fill="#c85870" opacity=".62"/><circle cx="375" cy="332" r="14" fill="#c05070" opacity=".6"/></g>
+        <!-- Cluster: mid sub-branch (275,336) -->
+        <g><circle cx="278" cy="322" r="28" fill="#cc5878" opacity=".78"/><circle cx="306" cy="310" r="21" fill="#d46880" opacity=".7"/><circle cx="254" cy="330" r="18" fill="#c45068" opacity=".7"/><circle cx="295" cy="340" r="15" fill="#bc4860" opacity=".65"/></g>
+        <!-- Cluster: left branch (22,410) -->
+        <g><circle cx="18" cy="396" r="32" fill="#d06878" opacity=".78"/><circle cx="50" cy="384" r="26" fill="#d87880" opacity=".7"/><circle cx="-6" cy="408" r="20" fill="#c85870" opacity=".68"/><circle cx="38" cy="416" r="17" fill="#c06070" opacity=".62"/></g>
+        <!-- Cluster: mid left (230,392) -->
+        <g><circle cx="234" cy="378" r="30" fill="#d06880" opacity=".8"/><circle cx="262" cy="366" r="24" fill="#d87880" opacity=".72"/><circle cx="208" cy="386" r="21" fill="#c85870" opacity=".72"/><circle cx="252" cy="396" r="17" fill="#bc5068" opacity=".66"/></g>
+        <!-- Cluster: mid right (426,392) -->
+        <g><circle cx="428" cy="378" r="26" fill="#cc6078" opacity=".75"/><circle cx="454" cy="368" r="20" fill="#d47080" opacity=".68"/><circle cx="406" cy="386" r="18" fill="#c45870" opacity=".68"/></g>
+        <!-- Cluster: right mid (368,416) -->
+        <g><circle cx="370" cy="402" r="25" fill="#d06880" opacity=".76"/><circle cx="396" cy="392" r="19" fill="#d87888" opacity=".68"/><circle cx="348" cy="410" r="17" fill="#c85878" opacity=".68"/><circle cx="386" cy="420" r="14" fill="#bc5070" opacity=".62"/></g>
+        <!-- Cluster: far left low (68,574) -->
+        <g><circle cx="66" cy="560" r="28" fill="#cc6078" opacity=".75"/><circle cx="94" cy="548" r="22" fill="#d47080" opacity=".68"/><circle cx="42" cy="568" r="19" fill="#c45870" opacity=".68"/><circle cx="82" cy="578" r="15" fill="#bc5068" opacity=".62"/></g>
+        <!-- Cluster: mid lower (212,492) -->
+        <g><circle cx="215" cy="478" r="27" fill="#d06880" opacity=".77"/><circle cx="241" cy="466" r="21" fill="#d87888" opacity=".68"/><circle cx="190" cy="486" r="19" fill="#c85878" opacity=".68"/><circle cx="230" cy="498" r="14" fill="#bc5070" opacity=".62"/></g>
+        <!-- Cluster: trunk upper (177,328) -->
+        <g><circle cx="180" cy="314" r="30" fill="#d46880" opacity=".8"/><circle cx="208" cy="302" r="24" fill="#dc7888" opacity=".72"/><circle cx="154" cy="322" r="20" fill="#cc5878" opacity=".72"/><circle cx="198" cy="332" r="16" fill="#c05070" opacity=".66"/></g>
+        <!-- Cluster: trunk high (208,258) -->
+        <g><circle cx="210" cy="244" r="26" fill="#cc5878" opacity=".78"/><circle cx="235" cy="232" r="20" fill="#d46880" opacity=".7"/><circle cx="186" cy="252" r="18" fill="#c44868" opacity=".7"/></g>
+        <!-- Cluster: tree top (280,162) -->
+        <g><circle cx="282" cy="148" r="28" fill="#d06880" opacity=".8"/><circle cx="308" cy="137" r="22" fill="#d87888" opacity=".72"/><circle cx="258" cy="156" r="19" fill="#c85878" opacity=".72"/><circle cx="298" cy="166" r="15" fill="#c05070" opacity=".65"/></g>
+        <!-- Scatter fills -->
+        <g opacity=".68">
+          <circle cx="118" cy="448" r="20" fill="#cc6078"/><circle cx="143" cy="436" r="16" fill="#d06880"/><circle cx="100" cy="458" r="14" fill="#c05070"/>
+          <circle cx="278" cy="577" r="19" fill="#d06880"/><circle cx="300" cy="567" r="15" fill="#d87888"/><circle cx="258" cy="585" r="13" fill="#c85878"/>
+          <circle cx="165" cy="598" r="16" fill="#cc6078"/><circle cx="185" cy="588" r="12" fill="#d46880"/>
+        </g>
+      </g>
+
+      <!-- Highlight tints — watercolour light -->
+      <g fill="#fce0e8" opacity=".35">
+        <circle cx="330" cy="308" r="12"/><circle cx="420" cy="214" r="9"/><circle cx="18" cy="388" r="10"/>
+        <circle cx="178" cy="306" r="9"/><circle cx="280" cy="140" r="9"/><circle cx="212" cy="470" r="8"/>
+      </g>
+
+      <!-- Falling petals -->
+      <g class="petals" fill="#cc5878" opacity=".55">
+        <ellipse cx="78" cy="685" rx="5.5" ry="2.5" transform="rotate(-28 78 685)"/>
+        <ellipse cx="195" cy="705" rx="4.5" ry="2.2" transform="rotate(18 195 705)"/>
+        <ellipse cx="345" cy="665" rx="5" ry="2.4" transform="rotate(-42 345 665)"/>
+        <ellipse cx="462" cy="692" rx="4" ry="2" transform="rotate(22 462 692)"/>
+        <ellipse cx="525" cy="645" rx="5" ry="2.5" transform="rotate(-12 525 645)"/>
+        <ellipse cx="158" cy="732" rx="3.8" ry="1.9" transform="rotate(32 158 732)"/>
+        <ellipse cx="388" cy="728" rx="4" ry="2" transform="rotate(-32 388 728)"/>
+        <ellipse cx="55" cy="715" rx="3.2" ry="1.6" transform="rotate(12 55 715)"/>
+        <ellipse cx="278" cy="748" rx="4" ry="2" transform="rotate(-22 278 748)"/>
+        <ellipse cx="432" cy="645" rx="3.5" ry="1.8" transform="rotate(38 432 645)"/>
+        <ellipse cx="562" cy="702" rx="4" ry="2" transform="rotate(-16 562 702)"/>
+        <ellipse cx="112" cy="652" rx="3.2" ry="1.6" transform="rotate(42 112 652)"/>
+        <ellipse cx="242" cy="668" rx="3.5" ry="1.8" transform="rotate(-8 242 668)"/>
+        <ellipse cx="498" cy="718" rx="3" ry="1.5" transform="rotate(28 498 718)"/>
+      </g>
+
+      <!-- ── SAMURAI SILHOUETTE ── -->
+      <g transform="translate(372,565)" class="samurai-fig">
+        <!-- Shadow -->
+        <ellipse cx="32" cy="178" rx="40" ry="8" fill="#7a6050" opacity=".28"/>
+        <!-- Legs/hakama -->
+        <rect x="15" y="118" width="16" height="54" rx="5" fill="#1a1208"/>
+        <rect x="35" y="118" width="16" height="54" rx="5" fill="#1a1208"/>
+        <ellipse cx="23" cy="172" rx="11" ry="4.5" fill="#221808"/>
+        <ellipse cx="43" cy="172" rx="11" ry="4.5" fill="#221808"/>
+        <!-- Hakama plates -->
+        <path d="M9 98 Q32 108 54 98 L60 118 L4 118Z" fill="#242010"/>
+        <line x1="19" y1="103" x2="17" y2="118" stroke="#1a1608" stroke-width="1"/>
+        <line x1="30" y1="105" x2="30" y2="118" stroke="#1a1608" stroke-width="1"/>
+        <line x1="41" y1="103" x2="43" y2="118" stroke="#1a1608" stroke-width="1"/>
+        <!-- Do (chest) -->
+        <rect x="10" y="56" width="48" height="44" rx="3" fill="#282010"/>
+        <rect x="12" y="58" width="44" height="40" rx="2" fill="#342818"/>
+        <line x1="12" y1="66" x2="56" y2="66" stroke="#221a08" stroke-width="1.2"/>
+        <line x1="12" y1="74" x2="56" y2="74" stroke="#221a08" stroke-width="1.2"/>
+        <line x1="12" y1="82" x2="56" y2="82" stroke="#221a08" stroke-width="1.2"/>
+        <line x1="12" y1="90" x2="56" y2="90" stroke="#221a08" stroke-width="1.2"/>
+        <line x1="34" y1="56" x2="34" y2="98" stroke="#c8102e" stroke-width="1.2" opacity=".7"/>
+        <!-- Shoulder guards -->
+        <path d="M-2 60 Q-10 48 -7 36 Q-2 28 10 33 L10 62Z" fill="#282010"/>
+        <line x1="-8" y1="44" x2="8" y2="44" stroke="#1a1208" stroke-width=".9"/>
+        <line x1="-9" y1="50" x2="9" y2="50" stroke="#1a1208" stroke-width=".9"/>
+        <line x1="-8" y1="56" x2="10" y2="56" stroke="#1a1208" stroke-width=".9"/>
+        <path d="M70 60 Q78 48 75 36 Q70 28 58 33 L58 62Z" fill="#282010"/>
+        <line x1="78" y1="44" x2="62" y2="44" stroke="#1a1208" stroke-width=".9"/>
+        <line x1="79" y1="50" x2="61" y2="50" stroke="#1a1208" stroke-width=".9"/>
+        <line x1="78" y1="56" x2="58" y2="56" stroke="#1a1208" stroke-width=".9"/>
+        <!-- Arm guards -->
+        <rect x="-14" y="62" width="13" height="34" rx="6.5" fill="#282010"/>
+        <rect x="69" y="62" width="13" height="34" rx="6.5" fill="#282010"/>
+        <!-- Helmet -->
+        <path d="M7 33 Q9 6 34 2 Q59 6 61 33 L57 40 Q34 44 11 40Z" fill="#282010"/>
+        <path d="M9 31 Q11 8 34 4 Q57 8 59 31 L55 38 Q34 42 13 38Z" fill="#342818"/>
+        <line x1="12" y1="18" x2="56" y2="18" stroke="#221a08" stroke-width="1"/>
+        <line x1="10" y1="24" x2="58" y2="24" stroke="#221a08" stroke-width="1"/>
+        <line x1="10" y1="30" x2="58" y2="30" stroke="#221a08" stroke-width="1"/>
+        <!-- Maedate crest — crimson -->
+        <path d="M34 2 Q29 -12 34 -20 Q39 -12 34 2Z" fill="#c8102e" opacity=".9"/>
+        <path d="M34 -20 Q26 -30 28 -36 Q34 -32 34 -20Z" fill="#c8102e" opacity=".72"/>
+        <path d="M34 -20 Q42 -30 40 -36 Q34 -32 34 -20Z" fill="#c8102e" opacity=".72"/>
+        <!-- Neck guard -->
+        <path d="M7 36 Q3 50 5 56 L13 56 L13 40Z" fill="#282010"/>
+        <path d="M61 36 Q65 50 63 56 L55 56 L55 40Z" fill="#282010"/>
+        <!-- Mask -->
+        <path d="M15 35 Q17 47 34 49 Q51 47 53 35 L49 31 Q34 35 19 31Z" fill="#1a1208" stroke="#6a4020" stroke-width=".8"/>
+        <ellipse cx="25" cy="32" rx="5" ry="4" fill="#0a0806"/>
+        <ellipse cx="43" cy="32" rx="5" ry="4" fill="#0a0806"/>
+        <circle cx="25" cy="32" r="2.2" fill="#c8102e" opacity=".82"/>
+        <circle cx="43" cy="32" r="2.2" fill="#c8102e" opacity=".82"/>
+        <!-- Katana 1 — across back -->
+        <g transform="rotate(-26,34,72)">
+          <rect x="-68" y="64" width="125" height="4" rx="1.5" fill="#221808"/>
+          <rect x="-68" y="64.5" width="125" height="2.5" rx="1" fill="#c0b898" opacity=".65"/>
+          <rect x="56" y="62" width="11" height="8" rx="2" fill="#7a5828"/>
+          <rect x="57" y="65" width="22" height="2" rx="1" fill="#5a3818"/>
+        </g>
+        <!-- Katana 2 — at hip -->
+        <g transform="rotate(-8,34,102)">
+          <rect x="-42" y="100" width="94" height="3.5" rx="1.5" fill="#221808"/>
+          <rect x="-42" y="100.5" width="94" height="2" rx="1" fill="#c0b898" opacity=".6"/>
+          <rect x="50" y="98" width="8" height="7" rx="1.5" fill="#7a5828"/>
+        </g>
+      </g>
+
+      <!-- Red seal — bottom right -->
+      <g transform="translate(530,836)">
+        <rect width="52" height="52" fill="#c8102e" opacity=".82"/>
+        <rect x="4" y="4" width="44" height="44" fill="none" stroke="rgba(140,10,30,.5)" stroke-width="1"/>
+        <text x="26" y="22" font-family="serif" font-size="9" fill="rgba(255,255,255,.75)" text-anchor="middle">侍</text>
+        <text x="26" y="36" font-family="serif" font-size="9" fill="rgba(255,255,255,.75)" text-anchor="middle">道</text>
+        <text x="26" y="50" font-family="serif" font-size="7.5" fill="rgba(255,255,255,.5)" text-anchor="middle">2026</text>
+      </g>
+    </svg>
+
+    <!-- Floating petal canvas (JS-driven) -->
+    <canvas id="petal-canvas" aria-hidden="true"></canvas>
+  </div>
+
+  <!-- Right: editorial content -->
+  <div class="hero-editorial">
+
+    <div class="hero-vert-kanji" aria-hidden="true">侍 · 開発者 · ロンドン</div>
+
+    <div class="hero-content">
+      <div class="hero-eyebrow" aria-hidden="true">
+        <span class="eyebrow-line"></span>
+        <span class="eyebrow-txt">Portfolio · 2026</span>
+      </div>
+
+      <div class="status-pill">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span>Open to Graduate Roles</span>
+      </div>
+
+      <h1 class="hero-h1">
+        <span class="h1-line" data-reveal>Software</span>
+        <span class="h1-line h1-accent" data-reveal>Developer.</span>
+      </h1>
+
+      <p class="hero-degree" data-reveal>BSc Computer Science · Westminster</p>
+
+      <p class="hero-desc" data-reveal>
+        Full-stack engineer. AI &amp; computer vision. I build things that go live — from legal news platforms to real-time lane detection on embedded hardware.
+      </p>
+
+      <div class="hero-actions" data-reveal>
+        <a href="#projects" class="btn-primary">View Projects</a>
+        <a href="https://github.com/BenyaminMahamed" target="_blank" rel="noopener" class="btn-ghost">GitHub →</a>
+      </div>
+    </div>
+
+    <!-- Scroll cue -->
+    <div class="scroll-cue" aria-hidden="true">
+      <span class="sc-line"></span>
+      <span class="sc-label">Scroll</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     MARQUEE STRIP
+     ═══════════════════════════════════════════ -->
+<div class="marquee-strip" aria-hidden="true">
+  <div class="marquee-inner">
+    <span class="mq-item">Django · PostgreSQL</span><span class="mq-sep">侍</span>
+    <span class="mq-item">Python · OpenCV</span><span class="mq-sep">侍</span>
+    <span class="mq-item">Lane Detection · Raspberry Pi</span><span class="mq-sep">侍</span>
+    <span class="mq-item">Live Platform · Blueprint Brief</span><span class="mq-sep">侍</span>
+    <span class="mq-item">JavaScript · HTML/CSS</span><span class="mq-sep">侍</span>
+    <span class="mq-item">Git · Linux · Bash</span><span class="mq-sep">侍</span>
+    <span class="mq-item">BSc CS · Westminster · London</span><span class="mq-sep">侍</span>
     <!-- Duplicate for seamless loop -->
-    <span class="tick"><span class="hi">BLUEPRINT BRIEF</span><span class="sep">▸</span>DJANGO · POSTGRESQL · LIVE PLATFORM</span>
-    <span class="tick"><span class="hi">DISSERTATION</span><span class="sep">▸</span>LANE DETECTION · OPENCV · RASPBERRY PI 5</span>
-    <span class="tick"><span class="hi">SKY TV APP</span><span class="sep">▸</span>DJANGO · FULL STACK · GROUP PROJECT</span>
-    <span class="tick"><span class="hi">IOT DASHBOARD</span><span class="sep">▸</span>MICROPYTHON · PICO W · GOOGLE SHEETS</span>
-    <span class="tick"><span class="hi">SKILLS</span><span class="sep">▸</span>PYTHON · DJANGO · JS · SQL · OPENCV · MICROPYTHON · BASH</span>
+    <span class="mq-item">Django · PostgreSQL</span><span class="mq-sep">侍</span>
+    <span class="mq-item">Python · OpenCV</span><span class="mq-sep">侍</span>
+    <span class="mq-item">Lane Detection · Raspberry Pi</span><span class="mq-sep">侍</span>
+    <span class="mq-item">Live Platform · Blueprint Brief</span><span class="mq-sep">侍</span>
+    <span class="mq-item">JavaScript · HTML/CSS</span><span class="mq-sep">侍</span>
+    <span class="mq-item">Git · Linux · Bash</span><span class="mq-sep">侍</span>
+    <span class="mq-item">BSc CS · Westminster · London</span><span class="mq-sep">侍</span>
   </div>
 </div>
 
-<!-- 01 PLAYER STATS -->
-<section id="stats">
-  <div class="sec-hdr reveal">
-    <div class="sec-num">01</div>
-    <div class="sec-ttl">PLAYER STATS</div>
-    <div class="sec-side">2026</div>
-  </div>
-  <div class="stats-grid reveal" style="transition-delay:.08s;margin-top:20px;">
-    <div class="stat-cell"><span class="stat-abbr">PROJ</span><span class="stat-value">5+</span><span class="stat-label">Projects</span></div>
-    <div class="stat-cell"><span class="stat-abbr">LANG</span><span class="stat-value">7+</span><span class="stat-label">Languages</span></div>
-    <div class="stat-cell"><span class="stat-abbr">FRMW</span><span class="stat-value">3+</span><span class="stat-label">Frameworks</span></div>
-    <div class="stat-cell"><span class="stat-abbr">LIVE</span><span class="stat-value">1</span><span class="stat-label">Live Platform</span></div>
-    <div class="stat-cell"><span class="stat-abbr">EXP</span><span class="stat-value">2Y</span><span class="stat-label">Experience</span></div>
+<!-- ═══════════════════════════════════════════
+     ABOUT
+     ═══════════════════════════════════════════ -->
+<section id="about">
+  <div class="about-wrap">
+
+    <!-- Left: large editorial image / mask panel -->
+    <div class="about-visual" data-parallax="0.3">
+      <svg class="about-mask-svg" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <radialGradient id="amg" cx="50%" cy="35%" r="65%">
+            <stop offset="0%" stop-color="#2a1c10"/>
+            <stop offset="100%" stop-color="#0a0806"/>
+          </radialGradient>
+          <radialGradient id="rgl" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#c8102e" stop-opacity=".22"/>
+            <stop offset="100%" stop-color="#c8102e" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <rect width="400" height="500" fill="#0a0806"/>
+        <circle cx="200" cy="240" r="185" fill="url(#rgl)"/>
+        <circle cx="200" cy="240" r="158" fill="none" stroke="#c8102e" stroke-width=".5" opacity=".15"/>
+        <circle cx="200" cy="240" r="142" fill="none" stroke="#c8102e" stroke-width=".4" opacity=".1"/>
+        <!-- Left horn -->
+        <path d="M86 148 Q70 110 78 78 Q84 54 96 44 Q100 64 100 92 Q100 120 100 143Z" fill="#c8102e" opacity=".86"/>
+        <path d="M90 148 Q76 115 83 84 Q87 62 96 50 Q99 68 100 94 Q100 120 100 143Z" fill="#9a0820" opacity=".9"/>
+        <path d="M96 44 Q100 37 102 44 Q100 54 96 50Z" fill="#e8102e"/>
+        <!-- Right horn -->
+        <path d="M314 148 Q330 110 322 78 Q316 54 304 44 Q300 64 300 92 Q300 120 300 143Z" fill="#c8102e" opacity=".86"/>
+        <path d="M310 148 Q324 115 317 84 Q313 62 304 50 Q301 68 300 94 Q300 120 300 143Z" fill="#9a0820" opacity=".9"/>
+        <path d="M304 44 Q300 37 298 44 Q300 54 304 50Z" fill="#e8102e"/>
+        <!-- Face -->
+        <path d="M74 188 Q68 142 90 116 Q116 90 200 88 Q284 90 310 116 Q332 142 326 188 L316 298 Q306 378 280 412 Q256 442 200 446 Q144 442 120 412 Q94 378 84 298Z" fill="url(#amg)" stroke="#c8102e" stroke-width="1.5"/>
+        <!-- Brow ridges -->
+        <path d="M95 162 Q120 142 162 152" fill="none" stroke="#5a3010" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M305 162 Q280 142 238 152" fill="none" stroke="#5a3010" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M97 157 Q120 139 158 149" fill="none" stroke="#c8102e" stroke-width="1.5" stroke-linecap="round" opacity=".6"/>
+        <path d="M303 157 Q280 139 242 149" fill="none" stroke="#c8102e" stroke-width="1.5" stroke-linecap="round" opacity=".6"/>
+        <!-- Eye sockets -->
+        <ellipse cx="146" cy="193" rx="35" ry="27" fill="#050402" stroke="#c8102e" stroke-width="1.5"/>
+        <ellipse cx="254" cy="193" rx="35" ry="27" fill="#050402" stroke="#c8102e" stroke-width="1.5"/>
+        <circle cx="146" cy="195" r="16" fill="#c8102e" opacity=".85"/>
+        <circle cx="254" cy="195" r="16" fill="#c8102e" opacity=".85"/>
+        <circle cx="146" cy="196" r="8" fill="#0a0806"/>
+        <circle cx="254" cy="196" r="8" fill="#0a0806"/>
+        <circle cx="152" cy="189" r="5" fill="rgba(255,100,60,.45)"/>
+        <circle cx="260" cy="189" r="5" fill="rgba(255,100,60,.45)"/>
+        <!-- Cheek lacquer marks -->
+        <circle cx="94" cy="228" r="9" fill="#c8102e" opacity=".55"/>
+        <circle cx="306" cy="228" r="9" fill="#c8102e" opacity=".55"/>
+        <!-- Nose -->
+        <path d="M174 204 Q180 228 174 244 Q184 262 200 264 Q216 262 226 244 Q220 228 226 204" fill="#1c1008" stroke="#6a3818" stroke-width=".8"/>
+        <ellipse cx="177" cy="250" rx="14" ry="10" fill="#3a1c08"/>
+        <ellipse cx="223" cy="250" rx="14" ry="10" fill="#3a1c08"/>
+        <!-- Mouth -->
+        <path d="M116 302 Q158 288 200 291 Q242 288 284 302" fill="none" stroke="#c8102e" stroke-width="2" stroke-linecap="round"/>
+        <path d="M133 302 Q163 292 200 294 Q237 292 267 302 Q260 313 237 310 Q218 307 200 308 Q182 307 163 310 Q140 313 133 302Z" fill="#4a2010"/>
+        <!-- Fangs -->
+        <path d="M146 308 L140 338 L156 333Z" fill="#f0e8d0"/>
+        <path d="M254 308 L260 338 L244 333Z" fill="#f0e8d0"/>
+        <path d="M178 303 L174 331 L184 328Z" fill="#e8e0c8" opacity=".88"/>
+        <path d="M222 303 L226 331 L216 328Z" fill="#e8e0c8" opacity=".88"/>
+        <!-- Small teeth -->
+        <g fill="#d8d0b8" opacity=".7">
+          <rect x="156" y="311" width="8" height="12" rx="2"/>
+          <rect x="169" y="313" width="8" height="10" rx="2"/>
+          <rect x="196" y="311" width="8" height="11" rx="2" transform="translate(-4,0)"/>
+          <rect x="209" y="313" width="8" height="10" rx="2"/>
+          <rect x="220" y="311" width="8" height="12" rx="2"/>
+        </g>
+        <path d="M143 316 Q200 330 257 316 L254 332 Q200 346 146 332Z" fill="#050402"/>
+        <!-- Forehead kamon -->
+        <circle cx="200" cy="130" r="20" fill="none" stroke="#c8102e" stroke-width="1" opacity=".5"/>
+        <circle cx="200" cy="130" r="10" fill="none" stroke="#c8102e" stroke-width=".8" opacity=".4"/>
+        <line x1="200" y1="110" x2="200" y2="150" stroke="#c8102e" stroke-width=".8" opacity=".4"/>
+        <line x1="180" y1="130" x2="220" y2="130" stroke="#c8102e" stroke-width=".8" opacity=".4"/>
+        <!-- Chin armour -->
+        <path d="M144 392 Q172 410 200 412 Q228 410 256 392" fill="none" stroke="#c8102e" stroke-width="1" opacity=".38"/>
+        <rect x="166" y="402" width="24" height="19" rx="4" fill="#1c1008" stroke="#c8102e" stroke-width=".8" opacity=".48"/>
+        <rect x="194" y="402" width="24" height="19" rx="4" fill="#1c1008" stroke="#c8102e" stroke-width=".8" opacity=".48"/>
+        <rect x="136" y="396" width="28" height="21" rx="4" fill="#1c1008" stroke="#c8102e" stroke-width=".8" opacity=".48"/>
+        <rect x="226" y="396" width="28" height="21" rx="4" fill="#1c1008" stroke="#c8102e" stroke-width=".8" opacity=".48"/>
+      </svg>
+      <div class="about-location-badge">London · UK</div>
+    </div>
+
+    <!-- Right: editorial text -->
+    <div class="about-text">
+      <div class="section-eyebrow" data-reveal>
+        <span class="se-num">01</span>
+        <span class="se-line"></span>
+        <span class="se-label">About</span>
+      </div>
+      <h2 class="section-title" data-reveal>The<br><em>Player Card.</em></h2>
+
+      <p class="about-p" data-reveal>
+        CS graduate from the <strong>University of Westminster</strong>, London. I build full-stack platforms, train computer vision systems, and write clean, purposeful code.
+      </p>
+      <p class="about-p" data-reveal style="--delay:.12s">
+        My dissertation focused on real-time lane detection using OpenCV on a Raspberry Pi 5. I co-founded <strong>The Blueprint Brief</strong> — a live legal news platform built with Django and PostgreSQL, serving real users.
+      </p>
+
+      <div class="about-stats" data-reveal style="--delay:.2s">
+        <div class="stat-item">
+          <span class="stat-val">3+</span>
+          <span class="stat-label">Projects</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-val">7+</span>
+          <span class="stat-label">Languages</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-val">1</span>
+          <span class="stat-label">Live Platform</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-val">BSc</span>
+          <span class="stat-label">CS Degree</span>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- 02 GAME TAPE -->
-<section id="projects">
-  <div class="sec-hdr reveal">
-    <div class="sec-num">02</div>
-    <div class="sec-ttl">GAME TAPE</div>
-    <div class="sec-side">4 PLAYS</div>
-  </div>
-  <div class="projects-inner">
-
-    <div class="project-row feat reveal" id="proj-01" style="transition-delay:.04s">
-      <div class="proj-num feat">
-        <div class="proj-jersey">01</div>
-        <div class="proj-lbl">LIVE<br>PLATFORM</div>
-      </div>
-      <div class="proj-body">
-        <div class="proj-head">
-          <div class="proj-title">THE BLUEPRINT BRIEF</div>
-          <div class="proj-status live">● LIVE NOW</div>
-        </div>
-        <div class="proj-desc">Co-founded student legal news platform. Articles, newsletters, full CMS. Real users running right now.</div>
-        <div class="proj-tags">
-          <span class="tag f">DJANGO</span><span class="tag f">POSTGRESQL</span><span class="tag f">PYTHON</span><span class="tag f">HTML/CSS</span><span class="tag f">JAVASCRIPT</span>
-        </div>
-        <a href="https://theblueprintbrief.com" target="_blank" class="proj-link f">VISIT LIVE ▸</a>
-      </div>
-    </div>
-
-    <div class="project-row reveal" id="proj-02" style="transition-delay:.08s">
-      <div class="proj-num">
-        <div class="proj-jersey">02</div>
-        <div class="proj-lbl">AI /<br>VISION</div>
-      </div>
-      <div class="proj-body">
-        <div class="proj-head">
-          <div class="proj-title">AUTONOMOUS NAV SYSTEM</div>
-          <div class="proj-status diss">DISSERTATION</div>
-        </div>
-        <div class="proj-desc">Real-time lane detection on Raspberry Pi 5. Canny edge detection, Hough transforms, HSV masking.</div>
-        <div class="proj-tags">
-          <span class="tag">PYTHON</span><span class="tag">OPENCV</span><span class="tag">NUMPY</span><span class="tag">BASH</span><span class="tag">GIT</span>
-        </div>
-        <a href="https://github.com/BenyaminMahamed/FINALYEARPROJECT" target="_blank" class="proj-link">VIEW REPO ▸</a>
-      </div>
-    </div>
-
-    <div class="project-row reveal" id="proj-03" style="transition-delay:.12s">
-      <div class="proj-num">
-        <div class="proj-jersey">03</div>
-        <div class="proj-lbl">FULL<br>STACK</div>
-      </div>
-      <div class="proj-body">
-        <div class="proj-head">
-          <div class="proj-title">SKY TV VOTING APP</div>
-          <div class="proj-status group">GROUP PROJECT</div>
-        </div>
-        <div class="proj-desc">Django voting workflow. Auth, profile management, sessions, portal dashboard and confirmation flows.</div>
-        <div class="proj-tags">
-          <span class="tag">PYTHON</span><span class="tag">DJANGO</span><span class="tag">SQL</span><span class="tag">HTML/CSS</span><span class="tag">JAVASCRIPT</span>
-        </div>
-        <a href="https://github.com/simonepietraroia/Sky-TV-Project" target="_blank" class="proj-link">VIEW REPO ▸</a>
-      </div>
-    </div>
-
-    <div class="project-row reveal" id="proj-04" style="transition-delay:.16s">
-      <div class="proj-num">
-        <div class="proj-jersey">04</div>
-        <div class="proj-lbl">IOT /<br>EMBEDDED</div>
-      </div>
-      <div class="proj-body">
-        <div class="proj-head">
-          <div class="proj-title">IOT SENSOR DASHBOARD</div>
-          <div class="proj-status cw">COURSEWORK</div>
-        </div>
-        <div class="proj-desc">Raspberry Pi Pico W + BME280. Web dashboard, Google Sheets cloud logger, WiFi resilience.</div>
-        <div class="proj-tags">
-          <span class="tag">MICROPYTHON</span><span class="tag">PYTHON</span><span class="tag">HTML/CSS</span><span class="tag">JAVASCRIPT</span><span class="tag">BASH</span>
-        </div>
-        <a href="https://github.com/BenyaminMahamed" target="_blank" class="proj-link">VIEW GITHUB ▸</a>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- GitHub live feed -->
-  <div class="gh-feed reveal" style="transition-delay:.2s">
-    <div class="gh-hdr">
-      <div class="gh-hdr-txt">LIVE GITHUB FEED — BenyaminMahamed</div>
-      <div class="gh-hdr-live"><div class="gh-dot"></div><span>LIVE</span></div>
-    </div>
-    <div class="gh-body" id="gh-repos"><div class="gh-load">LOADING REPOS...</div></div>
-  </div>
-</section>
-
-<!-- 03 SCOUTING REPORT -->
+<!-- ═══════════════════════════════════════════
+     SKILLS
+     ═══════════════════════════════════════════ -->
 <section id="skills">
-  <div class="sec-hdr reveal">
-    <div class="sec-num">03</div>
-    <div class="sec-ttl">SCOUTING REPORT</div>
-    <div class="sec-side">ALL LANGUAGES</div>
-  </div>
-  <div class="skills-board reveal" style="transition-delay:.05s">
-    <div class="skills-thead">
-      <span></span><span>LANGUAGE / TOOL</span><span>CATEGORY</span><span>PROFICIENCY</span><span style="text-align:right">RTG</span>
+  <div class="wrap">
+    <div class="section-eyebrow" data-reveal>
+      <span class="se-num">02</span>
+      <span class="se-line"></span>
+      <span class="se-label">Skills</span>
     </div>
+    <h2 class="section-title" data-reveal>Scouting<br><em>Report.</em></h2>
 
-    <div class="skills-cat"><div class="sc-lbl">BACKEND &amp; CORE</div><div class="sc-cnt">3 SKILLS</div></div>
-    <div class="skill-row"><div class="sk-dot" style="background:#3a9fd5"></div><div class="sk-name">PYTHON</div>          <div class="sk-cat">Primary Lang</div>   <div class="sk-bar-wrap"><div class="sk-bar" data-pct="90"></div></div><div class="sk-rtg">90</div></div>
-    <div class="skill-row"><div class="sk-dot" style="background:#44bb44"></div><div class="sk-name">DJANGO</div>          <div class="sk-cat">Web Framework</div>  <div class="sk-bar-wrap"><div class="sk-bar" data-pct="82"></div></div><div class="sk-rtg">82</div></div>
-    <div class="skill-row"><div class="sk-dot" style="background:#aa66ff"></div><div class="sk-name">SQL / POSTGRESQL</div><div class="sk-cat">Database</div>     <div class="sk-bar-wrap"><div class="sk-bar" data-pct="72"></div></div><div class="sk-rtg">72</div></div>
-
-    <div class="skills-cat"><div class="sc-lbl">FRONTEND</div><div class="sc-cnt">2 SKILLS</div></div>
-    <div class="skill-row"><div class="sk-dot" style="background:#e44d26"></div><div class="sk-name">HTML / CSS</div>      <div class="sk-cat">Markup &amp; Style</div><div class="sk-bar-wrap"><div class="sk-bar" data-pct="80"></div></div><div class="sk-rtg">80</div></div>
-    <div class="skill-row"><div class="sk-dot" style="background:#e8cc00"></div><div class="sk-name">JAVASCRIPT</div>      <div class="sk-cat">Scripting</div>      <div class="sk-bar-wrap"><div class="sk-bar" data-pct="70"></div></div><div class="sk-rtg">70</div></div>
-
-    <div class="skills-cat"><div class="sc-lbl">AI / COMPUTER VISION</div><div class="sc-cnt">2 SKILLS</div></div>
-    <div class="skill-row"><div class="sk-dot" style="background:#ff6600"></div><div class="sk-name">OPENCV</div>          <div class="sk-cat">Computer Vision</div><div class="sk-bar-wrap"><div class="sk-bar" data-pct="78"></div></div><div class="sk-rtg">78</div></div>
-    <div class="skill-row"><div class="sk-dot" style="background:#4ab8ff"></div><div class="sk-name">NUMPY</div>           <div class="sk-cat">Scientific Py</div>  <div class="sk-bar-wrap"><div class="sk-bar" data-pct="74"></div></div><div class="sk-rtg">74</div></div>
-
-    <div class="skills-cat"><div class="sc-lbl">EMBEDDED &amp; IoT</div><div class="sc-cnt">1 SKILL</div></div>
-    <div class="skill-row"><div class="sk-dot" style="background:#00cc88"></div><div class="sk-name">MICROPYTHON</div>     <div class="sk-cat">Pico W / IoT</div>   <div class="sk-bar-wrap"><div class="sk-bar" data-pct="65"></div></div><div class="sk-rtg">65</div></div>
-
-    <div class="skills-cat"><div class="sc-lbl">DEVOPS &amp; TOOLS</div><div class="sc-cnt">2 SKILLS</div></div>
-    <div class="skill-row"><div class="sk-dot" style="background:#00e8c8"></div><div class="sk-name">GIT / GITHUB</div>    <div class="sk-cat">Version Control</div><div class="sk-bar-wrap"><div class="sk-bar" data-pct="75"></div></div><div class="sk-rtg">75</div></div>
-    <div class="skill-row"><div class="sk-dot" style="background:#888"></div>   <div class="sk-name">BASH / LINUX</div>    <div class="sk-cat">Shell Scripting</div><div class="sk-bar-wrap"><div class="sk-bar" data-pct="60"></div></div><div class="sk-rtg">60</div></div>
+    <div class="skills-grid">
+      <div class="skill-group" data-reveal>
+        <p class="sg-title">Backend &amp; Core</p>
+        <div class="skill-item"><div class="si-head"><span>Python</span><span>90</span></div><div class="si-track"><div class="si-fill" data-pct="90"></div></div></div>
+        <div class="skill-item"><div class="si-head"><span>Django</span><span>82</span></div><div class="si-track"><div class="si-fill" data-pct="82"></div></div></div>
+        <div class="skill-item"><div class="si-head"><span>SQL / PostgreSQL</span><span>72</span></div><div class="si-track"><div class="si-fill" data-pct="72"></div></div></div>
+        <p class="sg-title" style="margin-top:2.5rem">AI / Computer Vision</p>
+        <div class="skill-item"><div class="si-head"><span>OpenCV</span><span>78</span></div><div class="si-track"><div class="si-fill" data-pct="78"></div></div></div>
+        <div class="skill-item"><div class="si-head"><span>NumPy</span><span>74</span></div><div class="si-track"><div class="si-fill" data-pct="74"></div></div></div>
+      </div>
+      <div class="skill-group" data-reveal style="--delay:.14s">
+        <p class="sg-title">Frontend</p>
+        <div class="skill-item"><div class="si-head"><span>HTML / CSS</span><span>80</span></div><div class="si-track"><div class="si-fill" data-pct="80"></div></div></div>
+        <div class="skill-item"><div class="si-head"><span>JavaScript</span><span>70</span></div><div class="si-track"><div class="si-fill" data-pct="70"></div></div></div>
+        <p class="sg-title" style="margin-top:2.5rem">DevOps &amp; Tools</p>
+        <div class="skill-item"><div class="si-head"><span>Git / GitHub</span><span>75</span></div><div class="si-track"><div class="si-fill" data-pct="75"></div></div></div>
+        <div class="skill-item"><div class="si-head"><span>Bash / Linux</span><span>60</span></div><div class="si-track"><div class="si-fill" data-pct="60"></div></div></div>
+        <div class="skill-item"><div class="si-head"><span>MicroPython</span><span>65</span></div><div class="si-track"><div class="si-fill" data-pct="65"></div></div></div>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- 04 FREE AGENCY -->
+<!-- ═══════════════════════════════════════════
+     SELECTED PROJECTS
+     ═══════════════════════════════════════════ -->
+<section id="projects">
+  <div class="wrap">
+    <div class="section-eyebrow" data-reveal>
+      <span class="se-num">03</span>
+      <span class="se-line"></span>
+      <span class="se-label">Selected Work</span>
+    </div>
+    <div class="projects-hdr">
+      <h2 class="section-title" data-reveal>Game<br><em>Tape.</em></h2>
+      <div class="filter-row" data-reveal style="--delay:.1s" id="proj-filters">
+        <button class="fb active" data-f="all">All</button>
+        <button class="fb" data-f="python">Python</button>
+        <button class="fb" data-f="django">Django</button>
+        <button class="fb" data-f="opencv">OpenCV</button>
+        <button class="fb" data-f="javascript">JS</button>
+      </div>
+    </div>
+
+    <div id="proj-grid" class="proj-grid">
+
+      <!-- PROJECT 01 — Featured -->
+      <article class="proj-card featured" data-t="python,django,javascript,html,sql" data-reveal>
+        <div class="pc-num"><span>01</span></div>
+        <div class="pc-body">
+          <header class="pc-head">
+            <h3 class="pc-title">The Blueprint Brief</h3>
+            <span class="pc-badge live" aria-label="Status: live">Live</span>
+          </header>
+          <p class="pc-desc">Co-founded student legal news platform. Full CMS, articles, newsletters. Real users running right now on a production Django + PostgreSQL stack.</p>
+          <ul class="pc-tags" aria-label="Technologies">
+            <li>Django</li><li>PostgreSQL</li><li>Python</li><li>HTML/CSS</li><li>JavaScript</li>
+          </ul>
+          <a href="https://theblueprintbrief.com" target="_blank" rel="noopener" class="pc-link">Visit Live Site <span aria-hidden="true">→</span></a>
+        </div>
+      </article>
+
+      <!-- PROJECT 02 -->
+      <article class="proj-card" data-t="python,opencv,numpy,bash" data-reveal style="--delay:.08s">
+        <div class="pc-num"><span>02</span></div>
+        <div class="pc-body">
+          <header class="pc-head">
+            <h3 class="pc-title">Autonomous Navigation System</h3>
+            <span class="pc-badge diss" aria-label="Status: dissertation">Dissertation</span>
+          </header>
+          <p class="pc-desc">Real-time lane detection on Raspberry Pi 5. Canny edge detection, Hough transforms, HSV masking — running at edge on embedded hardware.</p>
+          <ul class="pc-tags" aria-label="Technologies">
+            <li>Python</li><li>OpenCV</li><li>NumPy</li><li>Bash</li><li>Git</li>
+          </ul>
+          <a href="https://github.com/BenyaminMahamed/FINALYEARPROJECT" target="_blank" rel="noopener" class="pc-link">View Repo <span aria-hidden="true">→</span></a>
+        </div>
+      </article>
+
+      <!-- PROJECT 03 -->
+      <article class="proj-card" data-t="python,django,javascript,html,sql" data-reveal style="--delay:.16s">
+        <div class="pc-num"><span>03</span></div>
+        <div class="pc-body">
+          <header class="pc-head">
+            <h3 class="pc-title">Sky TV Voting App</h3>
+            <span class="pc-badge grp" aria-label="Status: group project">Group</span>
+          </header>
+          <p class="pc-desc">Django voting workflow — auth, profile management, session handling, portal dashboard and confirmation flows. Full-stack team collaboration.</p>
+          <ul class="pc-tags" aria-label="Technologies">
+            <li>Python</li><li>Django</li><li>SQL</li><li>HTML/CSS</li><li>JavaScript</li>
+          </ul>
+          <a href="https://github.com/simonepietraroia/Sky-TV-Project" target="_blank" rel="noopener" class="pc-link">View Repo <span aria-hidden="true">→</span></a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     LIVE GITHUB ARCHIVE
+     ═══════════════════════════════════════════ -->
+<section id="github">
+  <div class="wrap">
+    <div class="section-eyebrow" data-reveal>
+      <span class="se-num">04</span>
+      <span class="se-line"></span>
+      <span class="se-label">Live Archive</span>
+    </div>
+    <div class="gh-hdr-row">
+      <h2 class="section-title" data-reveal>GitHub<br><em>Archive.</em></h2>
+      <div class="gh-controls" data-reveal style="--delay:.1s">
+        <div class="gh-search-wrap">
+          <input type="search" id="gh-search" class="gh-search" placeholder="Search repos…" aria-label="Search repositories">
+        </div>
+        <div class="gh-lang-filters" id="gh-lang-filters" role="group" aria-label="Filter by language">
+          <button class="gh-fb active" data-lang="all">All</button>
+        </div>
+      </div>
+    </div>
+    <div id="gh-grid" class="gh-grid" aria-live="polite" aria-label="GitHub repositories">
+      <div class="gh-loading" id="gh-loading">
+        <div class="gh-loader-ring" aria-hidden="true"></div>
+        <span>Fetching repositories…</span>
+      </div>
+    </div>
+    <div class="gh-footer" data-reveal>
+      <a href="https://github.com/BenyaminMahamed" target="_blank" rel="noopener" class="btn-ghost">
+        View Full GitHub Profile →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     CONTACT
+     ═══════════════════════════════════════════ -->
 <section id="contact">
-  <div class="sec-hdr reveal">
-    <div class="sec-num">04</div>
-    <div class="sec-ttl">FREE AGENCY</div>
-    <div class="sec-side">OPEN</div>
+  <!-- Atmospheric background illustration -->
+  <div class="contact-bg" aria-hidden="true">
+    <svg viewBox="0 0 1400 700" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <rect width="1400" height="700" fill="#0a0806"/>
+      <radialGradient id="cgr" cx="72%" cy="50%" r="48%">
+        <stop offset="0%" stop-color="#c8102e" stop-opacity=".1"/>
+        <stop offset="100%" stop-color="#c8102e" stop-opacity="0"/>
+      </radialGradient>
+      <rect width="1400" height="700" fill="url(#cgr)"/>
+      <!-- Partial red sun right edge -->
+      <circle cx="1100" cy="350" r="210" fill="#c8102e" opacity=".07"/>
+      <circle cx="1100" cy="350" r="158" fill="#c8102e" opacity=".06"/>
+      <!-- Sparse blossom branches top right corner -->
+      <g fill="none" stroke="#2a1c10" stroke-linecap="round" opacity=".35">
+        <path d="M1240 0 Q1252 90 1260 158 Q1265 220 1244 272" stroke-width="2"/>
+        <path d="M1260 158 Q1308 136 1360 125" stroke-width="1.5"/>
+        <path d="M1255 196 Q1214 179 1192 168" stroke-width="1.5"/>
+        <path d="M1244 272 Q1284 258 1332 252" stroke-width="1.5"/>
+        <path d="M1252 118 Q1270 105 1295 98" stroke-width="1.2"/>
+      </g>
+      <g fill="#c8102e" opacity=".16">
+        <circle cx="1340" cy="126" r="9"/><circle cx="1358" cy="119" r="6.5"/>
+        <circle cx="1198" cy="165" r="8"/><circle cx="1185" cy="174" r="5.5"/>
+        <circle cx="1316" cy="254" r="8"/><circle cx="1334" cy="249" r="5.5"/>
+        <circle cx="1270" cy="108" r="5.5"/><circle cx="1256" cy="200" r="5"/>
+        <circle cx="1294" cy="99" r="5"/>
+      </g>
+    </svg>
   </div>
-  <div class="contact-grid">
-    <div class="reveal">
-      <div class="contact-heading">
-        <span class="l1">OPEN FOR</span>
-        <span class="l2">NEW OPPS.</span>
+
+  <div class="contact-inner">
+    <div class="contact-left">
+      <div class="section-eyebrow" data-reveal>
+        <span class="se-num">05</span>
+        <span class="se-line" style="background:rgba(255,255,255,.06)"></span>
+        <span class="se-label">Contact</span>
       </div>
-      <div class="contact-sub">CS graduate in London. AI/ML, full-stack, platform building. Let's talk.</div>
-      <div class="contact-links">
-        <a href="https://github.com/BenyaminMahamed" target="_blank" class="contact-link">
-          <div class="cl-icon">
+      <h2 class="contact-title" data-reveal>Let's Build<br><em>Something.</em></h2>
+      <p class="contact-sub" data-reveal>
+        CS graduate in London — open to graduate software engineering, AI/ML, and full-stack roles.
+      </p>
+
+      <div class="contact-links" data-reveal style="--delay:.1s">
+        <a href="https://github.com/BenyaminMahamed" target="_blank" rel="noopener" class="c-link">
+          <span class="cl-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-          </div>
-          <div><span class="cl-lbl">GITHUB</span><span class="cl-val">BenyaminMahamed</span></div>
-          <span class="cl-arrow">▸</span>
+          </span>
+          <span class="cl-body">
+            <span class="cl-label">GitHub</span>
+            <span class="cl-value">BenyaminMahamed</span>
+          </span>
+          <span class="cl-arr" aria-hidden="true">→</span>
         </a>
-        <a href="https://www.linkedin.com/in/benyamin-mahamed/" target="_blank" class="contact-link">
-          <div class="cl-icon">
+        <a href="https://www.linkedin.com/in/benyamin-mahamed/" target="_blank" rel="noopener" class="c-link">
+          <span class="cl-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-          </div>
-          <div><span class="cl-lbl">LINKEDIN</span><span class="cl-val">benyamin-mahamed</span></div>
-          <span class="cl-arrow">▸</span>
+          </span>
+          <span class="cl-body">
+            <span class="cl-label">LinkedIn</span>
+            <span class="cl-value">benyamin-mahamed</span>
+          </span>
+          <span class="cl-arr" aria-hidden="true">→</span>
         </a>
-        <a href="https://theblueprintbrief.com" target="_blank" class="contact-link">
-          <div class="cl-icon">
-            <span class="cl-icon-emoji">⚡</span>
-          </div>
-          <div><span class="cl-lbl">PLATFORM</span><span class="cl-val">theblueprintbrief.com</span></div>
-          <span class="cl-arrow">▸</span>
+        <a href="https://theblueprintbrief.com" target="_blank" rel="noopener" class="c-link">
+          <span class="cl-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </span>
+          <span class="cl-body">
+            <span class="cl-label">Live Platform</span>
+            <span class="cl-value">theblueprintbrief.com</span>
+          </span>
+          <span class="cl-arr" aria-hidden="true">→</span>
         </a>
+      </div>
+
+      <div class="avail-badge" data-reveal style="--delay:.22s">
+        <span class="avail-dot" aria-hidden="true"></span>
+        <span><strong>Available now</strong> — seeking graduate roles in London</span>
       </div>
     </div>
 
-    <div class="trophy-card reveal" style="transition-delay:.12s">
-      <div class="trophy-firebar"></div>
-      <div class="trophy-badge-lbl">🏆 PLAYER CARD</div>
-      <div class="trophy-name">BENYAMIN<br>MAHAMED</div>
-      <div class="trophy-role">FULL STACK · AI/ML</div>
-      <div class="trophy-div"></div>
-      <div class="trophy-uni">UNIVERSITY OF WESTMINSTER · LONDON</div>
-      <div class="trophy-stats">
-        <div class="trophy-stat"><span class="t-val">5+</span><span class="t-lbl">PROJECTS</span></div>
-        <div class="trophy-stat"><span class="t-val">BSc</span><span class="t-lbl">DEGREE</span></div>
-        <div class="trophy-stat"><span class="t-val">LDN</span><span class="t-lbl">LOCATION</span></div>
+    <div class="contact-card" data-reveal style="--delay:.15s" aria-label="Profile card">
+      <svg class="cc-kamon" viewBox="0 0 90 90" aria-hidden="true">
+        <circle cx="45" cy="45" r="42" fill="none" stroke="#c8102e" stroke-width="1.2"/>
+        <circle cx="45" cy="45" r="30" fill="none" stroke="#c8102e" stroke-width=".7" opacity=".5"/>
+        <g transform="translate(45,45)" fill="none" stroke="#c8102e" stroke-width="1">
+          <line x1="0" y1="-32" x2="0" y2="32"/>
+          <line x1="-32" y1="0" x2="32" y2="0"/>
+          <line x1="-22" y1="-22" x2="22" y2="22"/>
+          <line x1="22" y1="-22" x2="-22" y2="22"/>
+        </g>
+        <circle cx="45" cy="45" r="10" fill="none" stroke="#c8102e" stroke-width="1"/>
+        <circle cx="45" cy="45" r="4" fill="#c8102e"/>
+      </svg>
+      <p class="cc-name">Benyamin Mahamed</p>
+      <p class="cc-role">Software Developer</p>
+      <p class="cc-uni">University of Westminster · London</p>
+      <div class="cc-divider" aria-hidden="true"></div>
+      <div class="cc-stats">
+        <div class="ccs"><span class="ccs-v">3+</span><span class="ccs-l">Projects</span></div>
+        <div class="ccs"><span class="ccs-v">BSc</span><span class="ccs-l">Degree</span></div>
+        <div class="ccs"><span class="ccs-v">LDN</span><span class="ccs-l">Location</span></div>
       </div>
     </div>
   </div>
 </section>
 
+<!-- ═══════════════════════════════════════════
+     FOOTER
+     ═══════════════════════════════════════════ -->
 <footer>
-  <p>BENYAMIN MAHAMED — <span>CS GRADUATE</span> — BUILT WITH CODE · LONDON, UK</p>
+  <p class="footer-copy">Benyamin Mahamed · 2026</p>
+  <p class="footer-mark" aria-hidden="true">侍</p>
+  <nav class="footer-links" aria-label="Footer navigation">
+    <a href="https://github.com/BenyaminMahamed" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://www.linkedin.com/in/benyamin-mahamed/" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://theblueprintbrief.com" target="_blank" rel="noopener">Blueprint Brief</a>
+  </nav>
 </footer>
 
-</div><!-- /main-portfolio -->
-
-<script>
-/* ── Loading screen — boot log sequence ── */
-const loadScreen = document.getElementById('loading-screen');
-const mainPort   = document.getElementById('main-portfolio');
-const flashEl    = document.getElementById('flash');
-const bootLog    = document.getElementById('boot-log');
-const barLabel   = document.getElementById('bar-label');
-
-const bootLines = [
-  { t: 400,  label: 'LOADING ROM...',       log: '> ROM OK · 512K' },
-  { t: 900,  label: 'CHECKING MEMORY...',   log: '> HEAP OK · 4MB' },
-  { t: 1500, label: 'LOADING ASSETS...',    log: '> SPRITES LOADED' },
-  { t: 2200, label: 'CALIBRATING SKILLS...',log: '> PYTHON 90 · DJANGO 82' },
-  { t: 2800, label: 'READY.',               log: '> PRESS START' },
-];
-bootLines.forEach(({ t, label, log }) => {
-  setTimeout(() => {
-    if (barLabel) barLabel.textContent = label;
-    if (bootLog)  bootLog.textContent  = log;
-  }, t);
-});
-
-function doTransition() {
-  if (loadScreen.style.display === 'none') return;
-  flashEl.style.opacity = '1';
-  setTimeout(() => {
-    loadScreen.style.display = 'none';
-    mainPort.classList.add('visible');
-    flashEl.style.opacity = '0';
-  }, 150);
-}
-document.getElementById('press-start-btn').addEventListener('click', doTransition);
-document.addEventListener('keydown', e => {
-  if ((e.key === 'Enter' || e.key === ' ') && loadScreen.style.display !== 'none') doTransition();
-});
-
-/* ── Jersey customiser ── */
-const PAL = [
-  '#1255cc','#8b0000','#006400','#4b0082','#b8860b','#008080',
-  '#4a0e0e','#2c4a2c','#1a1a6e','#8b4513','#c41e3a','#2e8b57',
-  '#00008b','#8b008b','#ff6600','#ffffff','#000000','#ffd700',
-  '#e8e8e8','#333333'
-];
-let j1 = '#1255cc', j2 = '#ffffff';
-
-function mkSw(id, cur, cb) {
-  const el = document.getElementById(id);
-  el.innerHTML = PAL.map(c =>
-    `<div class="swatch${c === cur ? ' sel' : ''}" style="background:${c}" data-c="${c}"></div>`
-  ).join('');
-  el.querySelectorAll('.swatch').forEach(sw => sw.addEventListener('click', () => {
-    el.querySelectorAll('.swatch').forEach(s => s.classList.remove('sel'));
-    sw.classList.add('sel');
-    cb(sw.dataset.c);
-  }));
-}
-function applyJ() {
-  document.documentElement.style.setProperty('--j1', j1);
-  document.documentElement.style.setProperty('--j2', j2);
-}
-mkSw('sw1', j1, c => { j1 = c; applyJ(); });
-mkSw('sw2', j2, c => { j2 = c; applyJ(); });
-document.getElementById('rand-btn').addEventListener('click', () => {
-  j1 = PAL[Math.floor(Math.random() * PAL.length)];
-  j2 = PAL[Math.floor(Math.random() * PAL.length)];
-  applyJ();
-  mkSw('sw1', j1, c => { j1 = c; applyJ(); });
-  mkSw('sw2', j2, c => { j2 = c; applyJ(); });
-});
-
-/* ── Language filter ── */
-const PROJS = [
-  { id: 'proj-01', title: '🔥 BLUEPRINT BRIEF', feat: true,  tags: ['python','django','sql','html/css','javascript','git'] },
-  { id: 'proj-02', title: 'AUTONOMOUS NAV',     feat: false, tags: ['python','opencv','numpy','bash','git'] },
-  { id: 'proj-03', title: 'SKY TV VOTING APP',  feat: false, tags: ['python','django','sql','html/css','javascript','git'] },
-  { id: 'proj-04', title: 'IOT DASHBOARD',      feat: false, tags: ['micropython','python','html/css','javascript','bash'] },
-];
-const projList = document.getElementById('proj-list');
-const projHdr  = document.getElementById('proj-hdr');
-
-function applyFilter(skill) {
-  // 1. Update the right-column project list
-  projHdr.textContent = skill ? skill.toUpperCase() + ' PROJECTS' : 'ALL PROJECTS';
-  const matched = skill ? PROJS.filter(p => p.tags.includes(skill)) : PROJS;
-  projList.innerHTML = matched.length
-    ? matched.map(p =>
-        `<a class="select-item${p.feat ? ' feat' : ''}" href="#${p.id}" style="text-decoration:none;">${p.title}</a>`
-      ).join('')
-    : '<div class="select-item" style="color:rgba(200,162,40,.3);font-size:17px;">NO MATCHES</div>';
-
-  // 2. Fade project rows — compare against PROJS data, not DOM text
-  document.querySelectorAll('.project-row').forEach(row => {
-    const id   = row.id; // e.g. "proj-01"
-    const proj = PROJS.find(p => p.id === id);
-    const ok   = !skill || (proj && proj.tags.includes(skill));
-    row.style.transition = 'opacity .3s';
-    row.style.opacity    = ok ? '1' : '0.15';
-  });
-}
-
-// Initialise with no filter
-applyFilter(null);
-
-document.querySelectorAll('.lang-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const was = btn.classList.contains('active');
-    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-    if (!was) {
-      btn.classList.add('active');
-      applyFilter(btn.dataset.skill); // data-skill is already lowercase
-    } else {
-      applyFilter(null);
-    }
-  });
-});
-
-/* ── Scroll reveal ── */
-const obs = new IntersectionObserver(es => {
-  es.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: .06 });
-document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-
-/* ── Skill bars animate on scroll ── */
-const bObs = new IntersectionObserver(es => {
-  es.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.querySelectorAll('.sk-bar').forEach(b => { b.style.width = b.dataset.pct + '%'; });
-    }
-  });
-}, { threshold: .15 });
-const sb = document.querySelector('.skills-board');
-if (sb) bObs.observe(sb);
-
-/* ── GitHub feed ── */
-async function loadGH() {
-  const c = document.getElementById('gh-repos');
-  try {
-    const r = await fetch('https://api.github.com/users/BenyaminMahamed/repos?sort=updated&per_page=6', {
-      headers: { 'Accept': 'application/vnd.github.v3+json' }
-    });
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    const repos = await r.json();
-    if (!Array.isArray(repos) || !repos.length) {
-      c.innerHTML = '<div class="gh-error">NO PUBLIC REPOS FOUND</div>';
-      return;
-    }
-    c.innerHTML = repos.map(repo => `
-      <div class="gh-row">
-        <div>
-          <a href="${repo.html_url}" target="_blank" class="gh-name">${repo.name.toUpperCase()}</a>
-          <div class="gh-desc">${repo.description ? repo.description.slice(0, 72) + (repo.description.length > 72 ? '…' : '') : 'No description'}</div>
-        </div>
-        <div class="gh-lang">${repo.language || 'N/A'}</div>
-        <div class="gh-stars">★ ${repo.stargazers_count}</div>
-      </div>
-    `).join('');
-  } catch (err) {
-    c.innerHTML = `<div class="gh-error">COULD NOT LOAD · <a href="https://github.com/BenyaminMahamed" target="_blank">GITHUB.COM/BENYAMINMAHAMED</a></div>`;
-  }
-}
-loadGH();
-</script>
+<!-- Scripts — defer keeps render unblocked -->
+<script src="js/main.js" defer></script>
+<script src="js/github.js" defer></script>
 </body>
 </html>
