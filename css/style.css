@@ -2405,3 +2405,271 @@ body:has(button:hover) .cursor-dot {
 
   .skill-row { grid-template-columns: 120px 1fr 2rem; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   MAIN.JS v2 SUPPLEMENT — IMAGE ASSET SYSTEM + KATANA SLASH + GITHUB V2
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ─── REAL IMAGE ASSETS — blend + filter integration ────────────────────────── */
+.asset-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  mix-blend-mode: multiply;
+  display: block;
+  /* opacity managed by JS load handler */
+  transition: opacity 0.6s ease, filter 0.4s ease;
+}
+
+/* Hero image — desaturated ink-wash integration */
+.hero-img {
+  object-position: center top;
+  filter: saturate(0) contrast(1.04) brightness(1.03);
+}
+
+/* Portrait — high contrast, bone-toned */
+.about-portrait-img {
+  object-position: center 20%;
+  filter: saturate(0) contrast(1.08) brightness(1.01);
+}
+
+/* Stack texture — warm washi paper appearance */
+.stack-texture-img {
+  object-position: center;
+  filter: saturate(0.08) contrast(1.02) brightness(1.04);
+}
+
+/* Contact landscape — near-monochrome panoramic */
+.landscape-img {
+  object-position: center center;
+  filter: saturate(0) contrast(0.96) brightness(1.02);
+}
+
+/* Project screenshots — editorial normaliser */
+/* desaturated, slightly sepia-warm to match ink canvas */
+.proj-screenshot {
+  object-position: center top;
+  filter: saturate(0.12) contrast(1.08) sepia(0.14) brightness(1.02);
+  mix-blend-mode: multiply;
+  transition: filter 0.4s ease;
+}
+
+/* When real image is present, hide the SVG fallback underneath */
+.asset-slot .nakazawa-svg-wrap {
+  position: absolute;
+  inset: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+/* asset-slot-inner must be relative so absolute children stack correctly */
+.asset-slot-inner {
+  position: relative;
+  overflow: hidden;
+}
+
+/* ─── KATANA SLASH HOVER — overlay layers ────────────────────────────────────── */
+/* These are dynamically injected by initKatanaSlashHovers() in main.js */
+/* CSS defines the base states; GSAP drives clip-path transitions */
+
+.katana-slash {
+  position: absolute;
+  inset: 0;
+  /* gradient defined inline by JS for sharp control */
+  pointer-events: none;
+  z-index: 2;
+  will-change: clip-path;
+  /* Hardware-accelerated composite layer */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.katana-stroke {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  will-change: opacity, transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* proj-data left accent — flashes crimson on katana enter */
+.proj-data {
+  border-left: 2px solid transparent;
+  transition: border-left-color 0.2s ease;
+  /* transition managed by GSAP for hover, CSS for base */
+}
+
+/* ─── PROJ IMG PANEL — position context for overlays ────────────────────────── */
+.proj-img-panel {
+  position: relative;
+  overflow: hidden;
+}
+
+/* ─── GITHUB ARCHIVE v2 EXTRAS ───────────────────────────────────────────────── */
+.repo-card--blueprint {
+  background: var(--c-canvas-warm);
+  border-top: 2px solid var(--c-crimson);
+  border-left: none;
+  border-right: var(--stroke-thin) solid var(--c-ink-whisper);
+  border-bottom: var(--stroke-thin) solid var(--c-ink-whisper);
+  position: relative;
+  overflow: hidden;
+}
+
+.repo-card--blueprint::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--c-crimson) 60%, transparent 100%);
+}
+
+.repo-card--blueprint:hover {
+  background: var(--c-canvas);
+}
+
+.repo-link--live {
+  font-family: var(--f-mono);
+  font-size: var(--ts-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--c-crimson);
+  font-weight: 500;
+  transition: color var(--d-fast) var(--ease-ink);
+}
+
+.repo-link--live:hover {
+  color: var(--c-crimson-deep);
+}
+
+.repo-bp-links {
+  display: flex;
+  gap: var(--sp-4);
+  align-items: center;
+}
+
+.repo-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1);
+  margin-bottom: var(--sp-3);
+}
+
+.repo-topic {
+  font-family: var(--f-mono);
+  font-size: var(--ts-micro);
+  letter-spacing: 0.08em;
+  color: var(--c-ink-mid);
+  background: var(--c-canvas-warm);
+  border: var(--stroke-hair) solid var(--c-ink-whisper);
+  padding: 1px var(--sp-2);
+  border-radius: 2px;
+  text-transform: lowercase;
+}
+
+.archive-empty {
+  grid-column: 1 / -1;
+  padding: var(--sp-12);
+  text-align: center;
+  color: var(--c-ink-ghost);
+}
+
+.archive-error {
+  grid-column: 1 / -1;
+}
+
+/* ─── NAV LINK ACTIVE STATE ──────────────────────────────────────────────────── */
+.nav-link.active {
+  color: var(--c-ink);
+}
+
+.nav-link.active::after {
+  width: 100%;
+}
+
+/* ─── ASSET SLOT — ensure overflow:hidden for blending ──────────────────────── */
+.asset-slot {
+  overflow: hidden;
+  /* Establish stacking context for blend modes */
+  isolation: isolate;
+}
+
+/* ─── PROJ ITEM HOVER — ensure z-index for overlay stacking ─────────────────── */
+.proj-item:hover {
+  z-index: 2;
+}
+
+/* ─── HARDWARE ACCELERATION HINTS ───────────────────────────────────────────── */
+/* Apply to all elements that will be GSAP-animated */
+.hero-text,
+.hero-right,
+.hero-index-col,
+.asset-slot--hero,
+.asset-slot--portrait,
+.asset-slot--stack,
+.contact-landscape-band,
+.h1-line,
+.proj-title,
+.proj-data {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* ─── SECTION-ABOUT — pseudo background for parallax depth ──────────────────── */
+.section-about {
+  background-attachment: local; /* updated by GSAP backgroundPositionY */
+}
+
+/* ─── LOADER — clip-path support ─────────────────────────────────────────────── */
+#loader {
+  clip-path: inset(0 0 0% 0); /* GSAP animates to inset(0 0 100% 0) */
+  will-change: clip-path;
+}
+
+/* ─── TYPOGRAPHY TOKENS UPDATE — ultra-crisp ink blacks ─────────────────────── */
+/* Upgrade from #0d0c0a to #111115 for maximum contrast on cream */
+.hero-h1,
+.section-title,
+.contact-title,
+.proj-title,
+.repo-name,
+.cred-val,
+.hi-val,
+.pm-val,
+.footer-name,
+.pc-name,
+.cl-handle {
+  color: #111115;
+}
+
+.hero-desc,
+.about-body p,
+.proj-desc,
+.repo-desc,
+.stack-desc,
+.contact-sub {
+  color: #3a3730;  /* elegant muted, warm ink mid */
+}
+
+/* ─── CRIMSON ACTIVE STATES ──────────────────────────────────────────────────── */
+.proj-status--live .status-dot,
+.nav-cta-dot,
+.avail-dot,
+.status-dot {
+  background: #c8102e;
+}
+
+.mono-label.crimson,
+.proj-link--primary,
+.repo-link--live,
+.contact-link--featured .cl-handle,
+.stack-cat-title,
+.section-eyebrow .mono-label {
+  color: #c8102e;
+}
