@@ -1,861 +1,726 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Benyamin Mahamed — Software Developer</title>
-<meta name="description" content="Full-stack software engineer. Django, Python, PostgreSQL, AI/ML. BSc Computer Science, University of Westminster. London, UK.">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Benyamin Mahamed — Software Engineer. Full-stack developer based in London. Django, Python, React, PostgreSQL."/>
+  <title>Benyamin Mahamed — Software Engineer</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Mono:wght@300;400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 
-<!--
-  TYPOGRAPHY:
-  — Cormorant Garamond: high-contrast editorial serif for display headings
-  — DM Mono: technical mono for labels, indices, tags
-  — DM Sans: clean modern sans for body and UI copy
--->
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css"/>
 
-<!-- GSAP + ScrollTrigger -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<!-- Lenis smooth scroll -->
-<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
-
-<link rel="stylesheet" href="css/style.css">
+  <!-- CDN: GSAP + ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <!-- CDN: Lenis Smooth Scroll -->
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js" defer></script>
 </head>
 <body>
 
-<!-- ═══ PAPER GRAIN OVERLAY ═══ -->
-<div class="paper-grain" aria-hidden="true"></div>
+  <!-- ── CUSTOM CURSOR ─────────────────────────────────────────── -->
+  <div class="cursor-dot"  aria-hidden="true"></div>
+  <div class="cursor-ring" aria-hidden="true"></div>
 
-<!-- ═══ CUSTOM CURSOR ═══ -->
-<div class="cursor-dot"  aria-hidden="true"></div>
-<div class="cursor-ring" aria-hidden="true"></div>
+  <!-- ── GRAIN OVERLAY ────────────────────────────────────────── -->
+  <div class="paper-grain" aria-hidden="true"></div>
 
-<!-- ═══════════════════════════════════════════
-     LOADER
-     ═══════════════════════════════════════════ -->
-<div id="loader" role="status" aria-label="Loading portfolio">
-  <div class="ld-wrap">
-    <div class="ld-ink-line" aria-hidden="true"></div>
-    <div class="ld-content">
-      <p class="ld-index">001</p>
-      <h1 class="ld-name">Benyamin<br>Mahamed</h1>
-      <p class="ld-sub">Software Developer · London · 2026</p>
-      <div class="ld-progress">
-        <div class="ld-bar-track">
-          <div class="ld-bar-fill" id="ld-bar"></div>
+  <!-- ── LOADER ───────────────────────────────────────────────── -->
+  <div id="loader" aria-label="Loading" role="status">
+    <div class="ld-wrap">
+      <div class="ld-ink-line"></div>
+      <div class="ld-content">
+        <p class="ld-index">Benyamin Mahamed — Portfolio</p>
+        <h1 class="ld-name">Loading</h1>
+        <p class="ld-sub">Software Engineer · London</p>
+        <div class="ld-progress">
+          <div class="ld-bar-track"><div class="ld-bar-fill" id="ld-bar"></div></div>
+          <span class="ld-pct" id="ld-pct">0%</span>
         </div>
-        <span class="ld-pct" id="ld-pct">0%</span>
+        <button class="ld-enter" id="ld-enter" aria-label="Enter portfolio">
+          <span class="ld-enter-line"></span>
+          <span>Enter</span>
+          <span class="ld-enter-arrow">→</span>
+        </button>
       </div>
-      <button class="ld-enter" id="ld-enter" aria-label="Enter portfolio">
-        <span class="ld-enter-line"></span>
-        Enter
-        <span class="ld-enter-arrow">→</span>
+      <p class="ld-vert">SE &middot; 2026</p>
+    </div>
+  </div>
+
+  <!-- ── NAV ──────────────────────────────────────────────────── -->
+  <nav id="nav" role="navigation" aria-label="Primary navigation">
+    <div class="nav-inner">
+      <a href="#hero" class="nav-logo" aria-label="Home">
+        <span class="nav-logo-mark">BM</span>
+        <span class="nav-logo-rule"></span>
+        <span class="nav-logo-sub">Software Engineer</span>
+      </a>
+      <ul class="nav-links" role="list">
+        <li><a href="#about"    class="nav-link"><span class="nav-num">01</span><span>About</span></a></li>
+        <li><a href="#projects" class="nav-link"><span class="nav-num">02</span><span>Projects</span></a></li>
+        <li><a href="#stack"    class="nav-link"><span class="nav-num">03</span><span>Stack</span></a></li>
+        <li><a href="#archive"  class="nav-link"><span class="nav-num">04</span><span>Archive</span></a></li>
+        <li><a href="#contact"  class="nav-link"><span class="nav-num">05</span><span>Contact</span></a></li>
+      </ul>
+      <a href="mailto:benyaminmahamed@icloud.com" class="nav-cta" aria-label="Open to work">
+        <span class="nav-cta-dot"></span>
+        <span>Open to Work</span>
+      </a>
+      <button class="nav-burger" id="nav-burger" aria-label="Toggle menu" aria-expanded="false">
+        <span class="burger-line"></span>
+        <span class="burger-line"></span>
       </button>
     </div>
-    <div class="ld-vert" aria-hidden="true">PORTFOLIO · 2026 · CS GRADUATE · LONDON</div>
-  </div>
-</div>
+  </nav>
 
-<!-- ═══════════════════════════════════════════
-     NAVIGATION
-     ═══════════════════════════════════════════ -->
-<nav id="nav" aria-label="Primary navigation">
-  <div class="nav-inner">
-    <a class="nav-logo" href="#hero" aria-label="Return to top">
-      <span class="nav-logo-mark">BM</span>
-      <span class="nav-logo-rule" aria-hidden="true"></span>
-      <span class="nav-logo-sub">Software Developer</span>
-    </a>
-
-    <ul class="nav-links" role="list">
-      <li><a href="#about"    class="nav-link"><span class="nav-num">01</span>About</a></li>
-      <li><a href="#projects" class="nav-link"><span class="nav-num">02</span>Projects</a></li>
-      <li><a href="#stack"    class="nav-link"><span class="nav-num">03</span>Stack</a></li>
-      <li><a href="#archive"  class="nav-link"><span class="nav-num">04</span>Archive</a></li>
-      <li><a href="#contact"  class="nav-link"><span class="nav-num">05</span>Contact</a></li>
-    </ul>
-
-    <a href="#contact" class="nav-cta" aria-label="Hire Benyamin">
-      <span class="nav-cta-dot" aria-hidden="true"></span>
-      <span>Available Now</span>
-    </a>
-
-    <button class="nav-burger" id="nav-burger" aria-label="Toggle navigation" aria-expanded="false">
-      <span class="burger-line"></span>
-      <span class="burger-line"></span>
-    </button>
-  </div>
-</nav>
-
-<!-- Mobile menu -->
-<div class="mobile-menu" id="mobile-menu" role="dialog" aria-hidden="true" aria-label="Navigation menu">
-  <div class="mm-inner">
-    <nav>
+  <!-- ── MOBILE MENU ──────────────────────────────────────────── -->
+  <div id="mobile-menu" class="mobile-menu" aria-hidden="true" role="dialog" aria-label="Navigation menu">
+    <div class="mm-inner">
       <ul class="mm-list" role="list">
-        <li><a href="#about"    class="mm-link"><em>01</em> About</a></li>
-        <li><a href="#projects" class="mm-link"><em>02</em> Projects</a></li>
-        <li><a href="#stack"    class="mm-link"><em>03</em> Stack</a></li>
-        <li><a href="#archive"  class="mm-link"><em>04</em> Archive</a></li>
-        <li><a href="#contact"  class="mm-link"><em>05</em> Contact</a></li>
+        <li><a href="#about"    class="mm-link"><em>01</em>About</a></li>
+        <li><a href="#projects" class="mm-link"><em>02</em>Projects</a></li>
+        <li><a href="#stack"    class="mm-link"><em>03</em>Stack</a></li>
+        <li><a href="#archive"  class="mm-link"><em>04</em>Archive</a></li>
+        <li><a href="#contact"  class="mm-link"><em>05</em>Contact</a></li>
       </ul>
-    </nav>
-    <div class="mm-meta">
-      <span>Benyamin Mahamed</span>
-      <span>London · UK · 2026</span>
+      <div class="mm-meta">
+        <span>London, UK</span>
+        <span>Open to opportunities</span>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- ═══════════════════════════════════════════
-     HERO
-     ═══════════════════════════════════════════ -->
-<section id="hero" class="hero">
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- HERO                                                       -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <section class="hero" id="hero" aria-label="Introduction">
+    <div class="hero-rule" aria-hidden="true"></div>
 
-  <!-- Vertical divider rule -->
-  <div class="hero-rule" aria-hidden="true"></div>
+    <div class="hero-left">
+      <div class="hero-index-col" aria-hidden="true">
+        <span class="hero-seq">000</span>
+        <span class="hero-vert-label">Portfolio</span>
+      </div>
+      <div class="hero-text">
+        <div class="hero-eyebrow">
+          <span class="hero-eyebrow-rule" aria-hidden="true"></span>
+          <span class="mono-label crimson">Software Engineer</span>
+        </div>
 
-  <!-- Left: editorial typographic panel -->
-  <div class="hero-left">
-    <div class="hero-index-col" aria-hidden="true">
-      <span class="hero-seq">001</span>
-      <span class="hero-vert-label">Software Engineer · Full-Stack · AI/ML</span>
+        <h1 class="hero-h1" aria-label="Benyamin Mahamed">
+          <span class="h1-line-wrap">
+            <span class="h1-line">Benyamin</span>
+          </span>
+          <span class="h1-line-wrap h1-italic">
+            <span class="h1-line">Mahamed</span>
+          </span>
+        </h1>
+
+        <div class="hero-meta">
+          <span class="status-badge">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span>Available for hire</span>
+          </span>
+          <span class="hero-degree">BSc Computer Science · Aston University</span>
+        </div>
+
+        <p class="hero-desc">
+          Full-stack software engineer with production experience across
+          Django backends, computer vision pipelines, and AI-integrated
+          research tools. Based in London — building things that work in the real world.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#projects" class="btn-primary">
+            <span>View Work</span>
+            <span class="btn-arrow" aria-hidden="true">→</span>
+          </a>
+          <a href="#contact" class="btn-outline">
+            <span>Get in Touch</span>
+          </a>
+        </div>
+
+        <div class="hero-accent-slash" aria-hidden="true"></div>
+      </div>
     </div>
 
-    <div class="hero-text">
-      <div class="hero-eyebrow">
-        <span class="hero-eyebrow-rule" aria-hidden="true"></span>
-        <span class="mono-label">Portfolio · 2026</span>
-      </div>
-
-      <h1 class="hero-h1">
-        <span class="h1-line-wrap"><span class="h1-line">Full-Stack</span></span>
-        <span class="h1-line-wrap h1-italic"><span class="h1-line">Software</span></span>
-        <span class="h1-line-wrap"><span class="h1-line">Engineer.</span></span>
-      </h1>
-
-      <div class="hero-meta">
-        <div class="status-badge">
-          <span class="status-dot" aria-hidden="true"></span>
-          <span>Open to Graduate Roles — London</span>
+    <div class="hero-right" aria-hidden="true">
+      <div class="hero-img-panel">
+        <div class="asset-slot asset-slot--hero">
+          <div class="asset-slot-inner">
+            <div class="css-ink-art">
+              <span class="ink-s s1"></span><span class="ink-s s2"></span>
+              <span class="ink-s s3"></span><span class="ink-s s4"></span>
+              <span class="ink-d d1"></span><span class="ink-d d2"></span>
+            </div>
+            <div class="asset-slot-label">
+              <code>assets/hero-ink.jpg</code>
+              <p>Sumi-e figure study</p>
+            </div>
+          </div>
+          <div class="panel-frame-line"></div>
+          <span class="panel-badge mono-label">001</span>
         </div>
-        <p class="hero-degree">BSc Computer Science · University of Westminster</p>
+      </div>
+      <div class="scroll-indicator" aria-hidden="true">
+        <div class="scroll-line"></div>
+        <span class="mono-label">Scroll</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MARQUEE ───────────────────────────────────────────────── -->
+  <div class="marquee-strip" aria-hidden="true">
+    <div class="marquee-track">
+      <span class="mq">Django</span><span class="mq-sep">✦</span>
+      <span class="mq">Python</span><span class="mq-sep">✦</span>
+      <span class="mq">PostgreSQL</span><span class="mq-sep">✦</span>
+      <span class="mq">React</span><span class="mq-sep">✦</span>
+      <span class="mq">Computer Vision</span><span class="mq-sep">✦</span>
+      <span class="mq">REST APIs</span><span class="mq-sep">✦</span>
+      <span class="mq">Linux</span><span class="mq-sep">✦</span>
+      <span class="mq">AWS</span><span class="mq-sep">✦</span>
+      <span class="mq">Docker</span><span class="mq-sep">✦</span>
+      <span class="mq">JavaScript</span><span class="mq-sep">✦</span>
+      <span class="mq">OpenCV</span><span class="mq-sep">✦</span>
+      <span class="mq">LLM Integration</span><span class="mq-sep">✦</span>
+      <!-- Duplicate for seamless loop -->
+      <span class="mq">Django</span><span class="mq-sep">✦</span>
+      <span class="mq">Python</span><span class="mq-sep">✦</span>
+      <span class="mq">PostgreSQL</span><span class="mq-sep">✦</span>
+      <span class="mq">React</span><span class="mq-sep">✦</span>
+      <span class="mq">Computer Vision</span><span class="mq-sep">✦</span>
+      <span class="mq">REST APIs</span><span class="mq-sep">✦</span>
+      <span class="mq">Linux</span><span class="mq-sep">✦</span>
+      <span class="mq">AWS</span><span class="mq-sep">✦</span>
+      <span class="mq">Docker</span><span class="mq-sep">✦</span>
+      <span class="mq">JavaScript</span><span class="mq-sep">✦</span>
+      <span class="mq">OpenCV</span><span class="mq-sep">✦</span>
+      <span class="mq">LLM Integration</span><span class="mq-sep">✦</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- ABOUT                                                      -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <section class="section-about" id="about" aria-label="About">
+    <div class="section-wrap">
+      <div class="about-grid">
+
+        <aside class="about-visual" aria-hidden="true">
+          <div class="asset-slot asset-slot--portrait">
+            <div class="asset-slot-inner">
+              <div class="asset-slot-label">
+                <code>assets/about-portrait.jpg</code>
+                <p>Ink portrait</p>
+              </div>
+            </div>
+          </div>
+          <div class="about-img-caption">
+            <span class="mono-label">Benyamin Mahamed</span>
+            <span class="mono-label" style="color:var(--c-ink-ghost)">London, UK</span>
+          </div>
+        </aside>
+
+        <div class="about-body-col">
+          <div class="section-eyebrow" data-gsap-reveal>
+            <span class="eyebrow-rule" aria-hidden="true"></span>
+            <span class="mono-label crimson">002 — About</span>
+          </div>
+          <h2 class="section-title" aria-label="About section">
+            Building software<br><em>that ships.</em>
+          </h2>
+
+          <div class="about-body" data-gsap-reveal data-delay="0.1">
+            <p>
+              I'm a final-year Computer Science student at <strong>Aston University</strong>,
+              co-founder and sole backend engineer of <strong>The Blueprint Brief</strong> —
+              a production editorial CMS serving over 1,000 registered users.
+            </p>
+            <p>
+              My work spans full-stack web engineering, computer vision pipelines,
+              and AI-integrated tooling. I care about systems that are
+              <strong>observable, maintainable, and built to last</strong> — not just
+              impressive demos.
+            </p>
+            <p>
+              Currently seeking <strong>graduate software engineering roles</strong> in London
+              starting summer 2026.
+            </p>
+          </div>
+
+          <div class="credential-grid" data-gsap-reveal data-delay="0.2">
+            <div class="credential-item">
+              <span class="cred-val">1,000+</span>
+              <span class="cred-label">Production Users</span>
+            </div>
+            <div class="credential-item">
+              <span class="cred-val">4</span>
+              <span class="cred-label">Major Projects</span>
+            </div>
+            <div class="credential-item">
+              <span class="cred-val">3</span>
+              <span class="cred-label">Languages</span>
+            </div>
+            <div class="credential-item">
+              <span class="cred-val">2026</span>
+              <span class="cred-label">Graduating</span>
+            </div>
+          </div>
+
+          <div class="about-tags" data-gsap-reveal data-delay="0.3" aria-label="Core skills">
+            <span class="tag">Django REST Framework</span>
+            <span class="tag">PostgreSQL</span>
+            <span class="tag">Python</span>
+            <span class="tag">OpenCV</span>
+            <span class="tag">React</span>
+            <span class="tag">Docker</span>
+            <span class="tag">Linux / Nginx</span>
+            <span class="tag">LLM APIs</span>
+            <span class="tag">Git</span>
+            <span class="tag">AWS</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- PROJECTS                                                   -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <section class="section-projects" id="projects" aria-label="Projects">
+
+    <div class="projects-header-band">
+      <div class="section-wrap">
+        <div class="projects-header-row">
+          <div>
+            <div class="section-eyebrow">
+              <span class="eyebrow-rule" aria-hidden="true"></span>
+              <span class="mono-label crimson">003 — Selected Work</span>
+            </div>
+            <h2 class="section-title">
+              Projects &amp;<br><em>Systems Built</em>
+            </h2>
+          </div>
+          <!-- Filter buttons — text MUST be in <span> for z-index layering -->
+          <div class="proj-filters" id="proj-filters" role="group" aria-label="Filter projects">
+            <button class="pf active" data-f="all"><span>All</span></button>
+            <button class="pf" data-f="production"><span>Production</span></button>
+            <button class="pf" data-f="ml"><span>ML / Vision</span></button>
+            <button class="pf" data-f="fullstack"><span>Full-Stack</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-wrap">
+      <div class="proj-list" id="proj-grid">
+
+        <!-- PROJECT 1 — Blueprint Brief (featured) -->
+        <article class="proj-item proj-item--featured" data-gsap-proj data-t="production fullstack django"
+          aria-label="The Blueprint Brief project">
+          <div class="proj-visual">
+            <div class="proj-img-panel">
+              <div class="asset-slot asset-slot--proj">
+                <div class="asset-slot-inner">
+                  <div class="asset-slot-label">
+                    <code>assets/blueprint-brief.jpg</code>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="proj-data">
+            <div class="proj-meta-row">
+              <span class="mono-label" aria-hidden="true">01</span>
+              <span class="proj-status proj-status--live">
+                <span class="status-dot" aria-hidden="true"></span>
+                <span>Live Production</span>
+              </span>
+            </div>
+            <h3 class="proj-title">The Blueprint<br>Brief</h3>
+            <p class="proj-desc">
+              Co-founded and architected a full-stack editorial CMS serving 1,000+ registered
+              users in production. Sole engineer responsible for all backend systems,
+              infrastructure, DNS, and transactional email delivery pipelines.
+            </p>
+            <div class="proj-highlights">
+              <div class="highlight-item">
+                <span class="hi-val">1,000+</span>
+                <span class="hi-label">Registered Users</span>
+              </div>
+              <div class="highlight-item">
+                <span class="hi-val">100%</span>
+                <span class="hi-label">Solo-Engineered</span>
+              </div>
+            </div>
+            <ul class="proj-tags" aria-label="Technologies">
+              <li>Django</li><li>PostgreSQL</li><li>Python</li>
+              <li>CKEditor 5</li><li>JavaScript</li><li>Linux</li>
+            </ul>
+            <div class="proj-links">
+              <a href="https://theblueprintbrief.com" target="_blank" rel="noopener"
+                 class="proj-link proj-link--primary">Visit Live Platform →</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- PROJECT 2 — Autonomous Navigation -->
+        <article class="proj-item" data-gsap-proj data-t="ml dissertation"
+          aria-label="Autonomous Navigation System project">
+          <div class="proj-visual">
+            <div class="proj-img-panel">
+              <div class="asset-slot asset-slot--proj">
+                <div class="asset-slot-inner">
+                  <div class="asset-slot-label">
+                    <code>assets/autonomous-nav.jpg</code>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="proj-data">
+            <div class="proj-meta-row">
+              <span class="mono-label" aria-hidden="true">02</span>
+              <span class="proj-status proj-status--diss">
+                <span>Final Year Dissertation</span>
+              </span>
+            </div>
+            <h3 class="proj-title">Autonomous<br>Navigation System</h3>
+            <p class="proj-desc">
+              Real-time lane detection and obstacle avoidance running on Raspberry Pi 5.
+              Classical computer vision pipeline — Canny edge detection, Hough Transform,
+              PID steering controller, and ultrasonic sensor fusion. No ML dependencies.
+            </p>
+            <ul class="proj-tags" aria-label="Technologies">
+              <li>Python</li><li>OpenCV</li><li>Raspberry Pi 5</li>
+              <li>PID Control</li><li>Sensor Fusion</li>
+            </ul>
+            <div class="proj-links">
+              <a href="https://github.com/BenyaminMahamed" target="_blank" rel="noopener"
+                 class="proj-link">GitHub →</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- PROJECT 3 — Lexis RAG -->
+        <article class="proj-item" data-gsap-proj data-t="ml fullstack ai"
+          aria-label="Lexis AI Research Assistant project">
+          <div class="proj-visual">
+            <div class="proj-img-panel">
+              <div class="asset-slot asset-slot--proj">
+                <div class="asset-slot-inner">
+                  <div class="asset-slot-label">
+                    <code>assets/lexis-rag.jpg</code>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="proj-data">
+            <div class="proj-meta-row">
+              <span class="mono-label" aria-hidden="true">03</span>
+              <span class="proj-status proj-status--personal">
+                <span>Personal</span>
+              </span>
+            </div>
+            <h3 class="proj-title">Lexis AI<br>Research Assistant</h3>
+            <p class="proj-desc">
+              RAG-powered document chat built with LangChain, FAISS vector store, and
+              the Anthropic Claude API. Upload any PDF and interrogate it with cited,
+              grounded answers. Django REST backend with React frontend.
+            </p>
+            <ul class="proj-tags" aria-label="Technologies">
+              <li>LangChain</li><li>FAISS</li><li>Claude API</li>
+              <li>Django</li><li>React</li><li>PostgreSQL</li>
+            </ul>
+            <div class="proj-links">
+              <a href="https://github.com/BenyaminMahamed" target="_blank" rel="noopener"
+                 class="proj-link">GitHub →</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- PROJECT 4 — Sky Voting -->
+        <article class="proj-item" data-gsap-proj data-t="fullstack group"
+          aria-label="Sky TV Voting Platform project">
+          <div class="proj-visual">
+            <div class="proj-img-panel">
+              <div class="asset-slot asset-slot--proj">
+                <div class="asset-slot-inner">
+                  <div class="asset-slot-label">
+                    <code>assets/sky-voting.jpg</code>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="proj-data">
+            <div class="proj-meta-row">
+              <span class="mono-label" aria-hidden="true">04</span>
+              <span class="proj-status proj-status--group">
+                <span>Group Project</span>
+              </span>
+            </div>
+            <h3 class="proj-title">Sky TV<br>Voting Platform</h3>
+            <p class="proj-desc">
+              Real-time audience voting platform built for a Sky TV client brief.
+              WebSocket-driven live result updates, anti-fraud session validation,
+              and a Django admin dashboard for broadcast operators.
+            </p>
+            <ul class="proj-tags" aria-label="Technologies">
+              <li>Django Channels</li><li>WebSockets</li><li>JavaScript</li>
+              <li>Redis</li><li>PostgreSQL</li>
+            </ul>
+            <div class="proj-links">
+              <a href="https://github.com/BenyaminMahamed" target="_blank" rel="noopener"
+                 class="proj-link">GitHub →</a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- STACK                                                      -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <section class="section-stack" id="stack" aria-label="Technical stack">
+    <div class="section-wrap">
+      <div class="stack-grid">
+
+        <div class="stack-intro">
+          <div class="section-eyebrow" data-gsap-reveal>
+            <span class="eyebrow-rule" aria-hidden="true"></span>
+            <span class="mono-label crimson">004 — Technical Stack</span>
+          </div>
+          <h2 class="section-title" data-gsap-reveal>
+            Tools &amp;<br><em>Capabilities</em>
+          </h2>
+          <p class="stack-desc" data-gsap-reveal data-delay="0.1">
+            Built through production problem-solving, not just tutorials.
+            Each skill here has been applied to something that ships.
+          </p>
+          <div class="asset-slot asset-slot--stack" data-gsap-reveal data-delay="0.2" aria-hidden="true">
+            <div class="asset-slot-inner">
+              <div class="asset-slot-label">
+                <code>assets/stack-texture.jpg</code>
+                <p>Washi paper texture</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stack-tables">
+
+          <div class="stack-category" data-gsap-reveal>
+            <p class="stack-cat-title">Backend</p>
+            <div class="skill-rows">
+              <div class="skill-row"><span class="sk-name">Python / Django</span><div class="sk-track"><div class="sk-fill" data-pct="92"></div></div><span class="sk-val mono-label">92</span></div>
+              <div class="skill-row"><span class="sk-name">Django REST Framework</span><div class="sk-track"><div class="sk-fill" data-pct="88"></div></div><span class="sk-val mono-label">88</span></div>
+              <div class="skill-row"><span class="sk-name">PostgreSQL</span><div class="sk-track"><div class="sk-fill" data-pct="85"></div></div><span class="sk-val mono-label">85</span></div>
+              <div class="skill-row"><span class="sk-name">Django Channels / WebSockets</span><div class="sk-track"><div class="sk-fill" data-pct="75"></div></div><span class="sk-val mono-label">75</span></div>
+            </div>
+          </div>
+
+          <div class="stack-category" data-gsap-reveal data-delay="0.05">
+            <p class="stack-cat-title">Frontend</p>
+            <div class="skill-rows">
+              <div class="skill-row"><span class="sk-name">JavaScript (ES6+)</span><div class="sk-track"><div class="sk-fill" data-pct="80"></div></div><span class="sk-val mono-label">80</span></div>
+              <div class="skill-row"><span class="sk-name">React</span><div class="sk-track"><div class="sk-fill" data-pct="72"></div></div><span class="sk-val mono-label">72</span></div>
+              <div class="skill-row"><span class="sk-name">HTML / CSS</span><div class="sk-track"><div class="sk-fill" data-pct="88"></div></div><span class="sk-val mono-label">88</span></div>
+            </div>
+          </div>
+
+          <div class="stack-category" data-gsap-reveal data-delay="0.1">
+            <p class="stack-cat-title">ML / Vision</p>
+            <div class="skill-rows">
+              <div class="skill-row"><span class="sk-name">OpenCV</span><div class="sk-track"><div class="sk-fill" data-pct="82"></div></div><span class="sk-val mono-label">82</span></div>
+              <div class="skill-row"><span class="sk-name">LangChain / RAG</span><div class="sk-track"><div class="sk-fill" data-pct="70"></div></div><span class="sk-val mono-label">70</span></div>
+              <div class="skill-row"><span class="sk-name">FAISS / Vector DBs</span><div class="sk-track"><div class="sk-fill" data-pct="65"></div></div><span class="sk-val mono-label">65</span></div>
+            </div>
+          </div>
+
+          <div class="stack-category" data-gsap-reveal data-delay="0.15">
+            <p class="stack-cat-title">Infrastructure</p>
+            <div class="skill-rows">
+              <div class="skill-row"><span class="sk-name">Linux / Nginx / Gunicorn</span><div class="sk-track"><div class="sk-fill" data-pct="80"></div></div><span class="sk-val mono-label">80</span></div>
+              <div class="skill-row"><span class="sk-name">Docker</span><div class="sk-track"><div class="sk-fill" data-pct="70"></div></div><span class="sk-val mono-label">70</span></div>
+              <div class="skill-row"><span class="sk-name">AWS / Cloud Hosting</span><div class="sk-track"><div class="sk-fill" data-pct="65"></div></div><span class="sk-val mono-label">65</span></div>
+              <div class="skill-row"><span class="sk-name">Git / GitHub</span><div class="sk-track"><div class="sk-fill" data-pct="90"></div></div><span class="sk-val mono-label">90</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- GITHUB ARCHIVE                                             -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <section class="section-archive" id="archive" aria-label="GitHub repository archive">
+    <div class="section-wrap">
+
+      <div class="archive-header">
+        <div>
+          <div class="section-eyebrow" data-gsap-reveal>
+            <span class="eyebrow-rule" aria-hidden="true"></span>
+            <span class="mono-label crimson">005 — Open Archive</span>
+          </div>
+          <h2 class="section-title" data-gsap-reveal>
+            GitHub<br><em>Repository Index</em>
+          </h2>
+        </div>
+        <div class="archive-controls">
+          <div class="archive-search-wrap">
+            <input type="search" id="gh-search" class="archive-search"
+              placeholder="Search repositories…" aria-label="Search repositories"/>
+          </div>
+          <div class="archive-lang-filters" id="gh-lang-filters" role="group" aria-label="Filter by language">
+            <!-- Language filter buttons built by github.js — text wrapped in span by JS -->
+          </div>
+        </div>
       </div>
 
-      <p class="hero-desc">
-        I architect and ship production systems — from a live editorial platform serving 1,000+ users to real-time computer vision on embedded hardware. Backend-first, AI-capable, always deploying.
-      </p>
+      <div class="archive-grid" id="gh-grid" aria-live="polite" aria-label="Repository grid">
+        <div class="archive-loading" id="gh-loading" aria-label="Loading repositories">
+          <div class="archive-spinner" aria-hidden="true"></div>
+          <span class="mono-label">Fetching repositories…</span>
+        </div>
+      </div>
 
-      <div class="hero-actions">
-        <a href="#projects" class="btn-primary">
-          <span>View Production Work</span>
+      <div class="archive-footer">
+        <a href="https://github.com/BenyaminMahamed" target="_blank" rel="noopener"
+           class="btn-outline" aria-label="View all repositories on GitHub">
+          <span>View All on GitHub</span>
           <span class="btn-arrow" aria-hidden="true">→</span>
         </a>
-        <a href="https://github.com/BenyaminMahamed" target="_blank" rel="noopener" class="btn-outline">
-          GitHub Archive
-        </a>
       </div>
 
-      <!-- Ink slash decorative accent -->
-      <div class="hero-accent-slash" aria-hidden="true"></div>
     </div>
-  </div>
+  </section>
 
-  <!-- Right: image asset panel -->
-  <div class="hero-right">
-    <!--
-      ┌─────────────────────────────────────────────────────────────────────┐
-      │  ASSET SLOT: assets/hero-ink.jpg                                    │
-      │  Prompt: "Ultra-high-contrast Sumi-e ink wash. A solitary figure    │
-      │  standing in vast negative white space. Sparse, gestural            │
-      │  brushstrokes. Ink bleeds at edges. Dramatic black on pure white.   │
-      │  No colour. Traditional Japanese kakejiku scroll composition.       │
-      │  1200×1600px minimum. Portrait orientation."                        │
-      │  Source: Unsplash search "sumi-e ink wash" or Midjourney prompt     │
-      └─────────────────────────────────────────────────────────────────────┘
-    -->
-    <div class="hero-img-panel" id="hero-img-panel">
-      <div class="asset-slot asset-slot--hero" aria-label="Sumi-e ink wash illustration panel">
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- CONTACT                                                    -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <section class="section-contact" id="contact" aria-label="Contact">
+
+    <div class="contact-landscape-band" aria-hidden="true">
+      <div class="asset-slot asset-slot--landscape">
         <div class="asset-slot-inner">
-          <!-- CSS ink art visible until real asset loaded -->
-          <div class="css-ink-art" aria-hidden="true">
-            <div class="ink-s s1"></div>
-            <div class="ink-s s2"></div>
-            <div class="ink-s s3"></div>
-            <div class="ink-s s4"></div>
-            <div class="ink-d d1"></div>
-            <div class="ink-d d2"></div>
-          </div>
           <div class="asset-slot-label">
-            <span class="mono-label crimson">ASSET REQUIRED</span>
-            <code>assets/hero-ink.jpg</code>
-            <p>Sumi-e ink wash · 1200×1600px</p>
+            <code>assets/contact-landscape.jpg</code>
           </div>
         </div>
-        <!-- Replace this div with: <img src="assets/hero-ink.jpg" alt="Ink wash illustration" class="hero-img"> -->
-      </div>
-
-      <!-- Crimson accent frame -->
-      <div class="panel-frame-line" aria-hidden="true"></div>
-      <!-- Coordinates badge -->
-      <div class="panel-badge" aria-hidden="true">
-        <span class="mono-label">51.5074° N · 0.1278° W</span>
       </div>
     </div>
 
-    <!-- Scroll indicator -->
-    <div class="scroll-indicator" aria-hidden="true">
-      <div class="scroll-line"></div>
-      <span class="mono-label">Scroll</span>
-    </div>
-  </div>
-
-</section>
-
-<!-- ═══════════════════════════════════════════
-     MARQUEE STRIP
-     ═══════════════════════════════════════════ -->
-<div class="marquee-strip" aria-hidden="true">
-  <div class="marquee-track">
-    <span class="mq">Django · PostgreSQL</span><span class="mq-sep">◆</span>
-    <span class="mq">Python · OpenCV · NumPy</span><span class="mq-sep">◆</span>
-    <span class="mq">Raspberry Pi 5 · Computer Vision</span><span class="mq-sep">◆</span>
-    <span class="mq">The Blueprint Brief · 1,000+ Users</span><span class="mq-sep">◆</span>
-    <span class="mq">JavaScript · HTML · CSS</span><span class="mq-sep">◆</span>
-    <span class="mq">Git · Linux · Bash · REST APIs</span><span class="mq-sep">◆</span>
-    <span class="mq">RAG · FAISS · Gemini 2.0</span><span class="mq-sep">◆</span>
-    <span class="mq">BSc Computer Science · Westminster</span><span class="mq-sep">◆</span>
-    <!-- duplicate for seamless loop -->
-    <span class="mq">Django · PostgreSQL</span><span class="mq-sep">◆</span>
-    <span class="mq">Python · OpenCV · NumPy</span><span class="mq-sep">◆</span>
-    <span class="mq">Raspberry Pi 5 · Computer Vision</span><span class="mq-sep">◆</span>
-    <span class="mq">The Blueprint Brief · 1,000+ Users</span><span class="mq-sep">◆</span>
-    <span class="mq">JavaScript · HTML · CSS</span><span class="mq-sep">◆</span>
-    <span class="mq">Git · Linux · Bash · REST APIs</span><span class="mq-sep">◆</span>
-    <span class="mq">RAG · FAISS · Gemini 2.0</span><span class="mq-sep">◆</span>
-    <span class="mq">BSc Computer Science · Westminster</span><span class="mq-sep">◆</span>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════
-     ABOUT
-     ═══════════════════════════════════════════ -->
-<section id="about" class="section-about">
-  <div class="section-wrap">
-    <div class="about-grid">
-
-      <!-- Left: image panel -->
-      <div class="about-visual" data-gsap-reveal>
-        <!--
-          ┌──────────────────────────────────────────────────────────────────┐
-          │  ASSET SLOT: assets/about-portrait.jpg                          │
-          │  Prompt: "Nakazawa-style high-contrast ink line art portrait.    │
-          │  Sparse, precise ink lines on warm cream/off-white paper.        │
-          │  Strong silhouette. Large negative space. Black ink only.        │
-          │  No fill colours. 800×1000px portrait orientation."             │
-          │  Alternative: Abstract Japanese calligraphy brushstroke panel.   │
-          └──────────────────────────────────────────────────────────────────┘
-        -->
-        <div class="asset-slot asset-slot--portrait" aria-label="Portrait panel">
-          <div class="asset-slot-inner">
-            <div class="css-ink-art" aria-hidden="true">
-              <div class="ink-s s5"></div>
-              <div class="ink-s s6"></div>
-            </div>
-            <div class="asset-slot-label">
-              <span class="mono-label crimson">ASSET REQUIRED</span>
-              <code>assets/about-portrait.jpg</code>
-              <p>Line art portrait · 800×1000px</p>
-            </div>
-          </div>
-          <!-- Replace with: <img src="assets/about-portrait.jpg" alt="Portrait" class="about-portrait-img"> -->
-        </div>
-
-        <div class="about-img-caption">
-          <span class="mono-label">London, United Kingdom</span>
-          <span class="mono-label">BSc Computer Science · 2026</span>
-        </div>
-      </div>
-
-      <!-- Right: editorial text block -->
-      <div class="about-content">
-        <div class="section-eyebrow" data-gsap-reveal>
-          <span class="mono-label crimson">01 — About</span>
-          <span class="eyebrow-rule" aria-hidden="true"></span>
-        </div>
-
-        <h2 class="section-title" data-gsap-reveal>
-          Engineer.<br>
-          <em>Builder.</em><br>
-          Architect.
-        </h2>
-
-        <div class="about-body" data-gsap-reveal data-delay="0.1">
-          <p>
-            CS graduate from the <strong>University of Westminster</strong>, London. I engineer production systems — not prototypes. My work spans the full stack: backend architecture, database design, computer vision pipelines, and AI integration.
-          </p>
-          <p>
-            I co-founded <strong>The Blueprint Brief</strong>, a live editorial platform currently serving over 1,000 registered users — built entirely with Django and PostgreSQL, deployed and maintained in production. My final year dissertation produced a real-time autonomous navigation system running on embedded hardware at ~14 FPS.
-          </p>
-        </div>
-
-        <!-- Credential grid -->
-        <div class="credential-grid" data-gsap-reveal data-delay="0.2">
-          <div class="credential-item">
-            <span class="cred-val" data-countup>1,000+</span>
-            <span class="cred-label">Platform Users</span>
-          </div>
-          <div class="credential-item">
-            <span class="cred-val">7+</span>
-            <span class="cred-label">Languages</span>
-          </div>
-          <div class="credential-item">
-            <span class="cred-val">4+</span>
-            <span class="cred-label">Production Projects</span>
-          </div>
-          <div class="credential-item">
-            <span class="cred-val">BSc</span>
-            <span class="cred-label">CS Honours</span>
-          </div>
-        </div>
-
-        <!-- Skill tags -->
-        <div class="about-tags" data-gsap-reveal data-delay="0.3">
-          <span class="tag">Full-Stack Development</span>
-          <span class="tag">AI / ML Engineering</span>
-          <span class="tag">Computer Vision</span>
-          <span class="tag">Embedded Systems</span>
-          <span class="tag">RESTful APIs</span>
-          <span class="tag">Database Architecture</span>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════
-     FEATURED PROJECTS
-     ═══════════════════════════════════════════ -->
-<section id="projects" class="section-projects">
-
-  <div class="projects-header-band">
     <div class="section-wrap">
-      <div class="section-eyebrow" data-gsap-reveal>
-        <span class="mono-label crimson">02 — Production Applications</span>
-        <span class="eyebrow-rule" aria-hidden="true"></span>
-      </div>
-      <div class="projects-header-row">
-        <h2 class="section-title" data-gsap-reveal>Featured<br><em>Architecture.</em></h2>
-        <div class="proj-filters" id="proj-filters" data-gsap-reveal data-delay="0.1"
-             role="group" aria-label="Filter projects">
-          <button class="pf active" data-f="all">All</button>
-          <button class="pf" data-f="python">Python</button>
-          <button class="pf" data-f="django">Django</button>
-          <button class="pf" data-f="opencv">Computer Vision</button>
-          <button class="pf" data-f="ai">AI / RAG</button>
-        </div>
-      </div>
-    </div>
-  </div>
+      <div class="contact-grid">
 
-  <div class="section-wrap">
-    <div class="proj-list" id="proj-grid">
-
-      <!-- ── PROJECT 01: THE BLUEPRINT BRIEF ── FEATURED / LIVE ── -->
-      <article class="proj-item proj-item--featured" data-t="python,django,javascript,html,sql" data-gsap-proj>
-
-        <div class="proj-visual">
-          <!--
-            ┌──────────────────────────────────────────────────────────────────┐
-            │  ASSET SLOT: assets/blueprint-brief.jpg                         │
-            │  Use: High-resolution browser screenshot of theblueprintbrief.com│
-            │  Or a mockup showing the editorial interface.                    │
-            │  Convert to high-contrast with warm tint if desired. 800×600px.  │
-            └──────────────────────────────────────────────────────────────────┘
-          -->
-          <div class="proj-img-panel">
-            <div class="asset-slot asset-slot--proj">
-              <div class="asset-slot-label">
-                <span class="mono-label crimson">LIVE PLATFORM</span>
-                <code>assets/blueprint-brief.jpg</code>
-              </div>
-              <!-- Replace with: <img src="assets/blueprint-brief.jpg" alt="The Blueprint Brief platform"> -->
-            </div>
-            <a href="https://theblueprintbrief.com" target="_blank" rel="noopener"
-               class="proj-visit-overlay" aria-label="Visit The Blueprint Brief live">
-              <span>Visit Live →</span>
-            </a>
+        <div class="contact-left">
+          <div class="section-eyebrow" data-gsap-reveal>
+            <span class="eyebrow-rule" aria-hidden="true"></span>
+            <span class="mono-label crimson">006 — Contact</span>
           </div>
-        </div>
-
-        <div class="proj-data">
-          <div class="proj-meta-row">
-            <span class="proj-index mono-label">01</span>
-            <span class="proj-status proj-status--live">
-              <span class="status-dot" aria-hidden="true"></span>
-              Live Production
-            </span>
-          </div>
-
-          <h3 class="proj-title">The Blueprint<br>Brief</h3>
-
-          <p class="proj-desc">
-            Co-founded and architected a full-stack editorial CMS serving 1,000+ registered users in production. Sole engineer responsible for all backend systems, infrastructure, DNS, and transactional email delivery pipelines.
+          <h2 class="contact-title" data-gsap-reveal>
+            Let's build<br><em>something.</em>
+          </h2>
+          <p class="contact-sub" data-gsap-reveal data-delay="0.1">
+            Open to graduate software engineering roles in London.
+            Also open to interesting side projects and consultancy work.
           </p>
-
-          <div class="proj-highlights">
-            <div class="highlight-item">
-              <span class="hi-val">1,000+</span>
-              <span class="hi-label">Registered Users</span>
-            </div>
-            <div class="highlight-item">
-              <span class="hi-val">100%</span>
-              <span class="hi-label">Solo-Engineered</span>
-            </div>
-          </div>
-
-          <ul class="proj-tags" aria-label="Technologies used">
-            <li>Django</li><li>PostgreSQL</li><li>Python</li>
-            <li>CKEditor 5</li><li>JavaScript</li><li>Linux</li>
-          </ul>
-
-          <div class="proj-links">
-            <a href="https://theblueprintbrief.com" target="_blank" rel="noopener" class="proj-link proj-link--primary">
-              Visit Live Platform <span aria-hidden="true">→</span>
-            </a>
+          <div class="avail-strip" data-gsap-reveal data-delay="0.2">
+            <span class="avail-dot" aria-hidden="true"></span>
+            <span>Available from Summer 2026</span>
           </div>
         </div>
-      </article>
 
-      <!-- ── PROJECT 02: AUTONOMOUS NAV SYSTEM ── -->
-      <article class="proj-item" data-t="python,opencv,numpy,bash,embedded" data-gsap-proj>
-        <div class="proj-visual">
-          <!--
-            ┌──────────────────────────────────────────────────────────────────┐
-            │  ASSET SLOT: assets/autonomous-nav.jpg                          │
-            │  Use: Clean architectural diagram of the CV pipeline, or a photo │
-            │  of the PiCar-X hardware setup. High-contrast, near-monochrome. │
-            │  800×600px.                                                      │
-            └──────────────────────────────────────────────────────────────────┘
-          -->
-          <div class="proj-img-panel">
-            <div class="asset-slot asset-slot--proj">
-              <div class="asset-slot-label">
-                <span class="mono-label">DISSERTATION</span>
-                <code>assets/autonomous-nav.jpg</code>
+        <div class="contact-right">
+          <nav class="contact-links" aria-label="Contact links">
+            <a href="mailto:benyaminmahamed@icloud.com"
+               class="contact-link contact-link--featured"
+               aria-label="Email Benyamin">
+              <div class="cl-left">
+                <span class="mono-label cl-platform">Email</span>
+                <span class="cl-handle">benyaminmahamed@icloud.com</span>
+              </div>
+              <span class="cl-arrow" aria-hidden="true">↗</span>
+            </a>
+            <a href="https://linkedin.com/in/benyaminmahamed"
+               target="_blank" rel="noopener"
+               class="contact-link"
+               aria-label="LinkedIn profile">
+              <div class="cl-left">
+                <span class="mono-label cl-platform">LinkedIn</span>
+                <span class="cl-handle">benyaminmahamed</span>
+              </div>
+              <span class="cl-arrow" aria-hidden="true">↗</span>
+            </a>
+            <a href="https://github.com/BenyaminMahamed"
+               target="_blank" rel="noopener"
+               class="contact-link"
+               aria-label="GitHub profile">
+              <div class="cl-left">
+                <span class="mono-label cl-platform">GitHub</span>
+                <span class="cl-handle">BenyaminMahamed</span>
+              </div>
+              <span class="cl-arrow" aria-hidden="true">↗</span>
+            </a>
+          </nav>
+
+          <div class="profile-card" data-gsap-reveal>
+            <div class="pc-header">
+              <span class="mono-label crimson">Profile</span>
+              <span class="pc-rule" aria-hidden="true"></span>
+            </div>
+            <p class="pc-name">Benyamin Mahamed</p>
+            <p class="pc-role">Software Engineer</p>
+            <p class="pc-uni">Aston University · BSc Computer Science · 2026</p>
+            <div class="pc-metrics">
+              <div class="pc-metric">
+                <span class="pm-val">1,000+</span>
+                <span class="pm-label">Users Served</span>
+              </div>
+              <div class="pc-metric">
+                <span class="pm-val">4+</span>
+                <span class="pm-label">Shipped Projects</span>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="proj-data">
-          <div class="proj-meta-row">
-            <span class="proj-index mono-label">02</span>
-            <span class="proj-status proj-status--diss">Final Year Dissertation</span>
-          </div>
-
-          <h3 class="proj-title">Autonomous<br>Navigation System</h3>
-
-          <p class="proj-desc">
-            Real-time lane detection and obstacle avoidance running on Raspberry Pi 5. Classical computer vision pipeline — Canny edge detection, Hough Transform, proportional steering controller. ~10ms latency at ~14 FPS across a 10,298-frame live session.
-          </p>
-
-          <ul class="proj-tags" aria-label="Technologies used">
-            <li>Python</li><li>OpenCV</li><li>NumPy</li>
-            <li>Raspberry Pi 5</li><li>Multithreading</li><li>Linux</li>
-          </ul>
-
-          <div class="proj-links">
-            <a href="https://github.com/BenyaminMahamed/FINALYEARPROJECT" target="_blank" rel="noopener" class="proj-link">
-              View Repository <span aria-hidden="true">→</span>
-            </a>
-          </div>
-        </div>
-      </article>
-
-      <!-- ── PROJECT 03: LEXIS RAG ── -->
-      <article class="proj-item" data-t="python,django,ai,rag,faiss" data-gsap-proj>
-        <div class="proj-visual">
-          <!--
-            ┌──────────────────────────────────────────────────────────────────┐
-            │  ASSET SLOT: assets/lexis-rag.jpg                               │
-            │  Use: Clean screenshot of the Lexis interface, or a minimal      │
-            │  system diagram showing the RAG pipeline flow. 800×600px.        │
-            └──────────────────────────────────────────────────────────────────┘
-          -->
-          <div class="proj-img-panel">
-            <div class="asset-slot asset-slot--proj">
-              <div class="asset-slot-label">
-                <span class="mono-label">AI SYSTEM</span>
-                <code>assets/lexis-rag.jpg</code>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="proj-data">
-          <div class="proj-meta-row">
-            <span class="proj-index mono-label">03</span>
-            <span class="proj-status proj-status--personal">Personal Project</span>
-          </div>
-
-          <h3 class="proj-title">Lexis — AI<br>Research Assistant</h3>
-
-          <p class="proj-desc">
-            Custom RAG pipeline built without LangChain abstractions. PDFs ingested page-by-page with PyMuPDF, chunked into overlapping 500-word windows, embedded with all-MiniLM-L6-v2, and indexed in FAISS. Four query modes — every response cites exact source chunks and page numbers.
-          </p>
-
-          <ul class="proj-tags" aria-label="Technologies used">
-            <li>Django</li><li>FAISS</li><li>Sentence-Transformers</li>
-            <li>PyMuPDF</li><li>Gemini 2.0 Flash</li><li>SQLite</li>
-          </ul>
-
-          <div class="proj-links">
-            <a href="https://github.com/BenyaminMahamed/AI-Research-Assistant" target="_blank" rel="noopener" class="proj-link">
-              View Repository <span aria-hidden="true">→</span>
-            </a>
-          </div>
-        </div>
-      </article>
-
-      <!-- ── PROJECT 04: SKY TV VOTING PLATFORM ── -->
-      <article class="proj-item" data-t="python,django,javascript,html,sql" data-gsap-proj>
-        <div class="proj-visual">
-          <!--
-            ┌──────────────────────────────────────────────────────────────────┐
-            │  ASSET SLOT: assets/sky-voting.jpg                              │
-            │  Use: Screenshot of the voting platform UI. 800×600px.          │
-            └──────────────────────────────────────────────────────────────────┘
-          -->
-          <div class="proj-img-panel">
-            <div class="asset-slot asset-slot--proj">
-              <div class="asset-slot-label">
-                <span class="mono-label">GROUP PROJECT</span>
-                <code>assets/sky-voting.jpg</code>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="proj-data">
-          <div class="proj-meta-row">
-            <span class="proj-index mono-label">04</span>
-            <span class="proj-status proj-status--group">Team · First Class</span>
-          </div>
-
-          <h3 class="proj-title">Sky TV<br>Voting Platform</h3>
-
-          <p class="proj-desc">
-            Led a team of four. Django voting workflow with full authentication, profile management, session handling, and portal dashboard. Selected to present to a panel of Sky engineers. Awarded 84% — First Class.
-          </p>
-
-          <ul class="proj-tags" aria-label="Technologies used">
-            <li>Python</li><li>Django</li><li>SQL</li><li>HTML/CSS</li><li>JavaScript</li>
-          </ul>
-
-          <div class="proj-links">
-            <a href="https://github.com/simonepietraroia/Sky-TV-Project" target="_blank" rel="noopener" class="proj-link">
-              View Repository <span aria-hidden="true">→</span>
-            </a>
-          </div>
-        </div>
-      </article>
-
-    </div><!-- /proj-list -->
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════
-     TECHNICAL ECOSYSTEM
-     ═══════════════════════════════════════════ -->
-<section id="stack" class="section-stack">
-  <div class="section-wrap">
-    <div class="section-eyebrow" data-gsap-reveal>
-      <span class="mono-label crimson">03 — Technical Ecosystem</span>
-      <span class="eyebrow-rule" aria-hidden="true"></span>
-    </div>
-
-    <div class="stack-grid">
-
-      <div class="stack-intro">
-        <h2 class="section-title" data-gsap-reveal>Core<br><em>Competencies.</em></h2>
-        <p class="stack-desc" data-gsap-reveal data-delay="0.1">
-          A production-proven stack built through real deployment — not coursework alone. Every skill listed has shipped to live users or embedded hardware.
-        </p>
-
-        <!--
-          ┌──────────────────────────────────────────────────────────────────┐
-          │  ASSET SLOT: assets/stack-texture.jpg                           │
-          │  Use: Close-up photograph of a traditional Japanese calligraphy  │
-          │  brush on washi paper, or abstract ink-on-paper texture.         │
-          │  Warm tones. 800×600px. Optional but elevates this panel.        │
-          └──────────────────────────────────────────────────────────────────┘
-        -->
-        <div class="stack-img-panel" data-gsap-reveal data-delay="0.2">
-          <div class="asset-slot asset-slot--stack" aria-label="Stack texture panel">
-            <div class="asset-slot-label">
-              <span class="mono-label crimson">ASSET REQUIRED</span>
-              <code>assets/stack-texture.jpg</code>
-              <p>Washi paper texture · 800×600px</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="stack-tables">
-
-        <div class="stack-category" data-gsap-reveal data-delay="0.05">
-          <h3 class="stack-cat-title">Backend &amp; Core</h3>
-          <div class="skill-rows">
-            <div class="skill-row">
-              <span class="sk-name">Python</span>
-              <div class="sk-track"><div class="sk-fill" data-pct="90"></div></div>
-              <span class="sk-val mono-label">90</span>
-            </div>
-            <div class="skill-row">
-              <span class="sk-name">Django / DRF</span>
-              <div class="sk-track"><div class="sk-fill" data-pct="82"></div></div>
-              <span class="sk-val mono-label">82</span>
-            </div>
-            <div class="skill-row">
-              <span class="sk-name">PostgreSQL / SQL</span>
-              <div class="sk-track"><div class="sk-fill" data-pct="72"></div></div>
-              <span class="sk-val mono-label">72</span>
-            </div>
-            <div class="skill-row">
-              <span class="sk-name">REST API Design</span>
-              <div class="sk-track"><div class="sk-fill" data-pct="78"></div></div>
-              <span class="sk-val mono-label">78</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="stack-category" data-gsap-reveal data-delay="0.1">
-          <h3 class="stack-cat-title">AI / Computer Vision</h3>
-          <div class="skill-rows">
-            <div class="skill-row">
-              <span class="sk-name">OpenCV</span>
-              <div class="sk-track"><div class="sk-fill" data-pct="78"></div></div>
-              <span class="sk-val mono-label">78</span>
-            </div>
-            <div class="skill-row">
-              <span class="sk-name">FAISS / RAG</span>
-              <div class="sk-track"><div class="sk-fill" data-pct="72"></div></div>
-              <span class="sk-val mono-label">72</span>
-            </div>
-            <div class="skill-row">
-              <span class="sk-name">NumPy / SciPy</span>
-              <div class="sk-track"><div class="sk-fill" data-pct="74"></div></div>
-              <span class="sk-val mono-label">74</span>
-            </div>
-            <div class="skill-row">
-              <span class="sk-name">Embedded / IoT</span>
-              <div class="sk-track"><div class="sk-fill" data-pct="65"></div></div>
-              <span class="sk-val mono-label">65</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="stack-category" data-gsap-reveal data-delay="0.15">
-          <h3 class="stack-cat-title">Frontend &amp; DevOps</h3>
-          <div class="skill-rows">
-            <div class="skill-row">
-              <span class="sk-name">JavaScript / HTML / CSS</span>
-              <div class="sk-track"><div class="sk-fill" data-pct="76"></div></div>
-              <span class="sk-val mono-label">76</span>
-            </div>
-            <div class="skill-row">
-              <span class="sk-name">Git / GitHub</span>
-              <div class="sk-track"><div class="sk-fill" data-pct="80"></div></div>
-              <span class="sk-val mono-label">80</span>
-            </div>
-            <div class="skill-row">
-              <span class="sk-name">Linux / Bash</span>
-              <div class="sk-track"><div class="sk-fill" data-pct="68"></div></div>
-              <span class="sk-val mono-label">68</span>
-            </div>
-            <div class="skill-row">
-              <span class="sk-name">Java</span>
-              <div class="sk-track"><div class="sk-fill" data-pct="60"></div></div>
-              <span class="sk-val mono-label">60</span>
-            </div>
-          </div>
-        </div>
-
-      </div><!-- /stack-tables -->
-    </div><!-- /stack-grid -->
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════
-     GITHUB ARCHIVE
-     ═══════════════════════════════════════════ -->
-<section id="archive" class="section-archive">
-  <div class="section-wrap">
-    <div class="section-eyebrow" data-gsap-reveal>
-      <span class="mono-label crimson">04 — Live GitHub Archive</span>
-      <span class="eyebrow-rule" aria-hidden="true"></span>
-    </div>
-
-    <div class="archive-header">
-      <h2 class="section-title" data-gsap-reveal>Repository<br><em>Index.</em></h2>
-
-      <div class="archive-controls" data-gsap-reveal data-delay="0.1">
-        <div class="archive-search-wrap">
-          <input type="search" id="gh-search" class="archive-search"
-                 placeholder="Search repositories…" aria-label="Search GitHub repositories">
-        </div>
-        <div class="archive-lang-filters" id="gh-lang-filters"
-             role="group" aria-label="Filter by language">
-          <button class="af active" data-lang="all">All</button>
-        </div>
       </div>
     </div>
+  </section>
 
-    <div id="gh-grid" class="archive-grid" aria-live="polite" aria-label="GitHub repositories">
-      <div class="archive-loading" id="gh-loading">
-        <div class="archive-spinner" aria-hidden="true"></div>
-        <span class="mono-label">Fetching repositories…</span>
+  <!-- ── FOOTER ───────────────────────────────────────────────── -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <span class="footer-name">Benyamin Mahamed</span>
+        <span class="mono-label" style="color:var(--c-ink-ghost)">© 2026</span>
       </div>
+      <span class="footer-rule" aria-hidden="true"></span>
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="#about">About</a>
+        <a href="#projects">Work</a>
+        <a href="#stack">Stack</a>
+        <a href="#contact">Contact</a>
+      </nav>
     </div>
+  </footer>
 
-    <div class="archive-footer" data-gsap-reveal>
-      <a href="https://github.com/BenyaminMahamed" target="_blank" rel="noopener" class="btn-outline">
-        View Full GitHub Profile →
-      </a>
-    </div>
-  </div>
-</section>
+  <!-- ── SCRIPTS ──────────────────────────────────────────────── -->
+  <script src="js/main.js"></script>
+  <script src="js/github.js"></script>
 
-<!-- ═══════════════════════════════════════════
-     CONTACT
-     ═══════════════════════════════════════════ -->
-<section id="contact" class="section-contact">
-
-  <!--
-    ┌──────────────────────────────────────────────────────────────────────┐
-    │  ASSET SLOT: assets/contact-landscape.jpg                           │
-    │  Prompt: "Abstract Japanese mountain landscape silhouette. Sumi-e    │
-    │  ink wash. Extreme horizontal format. Misty mountains receding into  │
-    │  white distance. Black ink on pale cream/white background. Very      │
-    │  sparse and minimal. 2400×600px landscape orientation."             │
-    └──────────────────────────────────────────────────────────────────────┘
-  -->
-  <div class="contact-landscape-band">
-    <div class="asset-slot asset-slot--landscape" aria-label="Mountain landscape illustration">
-      <div class="asset-slot-label">
-        <span class="mono-label crimson">ASSET REQUIRED</span>
-        <code>assets/contact-landscape.jpg</code>
-        <p>Sumi-e landscape · 2400×600px</p>
-      </div>
-    </div>
-    <!-- Replace with: <img src="assets/contact-landscape.jpg" alt="Ink wash mountain landscape" class="landscape-img"> -->
-  </div>
-
-  <div class="section-wrap">
-    <div class="contact-grid">
-
-      <div class="contact-left">
-        <div class="section-eyebrow" data-gsap-reveal>
-          <span class="mono-label crimson">05 — Contact</span>
-          <span class="eyebrow-rule" aria-hidden="true"></span>
-        </div>
-
-        <h2 class="contact-title" data-gsap-reveal>
-          Let's Build<br><em>Something</em><br>Production-Grade.
-        </h2>
-
-        <p class="contact-sub" data-gsap-reveal data-delay="0.1">
-          BSc CS graduate in London. Seeking graduate software engineering, AI/ML, and full-stack roles. Available immediately.
-        </p>
-
-        <div class="avail-strip" data-gsap-reveal data-delay="0.18">
-          <span class="avail-dot" aria-hidden="true"></span>
-          <strong>Available Now</strong> — London · Open to Hybrid / On-site
-        </div>
-      </div>
-
-      <div class="contact-right" data-gsap-reveal data-delay="0.12">
-
-        <div class="contact-links">
-          <a href="https://github.com/BenyaminMahamed" target="_blank" rel="noopener" class="contact-link">
-            <div class="cl-left">
-              <span class="cl-platform mono-label">GitHub</span>
-              <span class="cl-handle">BenyaminMahamed</span>
-            </div>
-            <span class="cl-arrow" aria-hidden="true">→</span>
-          </a>
-
-          <a href="https://www.linkedin.com/in/benyamin-mahamed/" target="_blank" rel="noopener" class="contact-link">
-            <div class="cl-left">
-              <span class="cl-platform mono-label">LinkedIn</span>
-              <span class="cl-handle">benyamin-mahamed</span>
-            </div>
-            <span class="cl-arrow" aria-hidden="true">→</span>
-          </a>
-
-          <a href="https://theblueprintbrief.com" target="_blank" rel="noopener" class="contact-link contact-link--featured">
-            <div class="cl-left">
-              <span class="cl-platform mono-label">Live Platform</span>
-              <span class="cl-handle">theblueprintbrief.com</span>
-            </div>
-            <span class="cl-arrow" aria-hidden="true">→</span>
-          </a>
-        </div>
-
-        <!-- Profile card -->
-        <div class="profile-card">
-          <div class="pc-header">
-            <div class="pc-rule" aria-hidden="true"></div>
-            <span class="mono-label">Profile</span>
-          </div>
-          <p class="pc-name">Benyamin Mahamed</p>
-          <p class="pc-role">Software Developer · Full-Stack · AI/ML</p>
-          <p class="pc-uni">University of Westminster · London · 2026</p>
-          <div class="pc-metrics">
-            <div class="pc-metric">
-              <span class="pm-val">1,000+</span>
-              <span class="pm-label">Platform Users</span>
-            </div>
-            <div class="pc-metric">
-              <span class="pm-val">4+</span>
-              <span class="pm-label">Live Projects</span>
-            </div>
-            <div class="pc-metric">
-              <span class="pm-val">LDN</span>
-              <span class="pm-label">Location</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════
-     FOOTER
-     ═══════════════════════════════════════════ -->
-<footer class="site-footer">
-  <div class="footer-inner">
-    <div class="footer-left">
-      <span class="footer-name">Benyamin Mahamed</span>
-      <span class="mono-label">Software Developer · London · 2026</span>
-    </div>
-    <div class="footer-rule" aria-hidden="true"></div>
-    <nav class="footer-nav" aria-label="Footer navigation">
-      <a href="https://github.com/BenyaminMahamed"  target="_blank" rel="noopener">GitHub</a>
-      <a href="https://www.linkedin.com/in/benyamin-mahamed/" target="_blank" rel="noopener">LinkedIn</a>
-      <a href="https://theblueprintbrief.com" target="_blank" rel="noopener">Blueprint Brief</a>
-    </nav>
-  </div>
-</footer>
-
-<script src="js/main.js" defer></script>
-<script src="js/github.js" defer></script>
 </body>
 </html>

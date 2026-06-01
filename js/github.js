@@ -370,7 +370,8 @@ function buildLanguageFilters(repos) {
     const btn = document.createElement('button');
     btn.className = 'af';
     btn.dataset.lang = lang.toLowerCase().replace(/\s+/g, '-');
-    btn.textContent = lang;
+    // Must use <span> so text sits above ::before fill layer at z-index:1
+    btn.innerHTML = `<span>${lang}</span>`;
     DOM.langFilters.appendChild(btn);
   });
 }

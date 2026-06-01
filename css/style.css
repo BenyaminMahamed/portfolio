@@ -184,7 +184,8 @@ input {
   height: 6px;
   background: var(--c-crimson);
   border-radius: 50%;
-  transform: translate(-50%, -50%);
+  /* Centring via translate(-50%,-50%) — JS sets left/top, NOT gsap x/y */
+  /* (full override in design-finish patch below) */
   transition: width var(--d-fast) var(--ease-ink),
               height var(--d-fast) var(--ease-ink),
               background var(--d-fast) var(--ease-ink);
@@ -195,7 +196,8 @@ input {
   height: 36px;
   border: var(--stroke-thin) solid var(--c-ink-mid);
   border-radius: 50%;
-  transform: translate(-50%, -50%);
+  /* Centring via translate(-50%,-50%) — JS sets left/top, NOT gsap x/y */
+  /* (full override in design-finish patch below) */
   transition: width var(--d-mid) var(--ease-ink),
               height var(--d-mid) var(--ease-ink),
               border-color var(--d-mid) var(--ease-ink),
@@ -2672,4 +2674,297 @@ body:has(button:hover) .cursor-dot {
 .stack-cat-title,
 .section-eyebrow .mono-label {
   color: #c8102e;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   DEFINITIVE FIX LAYER — overrides all earlier declarations
+   (1) Cursor centering  (2) Button text  (3) Featured border  (4) Slash stroke
+   (5) Design finish
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ─── 1. CURSOR — left/top positioning, transform for centering only ─────────── */
+/*
+   JS sets element.style.left / element.style.top directly.
+   CSS transform:translate(-50%,-50%) centres the element on that coordinate.
+   No GSAP x/y — they would create a second transform and break alignment.
+*/
+.cursor-dot {
+  position: fixed;
+  top: 0; left: 0;
+  width: 6px;
+  height: 6px;
+  background: var(--c-crimson);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  will-change: left, top;
+  transform: translate(-50%, -50%);
+  transition: width 0.15s ease, height 0.15s ease, opacity 0.15s ease;
+}
+
+.cursor-ring {
+  position: fixed;
+  top: 0; left: 0;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--c-ink-mid);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  will-change: left, top;
+  transform: translate(-50%, -50%);
+  transition: width 0.25s ease, height 0.25s ease,
+              border-color 0.25s ease, opacity 0.15s ease;
+}
+
+/* ─── 2. BUTTONS — text always visible, fill always behind text ──────────────── */
+/*
+   Pattern: button is position:relative, overflow:hidden.
+   ::before is the fill layer (scaleX 0→1).
+   Text/children must have position:relative + z-index:1 to sit above ::before.
+   The button's own `color` must transition to white on hover/active.
+*/
+
+/* Project filter pills */
+.pf {
+  position: relative;
+  overflow: hidden;
+  color: var(--c-ink-mid);
+  border: 1px solid var(--c-ink-ghost);
+  background: transparent;
+  font-family: var(--f-mono);
+  font-size: var(--ts-micro);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: var(--sp-1) var(--sp-3);
+  cursor: none;
+  transition: color 0.28s ease, border-color 0.28s ease;
+}
+.pf::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--c-ink);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.32s cubic-bezier(0.76, 0, 0.24, 1);
+  z-index: 0;
+}
+.pf:hover::before,
+.pf.active::before { transform: scaleX(1); }
+.pf:hover,
+.pf.active {
+  color: #f5f0e8;
+  border-color: var(--c-ink);
+}
+/* ALL children of .pf above the fill */
+.pf > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Archive language filter pills */
+.af {
+  position: relative;
+  overflow: hidden;
+  color: var(--c-ink-mid);
+  border: 1px solid var(--c-ink-ghost);
+  background: transparent;
+  font-family: var(--f-mono);
+  font-size: var(--ts-micro);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: var(--sp-1) var(--sp-2);
+  cursor: none;
+  transition: color 0.28s ease, border-color 0.28s ease;
+}
+.af::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--c-ink);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.32s cubic-bezier(0.76, 0, 0.24, 1);
+  z-index: 0;
+}
+.af:hover::before,
+.af.active::before { transform: scaleX(1); }
+.af:hover,
+.af.active {
+  color: #f5f0e8;
+  border-color: var(--c-ink);
+}
+.af > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Nav CTA */
+.nav-cta {
+  position: relative;
+  overflow: hidden;
+  color: var(--c-ink);
+  transition: color 0.28s ease;
+}
+.nav-cta::before {
+  z-index: 0;
+}
+.nav-cta > * {
+  position: relative;
+  z-index: 1;
+}
+.nav-cta:hover {
+  color: #f5f0e8;
+}
+
+/* Primary button */
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+  color: #f5f0e8;
+  transition: color 0.28s ease;
+}
+.btn-primary::before {
+  z-index: 0;
+}
+.btn-primary > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Outline button */
+.btn-outline {
+  position: relative;
+  overflow: hidden;
+  color: var(--c-ink);
+  transition: color 0.28s ease;
+}
+.btn-outline::before {
+  z-index: 0;
+}
+.btn-outline > * {
+  position: relative;
+  z-index: 1;
+}
+.btn-outline:hover {
+  color: #f5f0e8;
+}
+
+/* Loader enter button */
+.ld-enter {
+  position: relative;
+  overflow: hidden;
+  color: #f5f0e8;
+  transition: color 0.28s ease;
+}
+.ld-enter::before {
+  z-index: 0;
+}
+.ld-enter > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── 3. FEATURED PROJECT BORDER ─────────────────────────────────────────────── */
+.proj-item--featured {
+  border: none !important;
+  border-bottom: 1px solid var(--c-ink-whisper) !important;
+  border-top: 2px solid var(--c-crimson) !important;
+}
+
+/* ─── 4. KATANA SLASH STROKE ─────────────────────────────────────────────────── */
+/* Base state — JS sets backgroundPosition via GSAP */
+.katana-stroke {
+  background-size: 300% 100% !important;
+}
+
+/* ─── 5. DESIGN FINISH ───────────────────────────────────────────────────────── */
+
+/* Alternating project row backgrounds */
+.proj-item:nth-child(odd)  { background: var(--c-canvas-bone); }
+.proj-item:nth-child(even) { background: var(--c-canvas-warm); }
+.proj-item--featured       { background: var(--c-canvas-warm) !important; }
+
+/* Proj-data left accent rule */
+.proj-data {
+  border-left: 2px solid var(--c-ink-whisper);
+  padding-left: calc(var(--sp-10) - 2px);
+  transition: border-left-color 0.2s ease;
+}
+
+/* Image slot shimmer before load */
+.proj-img-panel {
+  position: relative;
+  overflow: hidden;
+}
+.proj-img-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    var(--c-canvas-deep) 0%,
+    var(--c-canvas-warm) 50%,
+    var(--c-canvas-deep) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s ease-in-out infinite;
+  z-index: 0;
+}
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Skill bars */
+.sk-track { height: 3px; border-radius: 0; background: var(--c-ink-whisper); }
+.sk-fill  { height: 100%; border-radius: 0; background: var(--c-ink); position: relative; }
+.sk-fill::after {
+  content: '';
+  position: absolute;
+  right: -1px; top: -4px;
+  width: 1.5px; height: 11px;
+  background: var(--c-ink);
+  opacity: 0.45;
+}
+
+/* Landscape vignette */
+.contact-landscape-band {
+  position: relative;
+  overflow: hidden;
+}
+.contact-landscape-band::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(249,245,237,0.4) 0%,
+    transparent 40%,
+    transparent 60%,
+    rgba(249,245,237,0.65) 100%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Focus visible */
+*:focus { outline: none; }
+*:focus-visible {
+  outline: 1.5px solid var(--c-crimson);
+  outline-offset: 3px;
+}
+
+/* Scrollbar */
+html { scrollbar-color: var(--c-ink-ghost) var(--c-canvas); scrollbar-width: thin; }
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--c-canvas); }
+::-webkit-scrollbar-thumb { background: var(--c-ink-ghost); }
+
+/* Print */
+@media print {
+  .paper-grain, .cursor-dot, .cursor-ring,
+  #loader, .marquee-strip, .nav-burger { display: none !important; }
+  body { font-size: 11pt; color: #000; background: #fff; }
 }
