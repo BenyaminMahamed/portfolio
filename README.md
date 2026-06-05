@@ -46,7 +46,7 @@ Co-founded this and built the entire platform as lead developer — a custom Dja
 ## Education
 
 **BSc Computer Science** — University of Westminster  
-Predicted Upper Second CLass | Year 2 Average: 71.83%
+Predicted Upper Second Class | Year 2 Average: 71.83%
 
 Relevant modules: Applied AI, Cyber Security, Applied Robotics, Internet of Things, Database Systems, Client-Server Architectures, Server-Side Web Development, Object Oriented Programming, Human Computer Interaction, Computer Science Final Project
 
