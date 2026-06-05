@@ -1,12 +1,12 @@
 /**
- * NAKAZAWA PORTFOLIO — MAIN.JS v3
+ * NAKAZAWA PORTFOLIO — MAIN.JS v4
  *
  * ROOT FIX: gsap.registerPlugin was called at IIFE parse time,
  * before defer'd CDN scripts finished loading. All GSAP usage
  * is now gated inside window.load so every dep is guaranteed ready.
  *
- * VISUAL: all asset-slot image placeholders removed from HTML.
- * Panels are pure CSS/ink — no SVG blobs, no placeholder boxes.
+ * VISUAL UPDATE: Adjusted the hover interactions (Katana Hovers) to 
+ * properly accommodate real image tags instead of CSS gradients.
  */
 
 'use strict';
@@ -40,7 +40,7 @@ window.addEventListener('load', function () {
   initSmoothAnchors(lenis);
   initParallax();
   initScrollReveals();
-  initKatanaHovers();
+  initImageHovers(); /* <-- Replaced KatanaHovers */
   initSkillBars();
   initCredentialCounters();
   initMarquee();
@@ -226,7 +226,6 @@ function animateHeroEntrance() {
   var desc    = document.querySelector('.hero-desc');
   var actions = document.querySelector('.hero-actions');
   var right   = document.querySelector('.hero-right');
-  var slash   = document.querySelector('.hero-accent-slash');
 
   var tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
 
@@ -236,7 +235,6 @@ function animateHeroEntrance() {
   if (desc)    tl.fromTo(desc,    { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5  }, 0.62);
   if (actions) tl.fromTo(actions, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5  }, 0.75);
   if (right)   tl.fromTo(right,   { opacity: 0, x: 24 }, { opacity: 1, x: 0, duration: 0.9, ease: 'power3.out' }, 0.28);
-  if (slash)   tl.fromTo(slash,   { scaleX: 0, transformOrigin: 'left' }, { scaleX: 1, duration: 0.6, ease: 'power3.out' }, 0.88);
 
   tl.call(function() { ScrollTrigger.refresh(); });
 }
@@ -315,22 +313,19 @@ function initSmoothAnchors(lenis) {
 }
 
 /* ════════════════════════════════════════════════════════════════════
-   PARALLAX — 4-TIER DEPTH
+   PARALLAX
    ════════════════════════════════════════════════════════════════════ */
 function initParallax() {
   /* Hero layers */
-  var heroPanel = document.querySelector('.hero-ink-panel');
-  if (heroPanel) gsap.to(heroPanel, { y: -100, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 2.0 }});
-
   var heroRight = document.querySelector('.hero-right');
   if (heroRight) gsap.to(heroRight, { y: -55, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1.3 }});
 
   var heroText = document.querySelector('.hero-text');
   if (heroText) gsap.to(heroText, { y: -30, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 0.8 }});
 
-  /* About ink panel */
-  var aboutInk = document.querySelector('.about-ink-panel');
-  if (aboutInk) gsap.to(aboutInk, { y: -70, ease: 'none', scrollTrigger: { trigger: '.section-about', start: 'top bottom', end: 'bottom top', scrub: 1.6 }});
+  /* About image */
+  var aboutVis = document.querySelector('.about-visual');
+  if (aboutVis) gsap.to(aboutVis, { y: -40, ease: 'none', scrollTrigger: { trigger: '.section-about', start: 'top bottom', end: 'bottom top', scrub: 1.6 }});
 
   /* Contact landscape */
   var landscape = document.querySelector('.contact-landscape-band');
@@ -373,45 +368,28 @@ function initScrollReveals() {
 }
 
 /* ════════════════════════════════════════════════════════════════════
-   KATANA SLASH HOVERS
+   IMAGE HOVERS (Replaced Katana)
    ════════════════════════════════════════════════════════════════════ */
-function initKatanaHovers() {
+function initImageHovers() {
   document.querySelectorAll('.proj-item').forEach(function(item) {
-    var panel    = item.querySelector('.proj-img-panel');
+    var panel    = item.querySelector('.proj-img-panel, .proj-visual');
+    var img      = item.querySelector('img');
     var title    = item.querySelector('.proj-title');
     var tags     = item.querySelectorAll('.proj-tags li');
     var data     = item.querySelector('.proj-data');
     var overlay  = item.querySelector('.proj-visit-overlay');
     if (!panel) return;
 
-    /* Slash overlay */
-    var slashEl = document.createElement('div');
-    slashEl.className = 'katana-slash';
-    slashEl.style.cssText = 'position:absolute;inset:0;background:linear-gradient(135deg,rgba(200,16,46,0.10),rgba(200,16,46,0.06));clip-path:polygon(0 0,0 0,0 100%,0 100%);pointer-events:none;z-index:2;will-change:clip-path;';
-    panel.appendChild(slashEl);
-
-    /* Stroke band */
-    var strokeEl = document.createElement('div');
-    strokeEl.className = 'katana-stroke';
-    strokeEl.style.cssText = 'position:absolute;inset:-10% -20%;width:140%;height:120%;background:linear-gradient(105deg,transparent 30%,rgba(200,16,46,0.60) 44%,rgba(230,40,70,0.75) 50%,rgba(200,16,46,0.60) 56%,transparent 70%);background-size:300% 100%;background-position:100% 0;pointer-events:none;z-index:3;opacity:0;';
-    panel.appendChild(strokeEl);
-
     var tl = null;
 
     item.addEventListener('mouseenter', function() {
       if (tl) tl.kill();
-      strokeEl.style.backgroundPosition = '100% 0';
-      strokeEl.style.opacity = '0';
-
       tl = gsap.timeline();
-      /* Stroke sweeps across — 0.48s, readable */
-      tl.set(strokeEl, { opacity: 1, backgroundPosition: '100% 0' })
-        .to(strokeEl, { backgroundPosition: '-30% 0', duration: 0.48, ease: 'power3.inOut' }, 0)
-        .to(strokeEl, { opacity: 0, duration: 0.14, ease: 'none' }, 0.40);
-      /* Overlay fills */
-      tl.to(slashEl, { clipPath: 'polygon(0 0,100% 0,100% 100%,0 100%)', duration: 0.52, ease: 'power2.out' }, 0.06);
+      
+      /* Scale image slightly */
+      if (img) tl.to(img, { scale: 1.05, duration: 0.5, ease: 'power2.out' }, 0);
       /* Visit overlay */
-      if (overlay) tl.to(overlay, { opacity: 1, duration: 0.2, ease: 'power2.out' }, 0.2);
+      if (overlay) tl.to(overlay, { opacity: 1, duration: 0.2, ease: 'power2.out' }, 0.1);
       /* Text drift */
       if (title) tl.to(title, { x: 5, duration: 0.28, ease: 'power2.out' }, 0.05);
       if (tags.length) tl.to(tags, { x: 3, stagger: 0.02, duration: 0.24, ease: 'power2.out' }, 0.08);
@@ -421,8 +399,8 @@ function initKatanaHovers() {
     item.addEventListener('mouseleave', function() {
       if (tl) tl.kill();
       tl = gsap.timeline();
-      tl.to(slashEl, { clipPath: 'polygon(100% 0,100% 0,100% 100%,100% 100%)', duration: 0.40, ease: 'power3.in' }, 0)
-        .set(slashEl, { clipPath: 'polygon(0 0,0 0,0 100%,0 100%)' });
+      
+      if (img) tl.to(img, { scale: 1, duration: 0.4, ease: 'power2.inOut' }, 0);
       if (overlay) tl.to(overlay, { opacity: 0, duration: 0.16 }, 0);
       if (title) tl.to(title, { x: 0, duration: 0.28, ease: 'power2.inOut' }, 0.04);
       if (tags.length) tl.to(tags, { x: 0, stagger: 0.015, duration: 0.22, ease: 'power2.inOut' }, 0.04);
@@ -506,8 +484,6 @@ function initNavTracking() {
 
 /* ════════════════════════════════════════════════════════════════════
    CREDENTIAL COUNTER ANIMATION
-   Count-up from 0 to target on viewport entry.
-   Handles "1,000+" "7+" "4+" "100%" — skips non-numeric like "BSc".
    ════════════════════════════════════════════════════════════════════ */
 function initCredentialCounters() {
   document.querySelectorAll('.cred-val, .hi-val, .pm-val').forEach(function(el) {
@@ -520,7 +496,6 @@ function initCredentialCounters() {
     var hasPlus     = suffix.charAt(0) === '+';
     var cleanSuffix = hasPlus ? suffix.slice(1) : suffix;
 
-    /* Store original so counter has clean start point */
     el.dataset.counterTarget = target;
 
     ScrollTrigger.create({
@@ -551,8 +526,6 @@ function initCredentialCounters() {
 
 /* ════════════════════════════════════════════════════════════════════
    MARQUEE ENTRANCE
-   Fades in from right on first scroll into view.
-   CSS animation keeps running — we just fade the track in.
    ════════════════════════════════════════════════════════════════════ */
 function initMarquee() {
   var track = document.querySelector('.marquee-track');

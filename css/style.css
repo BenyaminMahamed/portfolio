@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════════════════════
-   NAKAZAWA PORTFOLIO — COMPLETE STYLESHEET v4
+   NAKAZAWA PORTFOLIO — COMPLETE STYLESHEET v5 (Typography & Wrap Optimized)
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 /* ─── TOKENS ─────────────────────────────────────────────────────────────────── */
@@ -158,39 +158,45 @@ input { font-family:inherit; }
 .hero-left { 
   flex:1; 
   display:flex; 
-  gap: clamp(1rem, 4vw, 3rem); 
+  gap: clamp(1rem, 3vw, 2.5rem); 
   padding:var(--sp-16) var(--wrap-pad); 
-  max-width:60%; 
+  max-width: 60%; /* Locked back to 60% for a clean layout ratio */
   position:relative; 
   z-index:1; 
 }
-.hero-index-col { 
-  display:flex; 
-  flex-direction:column; 
-  align-items:center; 
-  gap:var(--sp-4); 
-  flex-shrink:0; 
-}
+.hero-index-col { display:flex; flex-direction:column; align-items:center; gap:var(--sp-4); flex-shrink:0; }
 .hero-seq { font-family:var(--f-mono); font-size:var(--ts-micro); letter-spacing:.2em; color:var(--c-crimson); text-transform:uppercase; writing-mode:vertical-rl; transform:rotate(180deg); }
 .hero-vert-label { font-family:var(--f-mono); font-size:var(--ts-micro); letter-spacing:.18em; text-transform:uppercase; color:var(--c-ink-ghost); writing-mode:vertical-rl; transform:rotate(180deg); }
-.hero-text { display:flex; flex-direction:column; justify-content:center; flex:1; position: relative; z-index: 2; }
+.hero-text { display:flex; flex-direction:column; justify-content:center; flex:1; position: relative; z-index: 2; min-width: 0; /* Prevents flexbox overflow */ }
 .hero-eyebrow { display:flex; align-items:center; gap:var(--sp-4); margin-bottom:var(--sp-6); }
 .hero-eyebrow-rule { display:block; width:32px; height:1px; background:var(--c-crimson); flex-shrink:0; }
 
-/* UPDATED H1 SIZE */
-.hero-h1 { font-family:var(--f-display); font-size: clamp(3rem, 6.5vw, 6.5rem); font-weight:300; line-height:.88; letter-spacing:-.03em; color:var(--c-ink); margin-bottom:var(--sp-8); }
+/* THE FIX: Logic applied to size, line-height, and wrapping */
+.hero-h1 { 
+  font-family: var(--f-display); 
+  font-size: clamp(3.5rem, 6.5vw, 6.5rem); 
+  font-weight: 300; 
+  line-height: 1; /* Relaxed from 0.88 to stop chopping off descenders like 'g' */
+  letter-spacing: -0.03em; 
+  color: var(--c-ink); 
+  margin-bottom: var(--sp-8); 
+}
 
-.h1-line-wrap { display:block; overflow:hidden; }
+.h1-line-wrap { 
+  display: block; 
+  overflow: hidden; 
+  padding-bottom: 0.15em; /* Breathing room for the overflow mask */
+  white-space: nowrap;    /* Prevents the words from wrapping inside the GSAP span! */
+}
 .h1-line { display:block; transform:translateY(100%); }
 .h1-line-wrap.h1-italic .h1-line { font-style:italic; font-weight:400; color:var(--c-ink-3); }
+
 .hero-meta { display:flex; align-items:center; gap:var(--sp-6); margin-bottom:var(--sp-6); flex-wrap:wrap; }
 .status-badge { display:inline-flex; align-items:center; gap:var(--sp-2); font-family:var(--f-mono); font-size:var(--ts-xs); letter-spacing:.1em; text-transform:uppercase; color:var(--c-ink); border:1px solid var(--c-ink); padding:var(--sp-1) var(--sp-3); }
 .status-dot { width:6px; height:6px; border-radius:50%; background:var(--c-crimson); animation:pulseDot 2.5s ease-in-out infinite; flex-shrink:0; }
 .hero-degree { font-family:var(--f-mono); font-size:var(--ts-xs); color:var(--c-ink-mid); letter-spacing:.06em; }
 .hero-desc { font-size:var(--ts-md); font-weight:300; line-height:1.7; color:var(--c-ink-3); max-width:480px; margin-bottom:var(--sp-10); }
 .hero-actions { display:flex; align-items:center; gap:var(--sp-4); flex-wrap:wrap; }
-
-/* DELETED .hero-accent-slash entirely from here! */
 
 .hero-right { flex:0 0 40%; position:relative; display:flex; flex-direction:column; justify-content:center; padding:var(--sp-16) var(--wrap-pad) var(--sp-16) var(--sp-8); z-index:1; }
 .hero-image-wrapper { width: 100%; height: auto; max-height: 500px; display: flex; align-items: center; justify-content: center; border-radius: 8px; overflow: hidden; border: 1px solid var(--c-ink-whisper); }
@@ -417,14 +423,13 @@ input { font-family:inherit; }
   .skill-row { grid-template-columns:140px 1fr 2rem; }
   .credential-grid { grid-template-columns:repeat(2,1fr); }
 }
+
 @media (max-width:860px) {
-  /* Hide the vertical text on mobile, it looks terrible and breaks the layout */
-  .hero-index-col { display: none; }
+  .hero-index-col { display: none; } /* Hide the vertical text on mobile, it breaks the layout */
   .nav-links,.nav-cta { display:none; }
   .nav-burger { display:flex; }
   .hero { flex-direction:column; min-height:auto; padding-bottom:var(--sp-16); }
   .hero-rule { display:none; }
-  /* Enforce proper padding so the image isn't squished */
   .hero-left { gap: 0; max-width:100%; padding-bottom: 2rem; }
   .hero-right { flex:none; padding: 0 var(--wrap-pad) var(--sp-16) var(--wrap-pad); padding-top:0; }
   .hero-image-wrapper { min-height: 250px; }
@@ -436,9 +441,11 @@ input { font-family:inherit; }
   .footer-inner { flex-wrap:wrap; }
   .footer-rule { display:none; }
 }
+
 @media (max-width:580px) {
   :root { --nav-h:56px; }
-  .hero-h1 { font-size:clamp(2.5rem,10vw,5rem); }
+  /* Aggressive font scaling constraint for small mobile screens so it never breaks the screen width */
+  .hero-h1 { font-size:clamp(2.5rem, 10vw, 3.5rem); } 
   .credential-grid { grid-template-columns:repeat(2,1fr); gap:var(--sp-4); }
   .archive-grid { grid-template-columns:1fr; }
   .repo-card--featured { grid-column:span 1; }

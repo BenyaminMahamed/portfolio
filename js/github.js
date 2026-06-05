@@ -2,14 +2,12 @@
  * NAKAZAWA PORTFOLIO — GITHUB.JS
  * ═══════════════════════════════════════════════════════════════════════════════
  * PIPELINE:
- *   1. Static Blueprint Brief card — always first, always visible,
- *      not sourced from GitHub API (it's a private repo)
- *   2. GitHub API fetch — paginated, all public repos
- *   3. Filter pipeline — excludes exact repo names in HIDDEN_REPOS
- *      plus any repo whose name matches any pattern in HIDDEN_PATTERNS
- *   4. Sort — updated_at descending
- *   5. Render — editorial card layout with lang colour dots
- *   6. Search + language filter — live DOM filter on rendered cards
+ * 1. Static Blueprint Brief card — always first, always visible
+ * 2. GitHub API fetch — paginated, all public repos
+ * 3. Filter pipeline — excludes HIDDEN_REPOS & HIDDEN_PATTERNS
+ * 4. Sort — updated_at descending
+ * 5. Render — grid cards (mobile friendly)
+ * 6. Search + language filter
  * ═══════════════════════════════════════════════════════════════════════════════
  */
 
@@ -22,15 +20,9 @@ const GH_CONFIG = {
   maxPages: 3,
 };
 
-/**
- * HIDDEN_REPOS: exact repo name matches — completely excluded from the grid.
- * This covers:
- *   - blueprint-brief-architecture (private system — corporate image protection)
- *   - Any JPMC / JPMorgan Chase task repositories
- */
 const HIDDEN_REPOS = new Set([
   'blueprint-brief-architecture',
-  'blueprint-brief',                // if ever made public, keep hidden from grid
+  'blueprint-brief',
   'jpmc-task',
   'jpmorgan-task',
   'jpmc-internship',
@@ -43,10 +35,6 @@ const HIDDEN_REPOS = new Set([
   'jp-morgan-task',
 ]);
 
-/**
- * HIDDEN_PATTERNS: substring patterns — any repo whose name contains
- * any of these strings (case-insensitive) is hidden.
- */
 const HIDDEN_PATTERNS = [
   'jpmc',
   'jpmorgan',
@@ -56,7 +44,6 @@ const HIDDEN_PATTERNS = [
   'blueprint-brief-arch',
 ];
 
-/** Language → hex colour (matches GitHub's official language colours) */
 const LANG_COLOURS = {
   'Python':       '#3572A5',
   'JavaScript':   '#f1e05a',
@@ -90,8 +77,7 @@ const DOM = {
   langFilters: null,
 };
 
-/* ─── STATE ──────────────────────────────────────────────────────────────────── */
-let allCards = [];  // all rendered card elements (post-filter)
+let allCards = [];
 
 /* ─── INITIALISE ─────────────────────────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', initGithub);
@@ -104,10 +90,8 @@ async function initGithub() {
 
   if (!DOM.grid) return;
 
-  // Render the static Blueprint Brief card first — always anchored at top
   renderBlueprintBriefAnchor();
 
-  // Fetch and render dynamic repos
   try {
     const repos = await fetchAllRepos();
     const filtered = filterRepos(repos);
@@ -126,15 +110,9 @@ async function initGithub() {
 }
 
 /* ─── STATIC BLUEPRINT BRIEF ANCHOR ─────────────────────────────────────────── */
-/**
- * Blueprint Brief is a private production platform — it won't appear in the
- * GitHub API response. We render it statically, always first, with a
- * prominent "LIVE PRODUCTION" badge and direct link.
- */
 function renderBlueprintBriefAnchor() {
   if (!DOM.grid) return;
 
-  // Remove loading indicator temporarily so we can prepend before it
   const card = document.createElement('article');
   card.className = 'repo-card repo-card--featured repo-card--blueprint';
   card.dataset.name = 'the-blueprint-brief';
@@ -142,7 +120,7 @@ function renderBlueprintBriefAnchor() {
   card.setAttribute('role', 'article');
 
   card.innerHTML = `
-    <div class="repo-card-header">
+    <div class="repo-card-header" style="flex-wrap: wrap; gap: 0.5rem;">
       <h3 class="repo-name">The Blueprint Brief</h3>
       <span class="repo-featured-badge">● Live Production</span>
     </div>
@@ -154,17 +132,17 @@ function renderBlueprintBriefAnchor() {
       since launch serving <strong>1,000+ active users</strong>.
     </p>
     <div class="repo-footer">
-      <div class="repo-meta">
+      <div class="repo-meta" style="flex-wrap: wrap; gap: 0.5rem;">
         <span class="repo-lang">
-          <span class="repo-lang-dot lang-dot--python" style="background:${LANG_COLOURS['Python']}"></span>
+          <span class="repo-lang-dot" style="background:${LANG_COLOURS['Python']}"></span>
           Python · Django
         </span>
         <span class="repo-lang">
-          <span class="repo-lang-dot lang-dot--default" style="background:${LANG_COLOURS['CSS']}"></span>
+          <span class="repo-lang-dot" style="background:${LANG_COLOURS['CSS']}"></span>
           PostgreSQL
         </span>
       </div>
-      <div class="repo-bp-links">
+      <div class="repo-bp-links" style="margin-top: 0.5rem;">
         <a href="https://theblueprintbrief.com"
            target="_blank" rel="noopener"
            class="repo-link repo-link--live"
@@ -175,7 +153,6 @@ function renderBlueprintBriefAnchor() {
     </div>
   `;
 
-  // Insert before the loading indicator
   if (DOM.loading && DOM.loading.parentNode === DOM.grid) {
     DOM.grid.insertBefore(card, DOM.loading);
   } else {
@@ -185,89 +162,49 @@ function renderBlueprintBriefAnchor() {
   allCards.push(card);
 }
 
-/* ─── GITHUB API FETCH — PAGINATED ──────────────────────────────────────────── */
+/* ─── GITHUB API FETCH ──────────────────────────────────────────────────────── */
 async function fetchAllRepos() {
   const allRepos = [];
-
   for (let page = 1; page <= GH_CONFIG.maxPages; page++) {
     const url = `https://api.github.com/users/${GH_CONFIG.username}/repos?per_page=${GH_CONFIG.perPage}&page=${page}&sort=updated&type=public`;
-
-    const response = await fetch(url, {
-      headers: {
-        'Accept': 'application/vnd.github.v3+json',
-      }
-    });
+    const response = await fetch(url, { headers: { 'Accept': 'application/vnd.github.v3+json' } });
 
     if (!response.ok) {
-      // Rate limit or other error
-      if (response.status === 403) {
-        throw new Error(`GitHub API rate limit reached (HTTP 403). Please try again later.`);
-      }
-      if (response.status === 404) {
-        throw new Error(`GitHub user '${GH_CONFIG.username}' not found.`);
-      }
+      if (response.status === 403) throw new Error(`GitHub API rate limit reached. Please try again later.`);
+      if (response.status === 404) throw new Error(`GitHub user '${GH_CONFIG.username}' not found.`);
       throw new Error(`GitHub API error: HTTP ${response.status}`);
     }
 
     const data = await response.json();
-
-    if (!Array.isArray(data)) {
-      throw new Error('Unexpected GitHub API response format.');
-    }
+    if (!Array.isArray(data)) throw new Error('Unexpected GitHub API response format.');
 
     allRepos.push(...data);
-
-    // If we got fewer than perPage, there are no more pages
     if (data.length < GH_CONFIG.perPage) break;
   }
-
   return allRepos;
 }
 
-/* ─── FILTER PIPELINE ────────────────────────────────────────────────────────── */
-/**
- * Excludes repos that:
- *   1. Match any name in HIDDEN_REPOS (exact, case-insensitive)
- *   2. Contain any substring from HIDDEN_PATTERNS (case-insensitive)
- *   3. Are fork:true (unless explicitly wanted)
- *   4. Are the portfolio repo itself (it's the current site)
- */
+/* ─── FILTER & SORT ─────────────────────────────────────────────────────────── */
 function filterRepos(repos) {
   return repos.filter(repo => {
     const name = repo.name.toLowerCase();
-
-    // Exact match exclusion
     if (HIDDEN_REPOS.has(name)) return false;
-
-    // Pattern exclusion
     for (const pattern of HIDDEN_PATTERNS) {
       if (name.includes(pattern.toLowerCase())) return false;
     }
-
-    // Exclude the portfolio repo itself
     if (name === 'portfolio') return false;
-
-    // Include forks only if they have meaningful activity
-    // (description present, more than 0 stars on their side)
-    // For a clean recruiter-facing view, forks are excluded
     if (repo.fork) return false;
-
     return true;
   });
 }
 
-/* ─── SORT ───────────────────────────────────────────────────────────────────── */
 function sortRepos(repos) {
-  return [...repos].sort((a, b) => {
-    // Primary: pushed_at descending
-    return new Date(b.pushed_at || b.updated_at) - new Date(a.pushed_at || a.updated_at);
-  });
+  return [...repos].sort((a, b) => new Date(b.pushed_at || b.updated_at) - new Date(a.pushed_at || a.updated_at));
 }
 
-/* ─── RENDER REPO CARDS ──────────────────────────────────────────────────────── */
+/* ─── RENDER CARDS ───────────────────────────────────────────────────────────── */
 function renderRepoCards(repos) {
   if (!DOM.grid) return;
-
   if (repos.length === 0) {
     const empty = document.createElement('p');
     empty.className = 'archive-empty mono-label';
@@ -277,29 +214,16 @@ function renderRepoCards(repos) {
   }
 
   const fragment = document.createDocumentFragment();
-
   repos.forEach(repo => {
     const card = buildRepoCard(repo);
     fragment.appendChild(card);
     allCards.push(card);
   });
-
   DOM.grid.appendChild(fragment);
 
-  // Staggered entrance if GSAP available
   if (typeof gsap !== 'undefined') {
     const newCards = Array.from(DOM.grid.querySelectorAll('.repo-card:not(.repo-card--blueprint)'));
-    gsap.fromTo(newCards,
-      { opacity: 0, y: 18 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.45,
-        stagger: 0.04,
-        ease: 'power2.out',
-        delay: 0.1,
-      }
-    );
+    gsap.fromTo(newCards, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.45, stagger: 0.04, ease: 'power2.out', delay: 0.1 });
   }
 }
 
@@ -321,16 +245,14 @@ function buildRepoCard(repo) {
   ).join('');
 
   card.innerHTML = `
-    <div class="repo-card-header">
-      <h3 class="repo-name">${escapeHtml(repo.name.replace(/-/g, ' ').replace(/_/g, ' '))}</h3>
-      ${repo.stargazers_count > 0
-        ? `<span class="repo-stars">★ ${repo.stargazers_count}</span>`
-        : ''}
+    <div class="repo-card-header" style="flex-wrap: wrap; gap: 0.5rem;">
+      <h3 class="repo-name" style="word-break: break-word;">${escapeHtml(repo.name.replace(/-/g, ' ').replace(/_/g, ' '))}</h3>
+      ${repo.stargazers_count > 0 ? `<span class="repo-stars">★ ${repo.stargazers_count}</span>` : ''}
     </div>
     <p class="repo-desc">${description}</p>
     ${topicsHtml ? `<div class="repo-topics">${topicsHtml}</div>` : ''}
     <div class="repo-footer">
-      <div class="repo-meta">
+      <div class="repo-meta" style="flex-wrap: wrap; gap: 0.5rem;">
         ${repo.language ? `
           <span class="repo-lang">
             <span class="repo-lang-dot" style="background:${langColour}"></span>
@@ -338,101 +260,62 @@ function buildRepoCard(repo) {
           </span>` : ''}
         <span class="repo-updated">${updatedDate}</span>
       </div>
-      <a href="${escapeHtml(repo.html_url)}"
-         target="_blank"
-         rel="noopener noreferrer"
-         class="repo-link"
-         aria-label="View ${escapeHtml(repo.name)} on GitHub">
+      <a href="${escapeHtml(repo.html_url)}" target="_blank" rel="noopener noreferrer" class="repo-link" style="margin-top: 0.5rem;">
         View →
       </a>
     </div>
   `;
-
   return card;
 }
 
-/* ─── LANGUAGE FILTER BUILDER ────────────────────────────────────────────────── */
+/* ─── FILTERS & SEARCH ───────────────────────────────────────────────────────── */
 function buildLanguageFilters(repos) {
   if (!DOM.langFilters) return;
-
-  const langs = new Map();  // lang → count
-
-  repos.forEach(repo => {
-    if (repo.language) {
-      langs.set(repo.language, (langs.get(repo.language) || 0) + 1);
-    }
-  });
-
-  // Sort by frequency descending
+  const langs = new Map();
+  repos.forEach(repo => { if (repo.language) langs.set(repo.language, (langs.get(repo.language) || 0) + 1); });
   const sorted = [...langs.entries()].sort((a, b) => b[1] - a[1]);
-
   sorted.forEach(([lang]) => {
     const btn = document.createElement('button');
     btn.className = 'af';
     btn.dataset.lang = lang.toLowerCase().replace(/\s+/g, '-');
-    // Must use <span> so text sits above ::before fill layer at z-index:1
     btn.innerHTML = `<span>${lang}</span>`;
     DOM.langFilters.appendChild(btn);
   });
 }
 
-/* ─── SEARCH ─────────────────────────────────────────────────────────────────── */
 function initSearch() {
   if (!DOM.search) return;
-
-  DOM.search.addEventListener('input', () => {
-    const query = DOM.search.value.toLowerCase().trim();
-    applyFilters(query, getActiveLang());
-  });
+  DOM.search.addEventListener('input', () => applyFilters(DOM.search.value.toLowerCase().trim(), getActiveLang()));
 }
 
-/* ─── LANGUAGE FILTER ────────────────────────────────────────────────────────── */
 function initLangFilter() {
   if (!DOM.langFilters) return;
-
   DOM.langFilters.addEventListener('click', (e) => {
     const btn = e.target.closest('.af');
     if (!btn) return;
-
     DOM.langFilters.querySelectorAll('.af').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-
     applyFilters(getSearchQuery(), btn.dataset.lang);
   });
 }
 
-function getSearchQuery() {
-  return DOM.search ? DOM.search.value.toLowerCase().trim() : '';
-}
-
+function getSearchQuery() { return DOM.search ? DOM.search.value.toLowerCase().trim() : ''; }
 function getActiveLang() {
-  if (!DOM.langFilters) return 'all';
-  const active = DOM.langFilters.querySelector('.af.active');
+  const active = DOM.langFilters ? DOM.langFilters.querySelector('.af.active') : null;
   return active ? active.dataset.lang : 'all';
 }
 
-/* ─── FILTER APPLICATION ─────────────────────────────────────────────────────── */
 function applyFilters(query, lang) {
   const cards = DOM.grid ? DOM.grid.querySelectorAll('.repo-card') : [];
-
   cards.forEach(card => {
-    const nameMatch = !query || card.dataset.name.includes(query)
-      || (card.querySelector('.repo-desc')?.textContent.toLowerCase().includes(query))
-      || (card.querySelector('.repo-name')?.textContent.toLowerCase().includes(query));
-
+    const nameMatch = !query || card.dataset.name.includes(query) || (card.querySelector('.repo-desc')?.textContent.toLowerCase().includes(query)) || (card.querySelector('.repo-name')?.textContent.toLowerCase().includes(query));
     const cardLang = card.dataset.lang || '';
     const langMatch = lang === 'all' || lang === '' || cardLang.includes(lang);
-
     const visible = nameMatch && langMatch;
 
     if (visible) {
       card.style.display = '';
-      if (typeof gsap !== 'undefined') {
-        gsap.fromTo(card,
-          { opacity: 0, y: 8 },
-          { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' }
-        );
-      }
+      if (typeof gsap !== 'undefined') gsap.fromTo(card, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' });
     } else {
       card.style.display = 'none';
     }
@@ -440,55 +323,26 @@ function applyFilters(query, lang) {
 }
 
 /* ─── UTILITIES ──────────────────────────────────────────────────────────────── */
-function hideLoading() {
-  if (DOM.loading) DOM.loading.style.display = 'none';
-}
-
+function hideLoading() { if (DOM.loading) DOM.loading.style.display = 'none'; }
 function renderError(err) {
   if (!DOM.grid) return;
   const errEl = document.createElement('div');
   errEl.className = 'archive-error';
-  errEl.style.cssText = `
-    grid-column: 1 / -1;
-    padding: 2rem;
-    font-family: var(--f-mono);
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    color: var(--c-ink-mid);
-    border: 1px solid var(--c-ink-whisper);
-    text-transform: uppercase;
-  `;
-  errEl.innerHTML = `
-    <span style="color:var(--c-crimson)">API Error</span>
-    — ${escapeHtml(err.message)}<br>
-    <a href="https://github.com/${GH_CONFIG.username}?tab=repositories"
-       target="_blank" rel="noopener"
-       style="color:var(--c-ink); text-decoration:underline; margin-top:0.5rem; display:inline-block;">
-      View repositories directly on GitHub →
-    </a>
-  `;
+  errEl.style.cssText = `grid-column: 1 / -1; padding: 2rem; font-family: var(--f-mono); font-size: 0.75rem; letter-spacing: 0.1em; color: var(--c-ink-mid); border: 1px solid var(--c-ink-whisper); text-transform: uppercase;`;
+  errEl.innerHTML = `<span style="color:var(--c-crimson)">API Error</span> — ${escapeHtml(err.message)}<br><a href="https://github.com/${GH_CONFIG.username}?tab=repositories" target="_blank" rel="noopener" style="color:var(--c-ink); text-decoration:underline; margin-top:0.5rem; display:inline-block;">View repositories directly on GitHub →</a>`;
   DOM.grid.appendChild(errEl);
 }
 
 function formatRelativeDate(iso) {
   if (!iso) return '';
-  const now  = Date.now();
-  const then = new Date(iso).getTime();
-  const diff = now - then;
-
-  const MINUTE = 60 * 1000;
-  const HOUR   = 60 * MINUTE;
-  const DAY    = 24 * HOUR;
-  const WEEK   = 7  * DAY;
-  const MONTH  = 30 * DAY;
-  const YEAR   = 365 * DAY;
-
-  if (diff < MINUTE)     return 'just now';
-  if (diff < HOUR)       return `${Math.floor(diff / MINUTE)}m ago`;
-  if (diff < DAY)        return `${Math.floor(diff / HOUR)}h ago`;
-  if (diff < WEEK)       return `${Math.floor(diff / DAY)}d ago`;
-  if (diff < MONTH)      return `${Math.floor(diff / WEEK)}w ago`;
-  if (diff < YEAR)       return `${Math.floor(diff / MONTH)}mo ago`;
+  const diff = Date.now() - new Date(iso).getTime();
+  const [MINUTE, HOUR, DAY, WEEK, MONTH, YEAR] = [60000, 3600000, 86400000, 604800000, 2592000000, 31536000000];
+  if (diff < MINUTE) return 'just now';
+  if (diff < HOUR) return `${Math.floor(diff / MINUTE)}m ago`;
+  if (diff < DAY) return `${Math.floor(diff / HOUR)}h ago`;
+  if (diff < WEEK) return `${Math.floor(diff / DAY)}d ago`;
+  if (diff < MONTH) return `${Math.floor(diff / WEEK)}w ago`;
+  if (diff < YEAR) return `${Math.floor(diff / MONTH)}mo ago`;
   return `${Math.floor(diff / YEAR)}y ago`;
 }
 
