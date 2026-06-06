@@ -456,3 +456,47 @@ input { font-family:inherit; }
   .stack-grid { grid-template-columns:1fr; }
   .stack-intro { position:relative; top:auto; }
 }
+
+/* ─── CERTIFICATIONS ─────────────────────────────────────────────────────────── */
+.section-certs { padding: var(--sp-32) 0; background: var(--c-canvas); border-top: 1px solid var(--c-ink-whisper); }
+.certs-grid { display: grid; grid-template-columns: 340px 1fr; gap: clamp(var(--sp-12), 6vw, var(--sp-24)); }
+.certs-intro { position: sticky; top: calc(var(--nav-h) + var(--sp-8)); }
+.certs-list { display: flex; flex-direction: column; border-top: 1px solid var(--c-ink-whisper); }
+.cert-item { display: flex; align-items: flex-start; gap: var(--sp-5); border-bottom: 0.5px solid var(--c-ink-whisper); padding: var(--sp-6) 0; }
+.cert-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+.cert-dot--active { background: var(--c-crimson); box-shadow: 0 0 0 3px var(--c-crimson-wash); }
+.cert-dot--inactive { border: 0.5px solid var(--c-ink-ghost); background: transparent; }
+.cert-body { flex: 1; }
+.cert-row { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--sp-4); flex-wrap: wrap; }
+.cert-name { font-family: var(--f-body); font-size: var(--ts-md); font-weight: 500; color: var(--c-ink); margin: 0 0 var(--sp-1); }
+.cert-issuer { font-family: var(--f-mono); font-size: var(--ts-xs); color: var(--c-ink-mid); margin: 0; letter-spacing: 0.08em; text-transform: uppercase; }
+.cert-meta { display: flex; align-items: center; gap: var(--sp-3); flex-shrink: 0; margin-top: 2px; }
+.cert-date { font-family: var(--f-mono); font-size: var(--ts-xs); color: var(--c-ink-mid); letter-spacing: 0.06em; }
+.cert-badge { font-family: var(--f-mono); font-size: var(--ts-micro); letter-spacing: 0.1em; text-transform: uppercase; color: var(--c-crimson); border: 0.5px solid rgba(200,16,46,0.3); padding: 2px var(--sp-3); background: var(--c-crimson-wash); }
+
+@media (max-width: 860px) {
+  .certs-grid { grid-template-columns: 1fr; }
+  .certs-intro { position: relative; top: auto; }
+}
+
+/* ─── HERO SVG FIX — centre the image within the wrapper ────────────────────── */
+.hero-image-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: auto;
+  border: none;
+  background: transparent;
+  border-radius: 0;
+  overflow: visible;
+}
+.hero-image-wrapper img {
+  width: 100%;
+  max-width: 680px;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  border: 1px solid var(--c-ink-whisper);
+  border-radius: 2px;
+}
