@@ -2,46 +2,67 @@
  * SAMURAI CHAMPLOO PORTFOLIO — MAIN.JS
  * Benyamin Mahamed · 2026
  *
+ * ARCHITECTURE: Scene-switcher. No page scroll between episodes.
+ * Each episode is a fixed full-viewport scene, hidden until selected.
+ *
  * FLOW:
- * 1. Page loads → menu screen visible immediately
- * 2. User selects episode → title card flashes → content section reveals
- * 3. Back button → returns to menu
- * 4. Scroll reveals, skill bars, project filter, cursor all init on content entry
+ * 1. Load → menu visible, all scenes hidden
+ * 2. Select episode → slash transition → scene activates
+ * 3. Content within scenes scrolls internally via .scene-inner--scroll
+ * 4. continue-btn / cnav-ep → transition to next scene
+ * 5. cnav-back → return to menu
  */
 
 'use strict';
 
-/* ─── EPISODE DATA ───────────────────────────────────────────────────────────── */
-const EPISODES = {
-  about:    { num: 'EP.01', title: 'The Wanderer',        sub: 'About · Origins · Philosophy' },
-  projects: { num: 'EP.02', title: 'The Work',            sub: 'Production Systems · Live Projects' },
-  stack:    { num: 'EP.03', title: 'The Arsenal',         sub: 'Technical Stack · Core Competencies' },
-  archive:  { num: 'EP.04', title: 'The Archive',         sub: 'GitHub · Repository Index' },
-  contact:  { num: 'EP.05', title: 'Unfinished Business', sub: 'Contact · Hire · Collaborate' },
-};
+/* ─── EPISODE MAP ────────────────────────────────────────────────────────────── */
+const EPISODES = [
+  { id: 'about',    num: 'EP.01', title: 'The Wanderer',        sub: 'About · Origins · Philosophy' },
+  { id: 'projects', num: 'EP.02', title: 'The Work',            sub: 'Production Systems · Live Projects' },
+  { id: 'stack',    num: 'EP.03', title: 'The Arsenal',         sub: 'Technical Stack · Core Competencies' },
+  { id: 'archive',  num: 'EP.04', title: 'The Archive',         sub: 'GitHub · Repository Index' },
+  { id: 'contact',  num: 'EP.05', title: 'Unfinished Business', sub: 'Contact · Hire · Collaborate' },
+];
 
 /* ─── STATE ──────────────────────────────────────────────────────────────────── */
-let state = {
-  inContent: false,
-  activeEp:  null,
-  lenis:     null,
+const S = {
+  inContent:     false,
+  activeScene:   null,   // current scene id string
+  menuActiveIdx: 0,      // keyboard nav index on menu
+  transitioning: false,  // lock during slash animation
+  skillsFired:   false,  // skill bars fire once
 };
 
-/* ─── ENTRY ──────────────────────────────────────────────────────────────────── */
-window.addEventListener('load', function () {
+/* ─── DOM CACHE ──────────────────────────────────────────────────────────────── */
+const DOM = {};
+
+/* ─── INIT ───────────────────────────────────────────────────────────────────── */
+window.addEventListener('load', () => {
+  DOM.menu         = document.getElementById('menu-screen');
+  DOM.mainContent  = document.getElementById('main-content');
+  DOM.contentNav   = document.getElementById('content-nav');
+  DOM.cnav_back    = document.getElementById('cnav-back');
+  DOM.slashOverlay = document.getElementById('slash-overlay');
+  DOM.titleCard    = document.getElementById('ep-titlecard');
+  DOM.tc_num       = document.getElementById('tc-ep-num');
+  DOM.tc_title     = document.getElementById('tc-ep-title');
+  DOM.tc_sub       = document.getElementById('tc-ep-sub');
+  DOM.menuItems    = Array.from(document.querySelectorAll('.episode-item'));
+  DOM.cnavEps      = Array.from(document.querySelectorAll('.cnav-ep'));
+  DOM.scenes       = Array.from(document.querySelectorAll('.scene'));
+  DOM.endReturn    = document.getElementById('end-card-return');
+  DOM.menuTime     = document.getElementById('menu-time');
+
   initCursor();
   initMenuClock();
+  initMenuItems();
   initMenuKeyboard();
-  initMenuClicks();
+  initContinueButtons();
   initContentNav();
-  initEndCard();
   initProjectFilter();
 
-  // GSAP + Lenis init — only needed once we enter content
-  // Guard in case CDN failed
-  if (typeof gsap === 'undefined') {
-    console.warn('[Portfolio] GSAP not loaded — animations disabled');
-  }
+  // Set first menu item active
+  setMenuActive(0);
 });
 
 /* ════════════════════════════════════════════════════════════════════
@@ -52,15 +73,16 @@ function initCursor() {
   const ring = document.querySelector('.cursor-ring');
   if (!dot || !ring) return;
 
-  // Hide on touch devices
   if ('ontouchstart' in window) {
     dot.style.display = ring.style.display = 'none';
+    document.body.style.cursor = 'auto';
+    document.querySelectorAll('button, a').forEach(el => el.style.cursor = 'pointer');
     return;
   }
 
-  let mx = -200, my = -200, rx = -200, ry = -200;
+  let mx = -300, my = -300, rx = -300, ry = -300;
 
-  window.addEventListener('mousemove', (e) => {
+  window.addEventListener('mousemove', e => {
     mx = e.clientX; my = e.clientY;
     dot.style.left = mx + 'px';
     dot.style.top  = my + 'px';
@@ -74,13 +96,12 @@ function initCursor() {
     requestAnimationFrame(loop);
   })();
 
-  const hoverSel = 'a, button, .episode-item, .pf, .af, .tag, .proj-link, .contact-link, .cnav-ep, .cnav-back, .ep-continue-btn';
-
-  document.addEventListener('mouseover', (e) => {
-    if (e.target.closest(hoverSel)) document.body.classList.add('cursor-hover');
+  const HOVER = 'a, button, .episode-item, .pf, .af, .atag, .plink, .clink, .cnav-ep, .continue-btn, .ghost-btn, .repo-card';
+  document.addEventListener('mouseover', e => {
+    if (e.target.closest(HOVER)) body.classList.add('cursor-active');
   });
-  document.addEventListener('mouseout', (e) => {
-    if (e.target.closest(hoverSel)) document.body.classList.remove('cursor-hover');
+  document.addEventListener('mouseout', e => {
+    if (e.target.closest(HOVER)) body.classList.remove('cursor-active');
   });
   document.addEventListener('mouseleave', () => {
     dot.style.opacity = ring.style.opacity = '0';
@@ -90,318 +111,270 @@ function initCursor() {
   });
 }
 
+const body = document.body;
+
 /* ════════════════════════════════════════════════════════════════════
    MENU CLOCK
    ════════════════════════════════════════════════════════════════════ */
 function initMenuClock() {
-  const el = document.getElementById('menu-time');
-  if (!el) return;
-
-  function tick() {
+  if (!DOM.menuTime) return;
+  const tick = () => {
     const now = new Date();
-    const h = String(now.getHours()).padStart(2, '0');
-    const m = String(now.getMinutes()).padStart(2, '0');
-    el.textContent = h + ':' + m;
-  }
+    DOM.menuTime.textContent =
+      String(now.getHours()).padStart(2,'0') + ':' +
+      String(now.getMinutes()).padStart(2,'0');
+  };
   tick();
   setInterval(tick, 30000);
 }
 
 /* ════════════════════════════════════════════════════════════════════
-   MENU — KEYBOARD NAVIGATION
+   MENU ITEMS
+   ════════════════════════════════════════════════════════════════════ */
+function initMenuItems() {
+  DOM.menuItems.forEach((item, i) => {
+    item.addEventListener('mouseenter', () => setMenuActive(i));
+    item.addEventListener('click', () => {
+      const target = item.dataset.target;
+      if (target) goToEpisode(target);
+    });
+  });
+}
+
+function setMenuActive(idx) {
+  DOM.menuItems.forEach((item, i) => item.classList.toggle('active', i === idx));
+  S.menuActiveIdx = idx;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   MENU KEYBOARD
    ════════════════════════════════════════════════════════════════════ */
 function initMenuKeyboard() {
-  const items = Array.from(document.querySelectorAll('.episode-item'));
-  if (!items.length) return;
-
-  let activeIdx = 0;
-
-  function setActive(idx) {
-    items.forEach((item, i) => {
-      item.classList.toggle('active', i === idx);
-    });
-    activeIdx = idx;
-  }
-
-  document.addEventListener('keydown', (e) => {
-    // Only fire when menu is visible
-    if (state.inContent) return;
+  document.addEventListener('keydown', e => {
+    if (S.inContent || S.transitioning) return;
 
     switch (e.key) {
       case 'ArrowUp':
         e.preventDefault();
-        setActive((activeIdx - 1 + items.length) % items.length);
+        setMenuActive((S.menuActiveIdx - 1 + EPISODES.length) % EPISODES.length);
         break;
       case 'ArrowDown':
         e.preventDefault();
-        setActive((activeIdx + 1) % items.length);
+        setMenuActive((S.menuActiveIdx + 1) % EPISODES.length);
         break;
       case 'Enter':
         e.preventDefault();
-        const target = items[activeIdx].dataset.target;
-        if (target) enterEpisode(target);
+        goToEpisode(EPISODES[S.menuActiveIdx].id);
+        break;
+      case 'Escape':
+        if (S.inContent) returnToMenu();
         break;
     }
   });
 }
 
 /* ════════════════════════════════════════════════════════════════════
-   MENU — CLICK SELECT
+   CONTINUE BUTTONS (inside scenes)
    ════════════════════════════════════════════════════════════════════ */
-function initMenuClicks() {
-  document.querySelectorAll('.episode-item').forEach(item => {
-    item.addEventListener('click', () => {
-      const target = item.dataset.target;
-      if (target) enterEpisode(target);
-    });
-
-    // Hover sets active state
-    item.addEventListener('mouseenter', () => {
-      document.querySelectorAll('.episode-item').forEach(i => i.classList.remove('active'));
-      item.classList.add('active');
+function initContinueButtons() {
+  document.querySelectorAll('.continue-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.target;
+      if (target) goToEpisode(target);
     });
   });
-}
-
-/* ════════════════════════════════════════════════════════════════════
-   ENTER EPISODE — core transition
-   ════════════════════════════════════════════════════════════════════ */
-function enterEpisode(sectionId) {
-  const ep = EPISODES[sectionId];
-  if (!ep) return;
-
-  state.activeEp = sectionId;
-
-  // 1. Show title card
-  showTitleCard(ep, () => {
-    // 2. Hide menu, show content
-    const menu    = document.getElementById('menu-screen');
-    const content = document.getElementById('main-content');
-    const cnav    = document.getElementById('content-nav');
-
-    if (menu)    menu.classList.add('hidden');
-    if (content) {
-      content.classList.add('visible');
-      content.style.opacity = '1';
-      content.style.pointerEvents = 'all';
-    }
-    if (cnav) cnav.classList.add('visible');
-
-    state.inContent = true;
-
-    // 3. Scroll to target section
-    const section = document.getElementById(sectionId);
-    if (section) {
-      setTimeout(() => {
-        section.scrollIntoView({ behavior: 'instant' });
-        // 4. Init animations now that content is visible
-        initContentAnimations();
-      }, 50);
-    }
-  });
-}
-
-/* ════════════════════════════════════════════════════════════════════
-   TITLE CARD
-   ════════════════════════════════════════════════════════════════════ */
-function showTitleCard(ep, onComplete) {
-  const card = document.getElementById('ep-titlecard');
-  const num  = document.getElementById('tc-ep-num');
-  const title = document.getElementById('tc-ep-title');
-  const sub   = document.getElementById('tc-ep-sub');
-
-  if (!card) { onComplete(); return; }
-
-  if (num)   num.textContent   = ep.num;
-  if (title) title.textContent = ep.title;
-  if (sub)   sub.textContent   = ep.sub;
-
-  card.classList.add('show');
-
-  // Title card animation is 1.6s, fire callback at ~1.2s so content ready
-  setTimeout(() => {
-    onComplete();
-  }, 1200);
-
-  setTimeout(() => {
-    card.classList.remove('show');
-  }, 1700);
 }
 
 /* ════════════════════════════════════════════════════════════════════
    CONTENT NAV
    ════════════════════════════════════════════════════════════════════ */
 function initContentNav() {
-  // Back to menu
-  const backBtn = document.getElementById('cnav-back');
-  if (backBtn) {
-    backBtn.addEventListener('click', returnToMenu);
+  // Back button
+  if (DOM.cnav_back) {
+    DOM.cnav_back.addEventListener('click', returnToMenu);
   }
 
-  // End card return button
-  const endReturn = document.getElementById('end-card-return');
-  if (endReturn) {
-    endReturn.addEventListener('click', returnToMenu);
+  // End card return
+  if (DOM.endReturn) {
+    DOM.endReturn.addEventListener('click', returnToMenu);
   }
 
-  // EP nav links — update active state on scroll
-  initEpNavTracking();
-}
-
-function returnToMenu() {
-  const menu    = document.getElementById('menu-screen');
-  const content = document.getElementById('main-content');
-  const cnav    = document.getElementById('content-nav');
-
-  // Scroll content to top before hiding
-  window.scrollTo({ top: 0, behavior: 'instant' });
-
-  if (menu) {
-    menu.classList.remove('hidden');
-  }
-  if (content) {
-    content.classList.remove('visible');
-    content.style.opacity = '0';
-    content.style.pointerEvents = 'none';
-  }
-  if (cnav) cnav.classList.remove('visible');
-
-  state.inContent = false;
-  state.activeEp  = null;
-}
-
-/* ════════════════════════════════════════════════════════════════════
-   EP NAV ACTIVE TRACKING
-   ════════════════════════════════════════════════════════════════════ */
-function initEpNavTracking() {
-  const epLinks = document.querySelectorAll('.cnav-ep');
-  if (!epLinks.length) return;
-
-  const epMap = {
-    'EP.01': 'about',
-    'EP.02': 'projects',
-    'EP.03': 'stack',
-    'EP.04': 'archive',
-    'EP.05': 'contact',
-  };
-
-  // Smooth scroll on ep nav click
-  epLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      const href = link.getAttribute('href');
-      const section = document.querySelector(href);
-      if (section) section.scrollIntoView({ behavior: 'smooth' });
+  // EP buttons in nav
+  DOM.cnavEps.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.target;
+      if (target && target !== S.activeScene) goToEpisode(target);
     });
   });
+}
 
-  // Intersection observer to set active ep
-  const sections = document.querySelectorAll('.episode[id]');
-  if (!sections.length) return;
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const id = entry.target.id;
-        epLinks.forEach(link => {
-          const epNum = link.dataset.ep;
-          link.classList.toggle('active', epMap[epNum] === id);
-        });
-      }
-    });
-  }, { threshold: 0.3 });
-
-  sections.forEach(s => observer.observe(s));
+function setCnavActive(id) {
+  DOM.cnavEps.forEach(btn => btn.classList.toggle('active', btn.dataset.target === id));
 }
 
 /* ════════════════════════════════════════════════════════════════════
-   END CARD
+   GO TO EPISODE — main transition controller
    ════════════════════════════════════════════════════════════════════ */
-function initEndCard() {
-  // Already handled in initContentNav
-}
+function goToEpisode(id) {
+  if (S.transitioning) return;
+  if (S.inContent && id === S.activeScene) return;
 
-/* ════════════════════════════════════════════════════════════════════
-   CONTENT ANIMATIONS — init once on first entry
-   ════════════════════════════════════════════════════════════════════ */
-let animationsInitialised = false;
+  S.transitioning = true;
 
-function initContentAnimations() {
-  if (animationsInitialised) return;
-  animationsInitialised = true;
+  const ep = EPISODES.find(e => e.id === id);
+  if (!ep) { S.transitioning = false; return; }
 
-  initLenis();
-  initScrollReveals();
-  initSkillBars();
-  initProjectFilter();
-}
+  const fromMenu = !S.inContent;
 
-/* ════════════════════════════════════════════════════════════════════
-   LENIS
-   ════════════════════════════════════════════════════════════════════ */
-function initLenis() {
-  if (typeof Lenis === 'undefined') return;
-
-  state.lenis = new Lenis({
-    duration: 1.1,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    smoothTouch: false,
-  });
-
-  if (typeof gsap !== 'undefined') {
-    gsap.ticker.add((time) => state.lenis.raf(time * 1000));
-    gsap.ticker.lagSmoothing(0);
-  } else {
-    function raf(time) {
-      state.lenis.raf(time);
-      requestAnimationFrame(raf);
+  // Phase 1: slash covers screen
+  slashIn(() => {
+    // Phase 2: swap scenes under the cover
+    if (fromMenu) {
+      // Hide menu, show content wrapper
+      DOM.menu.classList.remove('screen-active');
+      DOM.mainContent.style.display = 'block';
+      DOM.contentNav.classList.add('visible');
+      S.inContent = true;
     }
-    requestAnimationFrame(raf);
-  }
+
+    // Deactivate all scenes
+    DOM.scenes.forEach(scene => scene.classList.remove('scene-active'));
+
+    // Activate target scene
+    const targetScene = document.getElementById('scene-' + id);
+    if (targetScene) {
+      targetScene.classList.add('scene-active');
+      // Reset internal scroll to top
+      const scrollInner = targetScene.querySelector('.scene-inner--scroll');
+      if (scrollInner) scrollInner.scrollTop = 0;
+    }
+
+    S.activeScene = id;
+    setCnavActive(id);
+
+    // Show title card (layered above slash reveal)
+    showTitleCard(ep);
+
+    // Phase 3: slash reveals new scene
+    slashOut(() => {
+      S.transitioning = false;
+
+      // Fire scene entry effects
+      onSceneEnter(id);
+    });
+  });
 }
 
 /* ════════════════════════════════════════════════════════════════════
-   SCROLL REVEALS
+   RETURN TO MENU
    ════════════════════════════════════════════════════════════════════ */
-function initScrollReveals() {
-  const els = document.querySelectorAll('[data-reveal]');
-  if (!els.length) return;
+function returnToMenu() {
+  if (S.transitioning) return;
+  S.transitioning = true;
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const el = entry.target;
-        const delay = parseFloat(el.dataset.delay || 0) * 1000;
-        setTimeout(() => el.classList.add('revealed'), delay);
-        observer.unobserve(el);
-      }
+  slashIn(() => {
+    // Deactivate all scenes
+    DOM.scenes.forEach(scene => scene.classList.remove('scene-active'));
+
+    // Hide content, show menu
+    DOM.mainContent.style.display = 'none';
+    DOM.contentNav.classList.remove('visible');
+    DOM.menu.classList.add('screen-active');
+
+    S.inContent   = false;
+    S.activeScene = null;
+
+    slashOut(() => {
+      S.transitioning = false;
     });
-  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  });
+}
 
-  els.forEach(el => observer.observe(el));
+/* ════════════════════════════════════════════════════════════════════
+   SLASH TRANSITION
+   ════════════════════════════════════════════════════════════════════ */
+function slashIn(cb) {
+  if (!DOM.slashOverlay) { cb(); return; }
+
+  DOM.slashOverlay.classList.remove('slash-out');
+  DOM.slashOverlay.classList.add('slash-in');
+
+  // Cover takes ~220ms total (panel-a: 180ms + panel-b: 40ms offset + 180ms)
+  setTimeout(cb, 240);
+}
+
+function slashOut(cb) {
+  if (!DOM.slashOverlay) { cb(); return; }
+
+  DOM.slashOverlay.classList.remove('slash-in');
+  DOM.slashOverlay.classList.add('slash-out');
+
+  setTimeout(() => {
+    DOM.slashOverlay.classList.remove('slash-out');
+    cb();
+  }, 280);
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   EPISODE TITLE CARD
+   ════════════════════════════════════════════════════════════════════ */
+function showTitleCard(ep) {
+  if (!DOM.titleCard) return;
+
+  if (DOM.tc_num)   DOM.tc_num.textContent   = ep.num;
+  if (DOM.tc_title) DOM.tc_title.textContent = ep.title;
+  if (DOM.tc_sub)   DOM.tc_sub.textContent   = ep.sub;
+
+  // Remove then re-add to restart animation
+  DOM.titleCard.classList.remove('show');
+  void DOM.titleCard.offsetWidth; // force reflow
+  DOM.titleCard.classList.add('show');
+
+  setTimeout(() => DOM.titleCard.classList.remove('show'), 1900);
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   SCENE ENTRY EFFECTS — fires when a scene becomes active
+   ════════════════════════════════════════════════════════════════════ */
+function onSceneEnter(id) {
+  // Reveal animations for the active scene
+  const scene = document.getElementById('scene-' + id);
+  if (!scene) return;
+
+  // Trigger data-reveal elements in this scene
+  const revealEls = scene.querySelectorAll('[data-reveal]');
+  revealEls.forEach(el => el.classList.remove('revealed'));
+
+  // Stagger reveals
+  revealEls.forEach((el, i) => {
+    setTimeout(() => el.classList.add('revealed'), 80 + i * 60);
+  });
+
+  // Skill bars — fire once when stack scene entered
+  if (id === 'stack' && !S.skillsFired) {
+    S.skillsFired = true;
+    setTimeout(() => fireSkillBars(scene), 400);
+  }
+
+  // Re-fire skill bars each time stack is visited
+  if (id === 'stack') {
+    setTimeout(() => fireSkillBars(scene), 400);
+  }
 }
 
 /* ════════════════════════════════════════════════════════════════════
    SKILL BARS
    ════════════════════════════════════════════════════════════════════ */
-function initSkillBars() {
-  const fills = document.querySelectorAll('.sk-fill');
-  if (!fills.length) return;
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const fill = entry.target;
-        const pct  = parseInt(fill.dataset.pct, 10) || 0;
-        fill.style.width = pct + '%';
-        observer.unobserve(fill);
-      }
-    });
-  }, { threshold: 0.3 });
-
-  fills.forEach(fill => {
+function fireSkillBars(scene) {
+  scene.querySelectorAll('.ski-fill').forEach(fill => {
+    const pct = parseInt(fill.dataset.pct, 10) || 0;
     fill.style.width = '0%';
-    observer.observe(fill);
+    // Small delay so CSS transition fires
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        fill.style.width = pct + '%';
+      });
+    });
   });
 }
 
@@ -419,19 +392,21 @@ function initProjectFilter() {
       btn.classList.add('active');
 
       const f = btn.dataset.f;
-
-      cards.forEach(card => {
+      cards.forEach((card, i) => {
         const tags = (card.dataset.t || '').toLowerCase();
-        const show = f === 'all' || tags.includes(f.toLowerCase());
-        card.style.display = show ? '' : 'none';
+        const show = f === 'all' || tags.includes(f);
+
         if (show) {
+          card.classList.remove('hidden');
           card.style.opacity = '0';
-          card.style.transform = 'translateY(12px)';
-          requestAnimationFrame(() => {
+          card.style.transform = 'translateY(10px)';
+          setTimeout(() => {
             card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
             card.style.opacity = '1';
             card.style.transform = 'translateY(0)';
-          });
+          }, i * 35);
+        } else {
+          card.classList.add('hidden');
         }
       });
     });
