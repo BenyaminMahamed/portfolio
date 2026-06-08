@@ -2,15 +2,15 @@
  * SAMURAI CHAMPLOO PORTFOLIO — MAIN.JS
  * Benyamin Mahamed · 2026
  *
- * ARCHITECTURE: Scene-switcher. No page scroll between episodes.
- * Each episode is a fixed full-viewport scene, hidden until selected.
- *
  * FLOW:
- * 1. Load → menu visible, all scenes hidden
- * 2. Select episode → slash transition → scene activates
- * 3. Content within scenes scrolls internally via .scene-inner--scroll
- * 4. continue-btn / cnav-ep → transition to next scene
- * 5. cnav-back → return to menu
+ * Menu (fixed) → slash transition → title card → long scroll page
+ *
+ * On episode select:
+ * 1. Slash covers screen
+ * 2. Menu hides, content shows, scroll to section
+ * 3. Hero canvas slides in, ink reveals fire
+ * 4. Slash reveals
+ * 5. Normal scroll from there — scroll reveals, skill bars, parallax scene breaks
  */
 
 'use strict';
@@ -26,42 +26,21 @@ const EPISODES = [
 
 /* ─── STATE ──────────────────────────────────────────────────────────────────── */
 const S = {
-  inContent:     false,
-  activeScene:   null,   // current scene id string
-  menuActiveIdx: 0,      // keyboard nav index on menu
-  transitioning: false,  // lock during slash animation
-  skillsFired:   false,  // skill bars fire once
+  menuActiveIdx: 0,
+  transitioning: false,
+  contentVisible: false,
+  revealObserver: null,
+  skillObserver: null,
 };
 
-/* ─── DOM CACHE ──────────────────────────────────────────────────────────────── */
-const DOM = {};
-
-/* ─── INIT ───────────────────────────────────────────────────────────────────── */
+/* ─── ENTRY ──────────────────────────────────────────────────────────────────── */
 window.addEventListener('load', () => {
-  DOM.menu         = document.getElementById('menu-screen');
-  DOM.mainContent  = document.getElementById('main-content');
-  DOM.contentNav   = document.getElementById('content-nav');
-  DOM.cnav_back    = document.getElementById('cnav-back');
-  DOM.slashOverlay = document.getElementById('slash-overlay');
-  DOM.titleCard    = document.getElementById('ep-titlecard');
-  DOM.tc_num       = document.getElementById('tc-ep-num');
-  DOM.tc_title     = document.getElementById('tc-ep-title');
-  DOM.tc_sub       = document.getElementById('tc-ep-sub');
-  DOM.menuItems    = Array.from(document.querySelectorAll('.episode-item'));
-  DOM.cnavEps      = Array.from(document.querySelectorAll('.cnav-ep'));
-  DOM.scenes       = Array.from(document.querySelectorAll('.scene'));
-  DOM.endReturn    = document.getElementById('end-card-return');
-  DOM.menuTime     = document.getElementById('menu-time');
-
   initCursor();
   initMenuClock();
   initMenuItems();
   initMenuKeyboard();
-  initContinueButtons();
   initContentNav();
   initProjectFilter();
-
-  // Set first menu item active
   setMenuActive(0);
 });
 
@@ -96,12 +75,12 @@ function initCursor() {
     requestAnimationFrame(loop);
   })();
 
-  const HOVER = 'a, button, .episode-item, .pf, .af, .atag, .plink, .clink, .cnav-ep, .continue-btn, .ghost-btn, .repo-card';
+  const HOVER = 'a, button, .ep-item, .pf, .af, .tag, .plink, .clink, .cnav-ep, .cnav-back, .ghost-btn, .repo-card';
   document.addEventListener('mouseover', e => {
-    if (e.target.closest(HOVER)) body.classList.add('cursor-active');
+    if (e.target.closest(HOVER)) document.body.classList.add('c-active');
   });
   document.addEventListener('mouseout', e => {
-    if (e.target.closest(HOVER)) body.classList.remove('cursor-active');
+    if (e.target.closest(HOVER)) document.body.classList.remove('c-active');
   });
   document.addEventListener('mouseleave', () => {
     dot.style.opacity = ring.style.opacity = '0';
@@ -111,18 +90,15 @@ function initCursor() {
   });
 }
 
-const body = document.body;
-
 /* ════════════════════════════════════════════════════════════════════
    MENU CLOCK
    ════════════════════════════════════════════════════════════════════ */
 function initMenuClock() {
-  if (!DOM.menuTime) return;
+  const el = document.getElementById('menu-time');
+  if (!el) return;
   const tick = () => {
-    const now = new Date();
-    DOM.menuTime.textContent =
-      String(now.getHours()).padStart(2,'0') + ':' +
-      String(now.getMinutes()).padStart(2,'0');
+    const d = new Date();
+    el.textContent = String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
   };
   tick();
   setInterval(tick, 30000);
@@ -132,17 +108,24 @@ function initMenuClock() {
    MENU ITEMS
    ════════════════════════════════════════════════════════════════════ */
 function initMenuItems() {
-  DOM.menuItems.forEach((item, i) => {
+  const items = Array.from(document.querySelectorAll('.ep-item'));
+
+  items.forEach((item, i) => {
     item.addEventListener('mouseenter', () => setMenuActive(i));
-    item.addEventListener('click', () => {
-      const target = item.dataset.target;
-      if (target) goToEpisode(target);
+    item.addEventListener('click', () => goToEpisode(item.dataset.target));
+    item.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        goToEpisode(item.dataset.target);
+      }
     });
   });
 }
 
 function setMenuActive(idx) {
-  DOM.menuItems.forEach((item, i) => item.classList.toggle('active', i === idx));
+  document.querySelectorAll('.ep-item').forEach((item, i) => {
+    item.classList.toggle('is-active', i === idx);
+  });
   S.menuActiveIdx = idx;
 }
 
@@ -151,7 +134,7 @@ function setMenuActive(idx) {
    ════════════════════════════════════════════════════════════════════ */
 function initMenuKeyboard() {
   document.addEventListener('keydown', e => {
-    if (S.inContent || S.transitioning) return;
+    if (S.contentVisible || S.transitioning) return;
 
     switch (e.key) {
       case 'ArrowUp':
@@ -166,101 +149,67 @@ function initMenuKeyboard() {
         e.preventDefault();
         goToEpisode(EPISODES[S.menuActiveIdx].id);
         break;
-      case 'Escape':
-        if (S.inContent) returnToMenu();
-        break;
     }
   });
 }
 
 /* ════════════════════════════════════════════════════════════════════
-   CONTINUE BUTTONS (inside scenes)
-   ════════════════════════════════════════════════════════════════════ */
-function initContinueButtons() {
-  document.querySelectorAll('.continue-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const target = btn.dataset.target;
-      if (target) goToEpisode(target);
-    });
-  });
-}
-
-/* ════════════════════════════════════════════════════════════════════
-   CONTENT NAV
-   ════════════════════════════════════════════════════════════════════ */
-function initContentNav() {
-  // Back button
-  if (DOM.cnav_back) {
-    DOM.cnav_back.addEventListener('click', returnToMenu);
-  }
-
-  // End card return
-  if (DOM.endReturn) {
-    DOM.endReturn.addEventListener('click', returnToMenu);
-  }
-
-  // EP buttons in nav
-  DOM.cnavEps.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const target = btn.dataset.target;
-      if (target && target !== S.activeScene) goToEpisode(target);
-    });
-  });
-}
-
-function setCnavActive(id) {
-  DOM.cnavEps.forEach(btn => btn.classList.toggle('active', btn.dataset.target === id));
-}
-
-/* ════════════════════════════════════════════════════════════════════
-   GO TO EPISODE — main transition controller
+   GO TO EPISODE — master transition
    ════════════════════════════════════════════════════════════════════ */
 function goToEpisode(id) {
   if (S.transitioning) return;
-  if (S.inContent && id === S.activeScene) return;
-
   S.transitioning = true;
 
   const ep = EPISODES.find(e => e.id === id);
   if (!ep) { S.transitioning = false; return; }
 
-  const fromMenu = !S.inContent;
-
-  // Phase 1: slash covers screen
+  // Phase 1: slash covers
   slashIn(() => {
-    // Phase 2: swap scenes under the cover
-    if (fromMenu) {
-      // Hide menu, show content wrapper
-      DOM.menu.classList.remove('screen-active');
-      DOM.mainContent.style.display = 'block';
-      DOM.contentNav.classList.add('visible');
-      S.inContent = true;
+
+    // Determine target scroll position
+    const targetSection = document.getElementById(id);
+
+    // Show content, hide menu
+    const menu    = document.getElementById('menu-screen');
+    const content = document.getElementById('portfolio');
+    const cnav    = document.getElementById('content-nav');
+
+    if (menu) {
+      menu.classList.remove('is-active');
     }
 
-    // Deactivate all scenes
-    DOM.scenes.forEach(scene => scene.classList.remove('scene-active'));
-
-    // Activate target scene
-    const targetScene = document.getElementById('scene-' + id);
-    if (targetScene) {
-      targetScene.classList.add('scene-active');
-      // Reset internal scroll to top
-      const scrollInner = targetScene.querySelector('.scene-inner--scroll');
-      if (scrollInner) scrollInner.scrollTop = 0;
+    if (content) {
+      content.classList.add('is-visible');
+      content.removeAttribute('aria-hidden');
     }
 
-    S.activeScene = id;
+    if (cnav) cnav.classList.add('is-visible');
+
+    S.contentVisible = true;
+
+    // Scroll instantly to target section
+    if (targetSection) {
+      const offset = targetSection.getBoundingClientRect().top + window.scrollY - 52;
+      window.scrollTo({ top: Math.max(0, offset), behavior: 'instant' });
+    }
+
+    // Set correct cnav active
     setCnavActive(id);
 
-    // Show title card (layered above slash reveal)
+    // Phase 2: title card fires over the slash reveal
     showTitleCard(ep);
 
-    // Phase 3: slash reveals new scene
+    // Phase 3: slash reveals
     slashOut(() => {
       S.transitioning = false;
 
-      // Fire scene entry effects
-      onSceneEnter(id);
+      // Fire hero entrance if going to about/top
+      if (id === 'about') {
+        fireHeroEntrance();
+      }
+
+      // Init all scroll-based animations now content is live
+      initScrollAnimations();
     });
   });
 }
@@ -273,16 +222,34 @@ function returnToMenu() {
   S.transitioning = true;
 
   slashIn(() => {
-    // Deactivate all scenes
-    DOM.scenes.forEach(scene => scene.classList.remove('scene-active'));
+    const menu    = document.getElementById('menu-screen');
+    const content = document.getElementById('portfolio');
+    const cnav    = document.getElementById('content-nav');
 
-    // Hide content, show menu
-    DOM.mainContent.style.display = 'none';
-    DOM.contentNav.classList.remove('visible');
-    DOM.menu.classList.add('screen-active');
+    // Scroll to top before hiding
+    window.scrollTo({ top: 0, behavior: 'instant' });
 
-    S.inContent   = false;
-    S.activeScene = null;
+    if (content) {
+      content.classList.remove('is-visible');
+      content.setAttribute('aria-hidden', 'true');
+    }
+    if (cnav) cnav.classList.remove('is-visible');
+    if (menu) menu.classList.add('is-active');
+
+    S.contentVisible = false;
+
+    // Reset hero canvas for next entry
+    const canvas = document.querySelector('.hero-canvas');
+    if (canvas) canvas.classList.remove('is-revealed');
+
+    // Reset ink reveals
+    document.querySelectorAll('[data-ink]').forEach(el => {
+      el.classList.remove('inked');
+    });
+    const identity = document.querySelector('.hero-identity');
+    if (identity) identity.classList.remove('inked');
+    const kanji = document.querySelector('.hero-kanji');
+    if (kanji) kanji.classList.remove('is-revealed');
 
     slashOut(() => {
       S.transitioning = false;
@@ -291,91 +258,225 @@ function returnToMenu() {
 }
 
 /* ════════════════════════════════════════════════════════════════════
+   CONTENT NAV
+   ════════════════════════════════════════════════════════════════════ */
+function initContentNav() {
+  const back    = document.getElementById('cnav-back');
+  const endBack = document.getElementById('end-card-back');
+
+  if (back)    back.addEventListener('click', returnToMenu);
+  if (endBack) endBack.addEventListener('click', returnToMenu);
+
+  // EP nav buttons — scroll to section
+  document.querySelectorAll('.cnav-ep').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.target;
+      if (!id) return;
+
+      if (!S.contentVisible) {
+        goToEpisode(id);
+        return;
+      }
+
+      const section = document.getElementById(id);
+      if (!section) return;
+
+      const offset = section.getBoundingClientRect().top + window.scrollY - 52;
+      window.scrollTo({ top: Math.max(0, offset), behavior: 'smooth' });
+      setCnavActive(id);
+    });
+  });
+
+  // Track active section on scroll
+  initScrollTracking();
+}
+
+function setCnavActive(id) {
+  document.querySelectorAll('.cnav-ep').forEach(btn => {
+    btn.classList.toggle('is-active', btn.dataset.target === id);
+  });
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   SCROLL TRACKING — update cnav active state
+   ════════════════════════════════════════════════════════════════════ */
+function initScrollTracking() {
+  const sections = document.querySelectorAll('section[id]');
+  if (!sections.length) return;
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        setCnavActive(entry.target.id);
+      }
+    });
+  }, { rootMargin: '-20% 0px -60% 0px', threshold: 0 });
+
+  sections.forEach(s => observer.observe(s));
+}
+
+/* ════════════════════════════════════════════════════════════════════
    SLASH TRANSITION
    ════════════════════════════════════════════════════════════════════ */
 function slashIn(cb) {
-  if (!DOM.slashOverlay) { cb(); return; }
+  const overlay = document.getElementById('slash-overlay');
+  if (!overlay) { setTimeout(cb, 50); return; }
 
-  DOM.slashOverlay.classList.remove('slash-out');
-  DOM.slashOverlay.classList.add('slash-in');
-
-  // Cover takes ~220ms total (panel-a: 180ms + panel-b: 40ms offset + 180ms)
-  setTimeout(cb, 240);
+  overlay.classList.remove('slash-out');
+  overlay.classList.add('slash-in');
+  setTimeout(cb, 260);
 }
 
 function slashOut(cb) {
-  if (!DOM.slashOverlay) { cb(); return; }
+  const overlay = document.getElementById('slash-overlay');
+  if (!overlay) { setTimeout(cb, 50); return; }
 
-  DOM.slashOverlay.classList.remove('slash-in');
-  DOM.slashOverlay.classList.add('slash-out');
-
+  overlay.classList.remove('slash-in');
+  overlay.classList.add('slash-out');
   setTimeout(() => {
-    DOM.slashOverlay.classList.remove('slash-out');
-    cb();
-  }, 280);
+    overlay.classList.remove('slash-out');
+    if (cb) cb();
+  }, 300);
 }
 
 /* ════════════════════════════════════════════════════════════════════
-   EPISODE TITLE CARD
+   TITLE CARD
    ════════════════════════════════════════════════════════════════════ */
 function showTitleCard(ep) {
-  if (!DOM.titleCard) return;
+  const card  = document.getElementById('ep-titlecard');
+  const num   = document.getElementById('tc-num');
+  const title = document.getElementById('tc-title');
+  const sub   = document.getElementById('tc-sub');
 
-  if (DOM.tc_num)   DOM.tc_num.textContent   = ep.num;
-  if (DOM.tc_title) DOM.tc_title.textContent = ep.title;
-  if (DOM.tc_sub)   DOM.tc_sub.textContent   = ep.sub;
+  if (!card) return;
 
-  // Remove then re-add to restart animation
-  DOM.titleCard.classList.remove('show');
-  void DOM.titleCard.offsetWidth; // force reflow
-  DOM.titleCard.classList.add('show');
+  if (num)   num.textContent   = ep.num;
+  if (title) title.textContent = ep.title;
+  if (sub)   sub.textContent   = ep.sub;
 
-  setTimeout(() => DOM.titleCard.classList.remove('show'), 1900);
+  card.classList.remove('show');
+  void card.offsetWidth; // force reflow to restart animation
+  card.classList.add('show');
+
+  setTimeout(() => card.classList.remove('show'), 1900);
 }
 
 /* ════════════════════════════════════════════════════════════════════
-   SCENE ENTRY EFFECTS — fires when a scene becomes active
+   HERO ENTRANCE — canvas slides in, ink reveals fire
    ════════════════════════════════════════════════════════════════════ */
-function onSceneEnter(id) {
-  // Reveal animations for the active scene
-  const scene = document.getElementById('scene-' + id);
-  if (!scene) return;
+function fireHeroEntrance() {
+  const canvas   = document.querySelector('.hero-canvas');
+  const identity = document.querySelector('.hero-identity');
+  const kanji    = document.querySelector('.hero-kanji');
+  const inkEls   = document.querySelectorAll('[data-ink]');
+  const prompt   = document.querySelector('.hero-scroll-prompt');
 
-  // Trigger data-reveal elements in this scene
-  const revealEls = scene.querySelectorAll('[data-reveal]');
-  revealEls.forEach(el => el.classList.remove('revealed'));
+  // Canvas slides in from right
+  if (canvas) {
+    setTimeout(() => canvas.classList.add('is-revealed'), 50);
+  }
 
-  // Stagger reveals
-  revealEls.forEach((el, i) => {
-    setTimeout(() => el.classList.add('revealed'), 80 + i * 60);
+  // Kanji ghost fades in
+  if (kanji) {
+    setTimeout(() => kanji.classList.add('is-revealed'), 200);
+  }
+
+  // Ink reveals stagger
+  if (identity) {
+    setTimeout(() => identity.classList.add('inked'), 150);
+  }
+
+  inkEls.forEach(el => {
+    const delay = parseInt(el.dataset.inkDelay || 0) * 200;
+    setTimeout(() => el.classList.add('inked'), 150 + delay);
   });
+}
 
-  // Skill bars — fire once when stack scene entered
-  if (id === 'stack' && !S.skillsFired) {
-    S.skillsFired = true;
-    setTimeout(() => fireSkillBars(scene), 400);
-  }
+/* ════════════════════════════════════════════════════════════════════
+   SCROLL ANIMATIONS — init once when content first shown
+   ════════════════════════════════════════════════════════════════════ */
+let scrollAnimsInited = false;
 
-  // Re-fire skill bars each time stack is visited
-  if (id === 'stack') {
-    setTimeout(() => fireSkillBars(scene), 400);
-  }
+function initScrollAnimations() {
+  if (scrollAnimsInited) return;
+  scrollAnimsInited = true;
+
+  initRevealObserver();
+  initSkillBars();
+  initParallaxBreaks();
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   SCROLL REVEALS
+   ════════════════════════════════════════════════════════════════════ */
+function initRevealObserver() {
+  const els = document.querySelectorAll('[data-reveal]');
+  if (!els.length) return;
+
+  S.revealObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el    = entry.target;
+      const delay = parseFloat(el.dataset.delay || 0) * 1000;
+      setTimeout(() => el.classList.add('is-revealed'), delay);
+      S.revealObserver.unobserve(el);
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  els.forEach(el => S.revealObserver.observe(el));
 }
 
 /* ════════════════════════════════════════════════════════════════════
    SKILL BARS
    ════════════════════════════════════════════════════════════════════ */
-function fireSkillBars(scene) {
-  scene.querySelectorAll('.ski-fill').forEach(fill => {
-    const pct = parseInt(fill.dataset.pct, 10) || 0;
-    fill.style.width = '0%';
-    // Small delay so CSS transition fires
-    requestAnimationFrame(() => {
+function initSkillBars() {
+  const fills = document.querySelectorAll('.sr-fill');
+  if (!fills.length) return;
+
+  S.skillObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const fill = entry.target;
+      const pct  = parseInt(fill.dataset.pct, 10) || 0;
+      // Double rAF to ensure CSS transition fires
       requestAnimationFrame(() => {
-        fill.style.width = pct + '%';
+        requestAnimationFrame(() => {
+          fill.style.width = pct + '%';
+        });
       });
+      S.skillObserver.unobserve(fill);
     });
+  }, { threshold: 0.3 });
+
+  fills.forEach(fill => {
+    fill.style.width = '0%';
+    S.skillObserver.observe(fill);
   });
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   PARALLAX SCENE BREAKS
+   ════════════════════════════════════════════════════════════════════ */
+function initParallaxBreaks() {
+  const breaks = document.querySelectorAll('.scene-break');
+  if (!breaks.length) return;
+
+  const onScroll = () => {
+    breaks.forEach(br => {
+      const img  = br.querySelector('.sb-img');
+      if (!img) return;
+      const rect = br.getBoundingClientRect();
+      const vh   = window.innerHeight;
+      // Only process when visible
+      if (rect.bottom < 0 || rect.top > vh) return;
+      const progress = (vh - rect.top) / (vh + rect.height);
+      const offset   = (progress - 0.5) * 80;
+      img.style.transform = `translateY(${offset}px) scale(1.15)`;
+    });
+  };
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll(); // Run once immediately
 }
 
 /* ════════════════════════════════════════════════════════════════════
@@ -383,8 +484,9 @@ function fireSkillBars(scene) {
    ════════════════════════════════════════════════════════════════════ */
 function initProjectFilter() {
   const btns  = document.querySelectorAll('#proj-filters .pf');
+  const hero  = document.querySelector('.proj-hero');
   const cards = document.querySelectorAll('.proj-card');
-  if (!btns.length || !cards.length) return;
+  if (!btns.length) return;
 
   btns.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -392,19 +494,31 @@ function initProjectFilter() {
       btn.classList.add('active');
 
       const f = btn.dataset.f;
+
+      // Handle hero card
+      if (hero) {
+        const tags = (hero.dataset.t || '').toLowerCase();
+        const show = f === 'all' || tags.includes(f);
+        hero.style.display = show ? '' : 'none';
+      }
+
+      // Handle grid cards
       cards.forEach((card, i) => {
         const tags = (card.dataset.t || '').toLowerCase();
         const show = f === 'all' || tags.includes(f);
 
         if (show) {
           card.classList.remove('hidden');
-          card.style.opacity = '0';
-          card.style.transform = 'translateY(10px)';
-          setTimeout(() => {
-            card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0)';
-          }, i * 35);
+          card.style.opacity    = '0';
+          card.style.transform  = 'translateY(10px)';
+          card.style.transition = 'none';
+          requestAnimationFrame(() => {
+            setTimeout(() => {
+              card.style.transition = 'opacity .3s ease, transform .3s ease';
+              card.style.opacity    = '1';
+              card.style.transform  = 'translateY(0)';
+            }, i * 40);
+          });
         } else {
           card.classList.add('hidden');
         }
