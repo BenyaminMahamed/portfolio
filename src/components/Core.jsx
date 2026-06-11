@@ -192,7 +192,6 @@ export function Hero() {
         <p className="hero-pre mono">subject acquired</p>
 
         <div className={`det-box ${boxDrawn ? 'drawn' : ''}`}>
-          <span className="det-label mono">person · conf 0.99</span>
           <span className="det-tick det-tick-tl" aria-hidden="true" />
           <span className="det-tick det-tick-tr" aria-hidden="true" />
           <span className="det-tick det-tick-bl" aria-hidden="true" />
