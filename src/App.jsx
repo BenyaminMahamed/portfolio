@@ -1,19 +1,18 @@
-import { Nav, Hero, About } from './components/Core'
-import { Work, Arsenal, Archive, Contact } from './components/Sections'
+import { Nav, Hero, Input, HudChrome } from './components/Core'
+import { Detections, Weights, Buffer, Transmit } from './components/Sections'
 
 export default function App() {
   return (
     <>
+      <HudChrome />
       <Nav />
       <main>
         <Hero />
-        <div className="slash-divider" aria-hidden="true" />
-        <About />
-        <Work />
-        <Arsenal />
-        <div className="slash-divider" aria-hidden="true" />
-        <Archive />
-        <Contact />
+        <Input />
+        <Detections />
+        <Weights />
+        <Buffer />
+        <Transmit />
       </main>
     </>
   )

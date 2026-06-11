@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
-import { EPISODES } from '../data/content'
+import { STAGES } from '../data/content'
 
-/* ── Reveal hook — IntersectionObserver wrapper ─────────────── */
+/* ── Reveal — bracket-flash frame capture ───────────────────── */
 export function Reveal({ children, delay = 0, as: Tag = 'div', className = '', ...rest }) {
   const ref = useRef(null)
   useEffect(() => {
@@ -26,30 +26,114 @@ export function Reveal({ children, delay = 0, as: Tag = 'div', className = '', .
   )
 }
 
-/* ── Section eyebrow ────────────────────────────────────────── */
-export function Eyebrow({ num, title }) {
+/* ── Typed text hook ────────────────────────────────────────── */
+function useTyped(lines, { charDelay = 18, lineDelay = 260, start = true } = {}) {
+  const [output, setOutput] = useState(() => lines.map(() => ''))
+  const [done, setDone] = useState(false)
+
+  useEffect(() => {
+    if (!start) return
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduced) {
+      setOutput(lines)
+      setDone(true)
+      return
+    }
+    let li = 0
+    let ci = 0
+    let cancelled = false
+    const timers = []
+
+    function tick() {
+      if (cancelled) return
+      if (li >= lines.length) { setDone(true); return }
+      ci++
+      const snapshot = lines.map((l, i) =>
+        i < li ? l : i === li ? l.slice(0, ci) : ''
+      )
+      setOutput(snapshot)
+      if (ci >= lines[li].length) {
+        li++; ci = 0
+        timers.push(setTimeout(tick, lineDelay))
+      } else {
+        timers.push(setTimeout(tick, charDelay))
+      }
+    }
+    timers.push(setTimeout(tick, 300))
+    return () => { cancelled = true; timers.forEach(clearTimeout) }
+  }, [start]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  return [output, done]
+}
+
+/* ── Live FPS meter — measures the actual page ──────────────── */
+function useFps() {
+  const [fps, setFps] = useState(60)
+  useEffect(() => {
+    let frames = 0
+    let last = performance.now()
+    let raf
+    const loop = now => {
+      frames++
+      if (now - last >= 500) {
+        setFps(Math.round((frames * 1000) / (now - last)))
+        frames = 0
+        last = now
+      }
+      raf = requestAnimationFrame(loop)
+    }
+    raf = requestAnimationFrame(loop)
+    return () => cancelAnimationFrame(raf)
+  }, [])
+  return fps
+}
+
+/* ── HUD chrome — fixed corner brackets + telemetry ─────────── */
+export function HudChrome() {
+  const fps = useFps()
+  const [clock, setClock] = useState('')
+
+  useEffect(() => {
+    const tick = () => {
+      const n = new Date()
+      setClock(
+        [n.getHours(), n.getMinutes(), n.getSeconds()]
+          .map(v => String(v).padStart(2, '0'))
+          .join(':')
+      )
+    }
+    tick()
+    const id = setInterval(tick, 1000)
+    return () => clearInterval(id)
+  }, [])
+
   return (
-    <Reveal className="section-eyebrow">
-      <span className="mono">{num} — {title}</span>
-      <span className="section-eyebrow-rule" aria-hidden="true" />
-    </Reveal>
+    <div className="hud" aria-hidden="true">
+      <span className="hud-corner hud-tl" />
+      <span className="hud-corner hud-tr" />
+      <span className="hud-corner hud-bl" />
+      <span className="hud-corner hud-br" />
+      <div className="hud-top-left mono">
+        <span className="rec-dot" /> feed_01 · live
+      </div>
+      <div className="hud-top-right mono">{fps} fps · {clock}</div>
+      <div className="hud-bottom mono">
+        <span>sys: benyamin_mahamed</span>
+        <span>loc: london_uk</span>
+        <span>status: available_now</span>
+      </div>
+    </div>
   )
 }
 
 /* ── NAV ────────────────────────────────────────────────────── */
 export function Nav() {
-  const [active, setActive] = useState('about')
+  const [active, setActive] = useState('input')
 
   useEffect(() => {
-    const sections = EPISODES
-      .map(ep => document.getElementById(ep.id))
-      .filter(Boolean)
+    const sections = STAGES.map(s => document.getElementById(s.id)).filter(Boolean)
     const obs = new IntersectionObserver(
-      entries => {
-        entries.forEach(e => {
-          if (e.isIntersecting) setActive(e.target.id)
-        })
-      },
+      entries => entries.forEach(e => e.isIntersecting && setActive(e.target.id)),
       { rootMargin: '-35% 0px -55% 0px' }
     )
     sections.forEach(s => obs.observe(s))
@@ -59,118 +143,138 @@ export function Nav() {
   return (
     <header className="nav">
       <div className="nav-inner">
-        <a href="#top" className="nav-logo" aria-label="Benyamin Mahamed — home">
-          B<em>/</em>M
+        <a href="#top" className="nav-logo mono" aria-label="Benyamin Mahamed — home">
+          BM<span className="nav-logo-cursor">▮</span>
         </a>
-        <nav className="nav-links" aria-label="Sections">
-          {EPISODES.map(ep => (
+        <nav className="nav-links" aria-label="Pipeline stages">
+          {STAGES.map(s => (
             <a
-              key={ep.id}
-              href={`#${ep.id}`}
-              className={`nav-link mono ${active === ep.id ? 'active' : ''}`}
+              key={s.id}
+              href={`#${s.id}`}
+              className={`nav-link mono ${active === s.id ? 'active' : ''}`}
             >
-              {ep.num}
+              {s.num}
             </a>
           ))}
         </nav>
-        <a href="#contact" className="nav-status mono">
+        <a href="#transmit" className="nav-status mono">
           <span className="status-dot" aria-hidden="true" />
-          Available now
+          available
         </a>
       </div>
     </header>
   )
 }
 
-/* ── HERO ───────────────────────────────────────────────────── */
+/* ── HERO — the detection sequence ──────────────────────────── */
 export function Hero() {
+  const [boxDrawn, setBoxDrawn] = useState(false)
+  const [typedLines, typedDone] = useTyped(
+    [
+      '> role: software_engineer',
+      '> stack: django · opencv · faiss · postgresql',
+      '> education: bsc_computer_science · westminster',
+      '> status: available_now · london',
+    ],
+    { start: boxDrawn }
+  )
+
+  useEffect(() => {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const t = setTimeout(() => setBoxDrawn(true), reduced ? 0 : 500)
+    return () => clearTimeout(t)
+  }, [])
+
   return (
     <section className="hero" id="top">
-      <div className="hero-grain" aria-hidden="true" />
+      <div className="scanline" aria-hidden="true" />
       <div className="hero-inner">
-        <div>
-          <div className="hero-eyebrow">
-            <span className="hero-eyebrow-rule" aria-hidden="true" />
-            <span className="mono">Software Engineer · London · 2026</span>
-          </div>
+        <p className="hero-pre mono">subject acquired</p>
+
+        <div className={`det-box ${boxDrawn ? 'drawn' : ''}`}>
+          <span className="det-label mono">person · conf 0.99</span>
+          <span className="det-tick det-tick-tl" aria-hidden="true" />
+          <span className="det-tick det-tick-tr" aria-hidden="true" />
+          <span className="det-tick det-tick-bl" aria-hidden="true" />
+          <span className="det-tick det-tick-br" aria-hidden="true" />
           <h1 className="hero-title">
-            Benyamin Mahamed
-            <em>builds production systems.</em>
+            Benyamin<br />Mahamed
           </h1>
-          <p className="hero-sub">
-            BSc Computer Science, University of Westminster. Co-founder and sole
-            engineer of <strong>The Blueprint Brief</strong> — a live Django platform
-            with 1,000+ users. Backend-first, AI-capable, always deploying.
-          </p>
-          <div className="hero-ctas">
-            <a href="#work" className="btn btn-primary">View the work</a>
-            <a href="mailto:benyaminmahamed@gmail.com" className="btn btn-ghost">Email me</a>
-          </div>
-          <div className="hero-meta">
-            <span className="mono"><strong>1,000+</strong>Platform users</span>
-            <span className="mono"><strong>~14 FPS</strong>Real-time CV</span>
-            <span className="mono"><strong>4+</strong>Live projects</span>
-          </div>
         </div>
-        <figure className="hero-frame">
-          <img
-            src="/assets/frames/hero.png"
-            alt="Silhouetted swordsman against an orange sunset — Samurai Champloo opening frame"
-            fetchpriority="high"
-          />
-          <figcaption className="hero-frame-label mono">
-            Tribute · Samurai Champloo
-          </figcaption>
-        </figure>
+
+        <div className="hero-typed mono" aria-label="Profile summary">
+          {typedLines.map((l, i) => (
+            <p key={i}>{l}</p>
+          ))}
+          <span className={`caret ${typedDone ? 'caret-idle' : ''}`} aria-hidden="true">▮</span>
+        </div>
+
+        <div className="hero-ctas">
+          <a href="#detections" className="btn btn-primary">View detections</a>
+          <a href="mailto:benyaminmahamed@gmail.com" className="btn btn-ghost">Transmit →</a>
+        </div>
+
+        <div className="hero-telemetry mono" aria-label="System metrics from final-year vision project">
+          <span><strong>~14</strong> fps_pipeline</span>
+          <span><strong>~10ms</strong> latency</span>
+          <span><strong>10,298</strong> frames_processed</span>
+          <span><strong>1,000+</strong> users_in_prod</span>
+        </div>
       </div>
     </section>
   )
 }
 
-/* ── ABOUT — EP.01 ──────────────────────────────────────────── */
-export function About() {
+/* ── Stage header ───────────────────────────────────────────── */
+export function StageHead({ num, name, title }) {
   return (
-    <section className="section" id="about">
+    <>
+      <Reveal className="stage-eyebrow">
+        <span className="mono stage-num">{num}</span>
+        <span className="mono stage-name">/ {name}</span>
+        <span className="stage-rule" aria-hidden="true" />
+      </Reveal>
+      <Reveal as="h2" className="stage-title" delay={60}>{title}</Reveal>
+    </>
+  )
+}
+
+/* ── INPUT — SYS.01 (About) ─────────────────────────────────── */
+export function Input() {
+  return (
+    <section className="section" id="input">
       <div className="wrap">
-        <Eyebrow num="EP.01" title="The Wanderer" />
-        <Reveal as="h2" className="section-title">
-          Engineer. <em>Builder.</em> Architect.
-        </Reveal>
-        <div className="about-grid">
-          <Reveal className="about-panel" delay={80}>
-            <img
-              src="/assets/frames/scroll.png"
-              alt="Aged parchment scroll with calligraphy and graffiti typography"
-              loading="lazy"
-            />
-            <span className="about-panel-kanji" aria-hidden="true">旅人</span>
-            <span className="about-panel-label mono">London · 2026</span>
+        <StageHead num="SYS.01" name="input" title="Subject profile." />
+        <div className="input-grid">
+          <Reveal className="profile-panel" delay={100}>
+            <div className="pp-head mono">subject_data</div>
+            <dl className="pp-rows">
+              <div><dt className="mono">name</dt><dd>Benyamin Mahamed</dd></div>
+              <div><dt className="mono">role</dt><dd>Software Engineer</dd></div>
+              <div><dt className="mono">education</dt><dd>BSc Computer Science, University of Westminster</dd></div>
+              <div><dt className="mono">location</dt><dd>London, United Kingdom</dd></div>
+              <div><dt className="mono">languages</dt><dd>7+ spoken · Python primary</dd></div>
+              <div><dt className="mono">availability</dt><dd className="pp-avail">Immediate</dd></div>
+            </dl>
           </Reveal>
           <div>
-            <Reveal className="about-copy" delay={120}>
+            <Reveal className="input-copy" delay={140}>
               <p>
-                CS graduate from the <strong>University of Westminster</strong>. I
-                engineer systems that ship — backend architecture, database design,
-                computer vision pipelines, and AI integration, running in production
+                I engineer systems that ship. Backend architecture, database design,
+                computer vision pipelines, and AI integration — running in production
                 rather than sitting in a repo.
               </p>
               <p>
                 I co-founded <strong>The Blueprint Brief</strong>, a live editorial
                 platform serving over 1,000 registered users, built end-to-end with
-                Django and PostgreSQL. My final-year dissertation produced a
-                real-time autonomous navigation system running at ~14 FPS on a
-                Raspberry Pi 5.
+                Django and PostgreSQL. My final-year dissertation produced a real-time
+                autonomous navigation system on a Raspberry Pi 5 — the vision pipeline
+                this site's interface is modelled on.
               </p>
             </Reveal>
-            <Reveal className="stat-strip" delay={180}>
-              <div className="stat-cell"><strong>1,000+</strong><span className="mono">Users</span></div>
-              <div className="stat-cell"><strong>7+</strong><span className="mono">Languages</span></div>
-              <div className="stat-cell"><strong>4+</strong><span className="mono">Projects</span></div>
-              <div className="stat-cell"><strong>BSc</strong><span className="mono">CS Honours</span></div>
-            </Reveal>
-            <Reveal className="tag-row" delay={220}>
+            <Reveal className="tag-row" delay={200}>
               {['Full-stack development', 'AI / ML', 'Computer vision', 'Embedded systems', 'REST APIs', 'Database architecture'].map(t => (
-                <span key={t} className="tag">{t}</span>
+                <span key={t} className="tag mono">{t}</span>
               ))}
             </Reveal>
           </div>

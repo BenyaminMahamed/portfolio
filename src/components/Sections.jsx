@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Eyebrow, Reveal } from './Core'
-import { PROJECTS, FILTERS, SKILL_GROUPS } from '../data/content'
+import { Reveal, StageHead } from './Core'
+import { PROJECTS, FILTERS, SKILL_GROUPS, CONTACT_LINKS } from '../data/content'
 
-/* ── WORK — EP.02 ───────────────────────────────────────────── */
-export function Work() {
+/* ── DETECTIONS — SYS.02 (Projects) ─────────────────────────── */
+export function Detections() {
   const [filter, setFilter] = useState('all')
 
   const visible = useMemo(
@@ -12,18 +12,17 @@ export function Work() {
   )
 
   return (
-    <section className="section section--navy" id="work">
+    <section className="section section--panel" id="detections">
       <div className="wrap">
-        <Eyebrow num="EP.02" title="The Work" />
-        <div className="work-head">
-          <Reveal as="h2" className="section-title">
-            Production <em>architecture.</em>
-          </Reveal>
-          <Reveal className="filters" delay={80} role="group" aria-label="Filter projects">
+        <div className="stage-head-row">
+          <div>
+            <StageHead num="SYS.02" name="detections" title="Objects detected: production systems." />
+          </div>
+          <Reveal className="filters" delay={100} role="group" aria-label="Filter projects">
             {FILTERS.map(f => (
               <button
                 key={f.id}
-                className={`filter-btn ${filter === f.id ? 'active' : ''}`}
+                className={`filter-btn mono ${filter === f.id ? 'active' : ''}`}
                 onClick={() => setFilter(f.id)}
                 aria-pressed={filter === f.id}
               >
@@ -33,44 +32,51 @@ export function Work() {
           </Reveal>
         </div>
 
-        <div className="project-grid">
+        <div className="det-grid">
           {visible.map((p, i) => (
             <Reveal
               key={p.id}
               as="article"
-              delay={i * 60}
-              className={`project-card ${p.featured ? 'project-card--featured' : ''}`}
+              delay={i * 70}
+              className={`det-card ${p.featured ? 'det-card--featured' : ''}`}
             >
-              <span className="project-ghost" aria-hidden="true">
-                {String(p.id).padStart(2, '0')}
-              </span>
-              <div className={`project-status st-${p.statusType}`}>
-                {p.statusType === 'live' && <span className="status-dot" aria-hidden="true" />}
-                <span className="mono">{p.status}</span>
+              <span className="dc-tick dc-tick-tl" aria-hidden="true" />
+              <span className="dc-tick dc-tick-tr" aria-hidden="true" />
+              <span className="dc-tick dc-tick-bl" aria-hidden="true" />
+              <span className="dc-tick dc-tick-br" aria-hidden="true" />
+
+              <div className="dc-meta mono">
+                <span className="dc-id">det_{String(p.id).padStart(2, '0')}</span>
+                <span className="dc-conf">conf {p.conf}</span>
+                <span className={`dc-status dc-status--${p.statusType}`}>
+                  {p.statusType === 'live' && <span className="status-dot" aria-hidden="true" />}
+                  {p.status}
+                </span>
               </div>
-              <h3 className="project-title">{p.title}</h3>
-              <p className="project-desc">{p.desc}</p>
+
+              <h3 className="dc-title">{p.title}</h3>
+              <p className="dc-desc">{p.desc}</p>
+
               {p.stats.length > 0 && (
-                <div className="project-stats">
+                <div className="dc-stats mono">
                   {p.stats.map(s => (
-                    <div key={s.label}>
-                      <strong>{s.val}</strong>
-                      <span className="mono">{s.label}</span>
-                    </div>
+                    <span key={s.label}><strong>{s.val}</strong> {s.label}</span>
                   ))}
                 </div>
               )}
-              <ul className="tech-row" aria-label="Technologies">
+
+              <ul className="dc-tech mono" aria-label="Technologies">
                 {p.tech.map(t => <li key={t}>{t}</li>)}
               </ul>
-              <div className="project-links">
+
+              <div className="dc-links">
                 {p.links.map(l => (
                   <a
                     key={l.url}
                     href={l.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`project-link ${l.primary ? 'project-link--primary' : ''}`}
+                    className={`dc-link mono ${l.primary ? 'dc-link--primary' : ''}`}
                   >
                     {l.label} →
                   </a>
@@ -84,8 +90,8 @@ export function Work() {
   )
 }
 
-/* ── ARSENAL — EP.03 ────────────────────────────────────────── */
-function SkillBar({ name, pct }) {
+/* ── WEIGHTS — SYS.03 (Skills) ──────────────────────────────── */
+function WeightBar({ name, pct }) {
   const ref = useRef(null)
   const [w, setW] = useState(0)
 
@@ -106,40 +112,36 @@ function SkillBar({ name, pct }) {
   }, [pct])
 
   return (
-    <div className="skill-row" ref={ref}>
-      <span className="skill-name">{name}</span>
-      <span className="skill-val mono" aria-hidden="true">{pct}</span>
+    <div className="weight-row" ref={ref}>
+      <span className="weight-name">{name}</span>
+      <span className="weight-val mono">{(pct / 100).toFixed(2)}</span>
       <div
-        className="skill-bar"
+        className="weight-bar"
         role="meter"
         aria-valuenow={pct}
         aria-valuemin={0}
         aria-valuemax={100}
         aria-label={`${name} proficiency`}
-        style={{ gridColumn: '1 / -1' }}
       >
-        <div className="skill-fill" style={{ width: `${w}%` }} />
+        <div className="weight-fill" style={{ width: `${w}%` }} />
       </div>
     </div>
   )
 }
 
-export function Arsenal() {
+export function Weights() {
   return (
-    <section className="section" id="arsenal">
+    <section className="section" id="weights">
       <div className="wrap">
-        <Eyebrow num="EP.03" title="The Arsenal" />
-        <Reveal as="h2" className="section-title">
-          Core <em>competencies.</em>
-        </Reveal>
-        <div className="skills-grid">
+        <StageHead num="SYS.03" name="weights" title="Model weights." />
+        <div className="weights-grid">
           {SKILL_GROUPS.map((g, gi) => (
-            <Reveal key={g.num} className="skill-group" delay={gi * 70}>
-              <div className="skill-group-head">
-                <span className="skill-group-num" aria-hidden="true">{g.num}</span>
-                <h3 className="skill-group-title mono">{g.title}</h3>
+            <Reveal key={g.num} className="weight-group" delay={gi * 80}>
+              <div className="wg-head mono">
+                <span className="wg-num">{g.num}</span>
+                <span>{g.title}</span>
               </div>
-              {g.skills.map(s => <SkillBar key={s.name} {...s} />)}
+              {g.skills.map(s => <WeightBar key={s.name} {...s} />)}
             </Reveal>
           ))}
         </div>
@@ -148,22 +150,19 @@ export function Arsenal() {
   )
 }
 
-/* ── ARCHIVE — EP.04 — live GitHub ──────────────────────────── */
+/* ── BUFFER — SYS.04 (GitHub archive) ───────────────────────── */
 const GH_USER = 'BenyaminMahamed'
 const HIDDEN_PATTERNS = [/jpmc/i, /forage/i, /blueprint/i]
 
 const FEATURED_REPO = {
-  id: 'featured-bpb',
   name: 'The Blueprint Brief',
-  description:
-    'Production Django + PostgreSQL editorial platform. Private repository — the live site is the demo.',
+  description: 'Production Django + PostgreSQL editorial platform. Private repository — the live site is the demo.',
   language: 'Django',
-  featured: true,
   liveUrl: 'https://theblueprintbrief.com',
 }
 
-export function Archive() {
-  const [repos, setRepos] = useState(null) // null = loading, [] = loaded
+export function Buffer() {
+  const [repos, setRepos] = useState(null)
   const [error, setError] = useState(false)
   const [search, setSearch] = useState('')
   const [lang, setLang] = useState('all')
@@ -180,17 +179,20 @@ export function Archive() {
         const cleaned = data
           .filter(r => !r.fork)
           .filter(r => !HIDDEN_PATTERNS.some(p => p.test(r.name)))
-          .sort((a, b) => b.stargazers_count - a.stargazers_count || new Date(b.pushed_at) - new Date(a.pushed_at))
+          .sort((a, b) =>
+            b.stargazers_count - a.stargazers_count ||
+            new Date(b.pushed_at) - new Date(a.pushed_at)
+          )
         setRepos(cleaned)
       })
       .catch(() => { if (!cancelled) setError(true) })
     return () => { cancelled = true }
   }, [])
 
-  const langs = useMemo(() => {
-    if (!repos) return []
-    return [...new Set(repos.map(r => r.language).filter(Boolean))]
-  }, [repos])
+  const langs = useMemo(
+    () => (repos ? [...new Set(repos.map(r => r.language).filter(Boolean))] : []),
+    [repos]
+  )
 
   const visible = useMemo(() => {
     if (!repos) return []
@@ -211,25 +213,24 @@ export function Archive() {
       FEATURED_REPO.name.toLowerCase().includes(search.trim().toLowerCase()))
 
   return (
-    <section className="section section--soft" id="archive">
+    <section className="section section--panel" id="buffer">
       <div className="wrap">
-        <Eyebrow num="EP.04" title="The Archive" />
-        <div className="archive-head">
-          <Reveal as="h2" className="section-title">
-            Repository <em>index.</em>
-          </Reveal>
-          <Reveal className="archive-controls" delay={80}>
+        <div className="stage-head-row">
+          <div>
+            <StageHead num="SYS.04" name="buffer" title="Frame buffer: repository index." />
+          </div>
+          <Reveal className="buffer-controls" delay={100}>
             <input
               type="search"
-              className="archive-search"
-              placeholder="Search repositories…"
+              className="buffer-search mono"
+              placeholder="grep repositories…"
               aria-label="Search repositories"
               value={search}
               onChange={e => setSearch(e.target.value)}
             />
             <div className="filters" role="group" aria-label="Filter by language">
               <button
-                className={`filter-btn ${lang === 'all' ? 'active' : ''}`}
+                className={`filter-btn mono ${lang === 'all' ? 'active' : ''}`}
                 onClick={() => setLang('all')}
                 aria-pressed={lang === 'all'}
               >
@@ -238,7 +239,7 @@ export function Archive() {
               {langs.map(l => (
                 <button
                   key={l}
-                  className={`filter-btn ${lang === l ? 'active' : ''}`}
+                  className={`filter-btn mono ${lang === l ? 'active' : ''}`}
                   onClick={() => setLang(l)}
                   aria-pressed={lang === l}
                 >
@@ -251,12 +252,10 @@ export function Archive() {
 
         <div className="repo-grid" aria-live="polite">
           {error && (
-            <div className="repo-msg mono">
-              Couldn't reach GitHub — view the profile directly below.
-            </div>
+            <div className="repo-msg mono">connection refused — open the profile directly below.</div>
           )}
           {!error && repos === null && (
-            <div className="repo-msg mono">Fetching repositories…</div>
+            <div className="repo-msg mono">reading buffer<span className="caret">▮</span></div>
           )}
           {!error && repos !== null && (
             <>
@@ -264,10 +263,10 @@ export function Archive() {
                 <article className="repo-card repo-card--featured">
                   <h3 className="repo-name">
                     {FEATURED_REPO.name}
-                    <span className="repo-badge">Featured</span>
+                    <span className="repo-badge mono">featured</span>
                   </h3>
                   <p className="repo-desc">{FEATURED_REPO.description}</p>
-                  <div className="repo-meta">
+                  <div className="repo-meta mono">
                     <span className="repo-lang">{FEATURED_REPO.language}</span>
                     <a
                       href={FEATURED_REPO.liveUrl}
@@ -275,7 +274,7 @@ export function Archive() {
                       rel="noopener noreferrer"
                       className="repo-link repo-link--live"
                     >
-                      Live site →
+                      live →
                     </a>
                   </div>
                 </article>
@@ -284,7 +283,7 @@ export function Archive() {
                 <article key={r.id} className="repo-card">
                   <h3 className="repo-name">{r.name}</h3>
                   <p className="repo-desc">{r.description || 'No description provided.'}</p>
-                  <div className="repo-meta">
+                  <div className="repo-meta mono">
                     {r.language && <span className="repo-lang">{r.language}</span>}
                     <a
                       href={r.html_url}
@@ -292,7 +291,7 @@ export function Archive() {
                       rel="noopener noreferrer"
                       className="repo-link"
                     >
-                      View →
+                      view →
                     </a>
                     {r.stargazers_count > 0 && (
                       <span className="repo-stars">★ {r.stargazers_count}</span>
@@ -301,20 +300,20 @@ export function Archive() {
                 </article>
               ))}
               {visible.length === 0 && !showFeatured && (
-                <div className="repo-msg mono">No repositories match that filter.</div>
+                <div className="repo-msg mono">0 results — adjust filter.</div>
               )}
             </>
           )}
         </div>
 
-        <div className="archive-foot">
+        <div className="buffer-foot">
           <a
             href={`https://github.com/${GH_USER}`}
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-ghost"
           >
-            View full GitHub profile →
+            Full GitHub profile →
           </a>
         </div>
       </div>
@@ -322,58 +321,44 @@ export function Archive() {
   )
 }
 
-/* ── CONTACT — EP.05 ────────────────────────────────────────── */
-const CONTACT_LINKS = [
-  { platform: 'Email', handle: 'benyaminmahamed@gmail.com', url: 'mailto:benyaminmahamed@gmail.com' },
-  { platform: 'GitHub', handle: 'BenyaminMahamed', url: 'https://github.com/BenyaminMahamed' },
-  { platform: 'LinkedIn', handle: 'benyamin-mahamed', url: 'https://www.linkedin.com/in/benyamin-mahamed/' },
-  { platform: 'Live platform', handle: 'theblueprintbrief.com', url: 'https://theblueprintbrief.com' },
-]
-
-export function Contact() {
+/* ── TRANSMIT — SYS.05 (Contact) ────────────────────────────── */
+export function Transmit() {
   return (
-    <section className="section section--navy" id="contact">
+    <section className="section" id="transmit">
       <div className="wrap">
-        <Eyebrow num="EP.05" title="Unfinished Business" />
-        <div className="contact-grid">
+        <StageHead num="SYS.05" name="transmit" title="Open a channel." />
+        <div className="transmit-grid">
           <div>
-            <Reveal as="h2" className="section-title">
-              Let's build <em>something real.</em>
-            </Reveal>
-            <Reveal as="p" className="contact-sub" delay={80}>
+            <Reveal as="p" className="transmit-sub" delay={80}>
               Seeking graduate software engineering, AI/ML, and full-stack roles
               in London. Available immediately — open to hybrid and on-site.
             </Reveal>
             <Reveal delay={140}>
               <a href="mailto:benyaminmahamed@gmail.com" className="btn btn-primary">
-                Start a conversation
+                Transmit message →
               </a>
             </Reveal>
           </div>
-          <Reveal className="contact-list" delay={120}>
+          <Reveal className="channel-list" delay={120}>
             {CONTACT_LINKS.map(c => (
               <a
                 key={c.platform}
                 href={c.url}
                 target={c.url.startsWith('mailto') ? undefined : '_blank'}
                 rel={c.url.startsWith('mailto') ? undefined : 'noopener noreferrer'}
-                className="contact-row"
+                className="channel-row"
               >
-                <span>
-                  <span className="contact-row-platform mono">{c.platform}</span>
-                  <span className="contact-row-handle">{c.handle}</span>
-                </span>
-                <span className="contact-row-arrow" aria-hidden="true">→</span>
+                <span className="channel-platform mono">{c.platform}</span>
+                <span className="channel-handle">{c.handle}</span>
+                <span className="channel-arrow" aria-hidden="true">→</span>
               </a>
             ))}
           </Reveal>
         </div>
 
         <footer className="endcard">
-          <div className="endcard-rule" aria-hidden="true" />
-          <p className="endcard-title">To Be Continued…</p>
-          <p className="endcard-sub mono">
-            Benyamin Mahamed · Software Engineer · London · 2026
+          <p className="endcard-line mono">
+            end_of_stream · benyamin_mahamed · software_engineer · london · 2026 <span className="caret caret-idle">▮</span>
           </p>
         </footer>
       </div>
