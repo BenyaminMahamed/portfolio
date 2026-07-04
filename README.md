@@ -2,7 +2,7 @@
 
 Computer Science graduate (BSc Hons, University of Westminster, 2026) based in London. I build things at the intersection of backend engineering and applied AI — RAG pipelines, computer vision systems, and production web platforms.
 
-Currently looking for junior software engineering and AI/ML roles.
+Currently looking for junior Software engineering, Full stack and Frontend roles.
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/benyamin-mahamed)
 [![GitHub](https://img.shields.io/badge/GitHub-Follow-black?style=for-the-badge&logo=github)](https://github.com/BenyaminMahamed)
