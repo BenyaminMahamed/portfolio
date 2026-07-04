@@ -1,366 +1,281 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { Reveal, StageHead } from './Core'
-import { PROJECTS, FILTERS, SKILL_GROUPS, CONTACT_LINKS } from '../data/content'
+// src/components/Sections.jsx
+// Kinetic Minimalist — Work grid, Letterbox modal, About, Stack, Contact.
+import { useEffect, useRef, useState } from 'react'
+import { Reveal, Sq } from './Core'
+import { PROJECTS, STACK, FACTS, LINKS } from '../data/content'
 
-/* ── DETECTIONS — SYS.02 (Projects) ─────────────────────────── */
-export function Detections() {
-  const [filter, setFilter] = useState('all')
-
-  const visible = useMemo(
-    () => PROJECTS.filter(p => filter === 'all' || p.tags.includes(filter)),
-    [filter]
-  )
-
+/* ── Stat row (shared by panels + modal) ────────────────────── */
+function StatRow({ stats, dark }) {
+  if (!stats.length) return null
   return (
-    <section className="section section--panel" id="detections">
-      <div className="wrap">
-        <div className="stage-head-row">
-          <div>
-            <StageHead num="SYS.02" name="detections" title="Objects detected: production systems." />
+    <div className="flex flex-wrap gap-x-8 gap-y-3 mt-6">
+      {stats.map(s => (
+        <div key={s.label}>
+          <div className="disp" style={{ fontSize: '1.7rem' }}>{s.val}</div>
+          <div className="mono" style={{ fontSize: '.6rem', opacity: dark ? 0.75 : 0.65, fontWeight: 500 }}>
+            {s.label}
           </div>
-          <Reveal className="filters" delay={100} role="group" aria-label="Filter projects">
-            {FILTERS.map(f => (
-              <button
-                key={f.id}
-                className={`filter-btn mono ${filter === f.id ? 'active' : ''}`}
-                onClick={() => setFilter(f.id)}
-                aria-pressed={filter === f.id}
-              >
-                {f.label}
-              </button>
-            ))}
-          </Reveal>
         </div>
+      ))}
+    </div>
+  )
+}
 
-        <div className="det-grid">
-          {visible.map((p, i) => (
-            <Reveal
-              key={p.id}
-              as="article"
-              delay={i * 70}
-              className={`det-card ${p.featured ? 'det-card--featured' : ''}`}
-            >
-              <span className="dc-tick dc-tick-tl" aria-hidden="true" />
-              <span className="dc-tick dc-tick-tr" aria-hidden="true" />
-              <span className="dc-tick dc-tick-bl" aria-hidden="true" />
-              <span className="dc-tick dc-tick-br" aria-hidden="true" />
-
-              <div className="dc-meta mono">
-                <span className="dc-id">det_{String(p.id).padStart(2, '0')}</span>
-                <span className="dc-conf">conf {p.conf}</span>
-                <span className={`dc-status dc-status--${p.statusType}`}>
-                  {p.statusType === 'live' && <span className="status-dot" aria-hidden="true" />}
-                  {p.status}
-                </span>
-              </div>
-
-              <h3 className="dc-title">{p.title}</h3>
-              <p className="dc-desc">{p.desc}</p>
-
-              {p.stats.length > 0 && (
-                <div className="dc-stats mono">
-                  {p.stats.map(s => (
-                    <span key={s.label}><strong>{s.val}</strong> {s.label}</span>
-                  ))}
-                </div>
-              )}
-
-              <ul className="dc-tech mono" aria-label="Technologies">
-                {p.tech.map(t => <li key={t}>{t}</li>)}
-              </ul>
-
-              <div className="dc-links">
-                {p.links.map(l => (
-                  <a
-                    key={l.url}
-                    href={l.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`dc-link mono ${l.primary ? 'dc-link--primary' : ''}`}
-                  >
-                    {l.label} →
-                  </a>
-                ))}
-              </div>
-            </Reveal>
-          ))}
+/* ── Project panel ──────────────────────────────────────────── */
+function Panel({ p, span, delay, onOpen }) {
+  return (
+    <Reveal delay={delay} className={span}>
+      <button className={`panel b3 h-full ${p.dark ? 'panel-dark' : ''}`}
+        style={p.dark ? { borderColor: 'var(--ink)' } : undefined}
+        onClick={e => onOpen(p, e)} aria-haspopup="dialog">
+        <div className="panel-head mono" style={{ fontSize: '.62rem', fontWeight: 600 }}>
+          <span>{p.num}</span>
+          <span style={{ color: p.dark ? 'var(--yellow)' : 'var(--crimson)' }}>{p.status}</span>
         </div>
+        <div className={`flex flex-col flex-1 p-5 md:p-7 ${p.dark ? 'halftone-paper' : ''}`}>
+          <h3 className="disp h-panel">{p.title}</h3>
+          <p className="mt-4 text-sm md:text-base" style={{ lineHeight: 1.6, maxWidth: 520, opacity: p.dark ? 0.92 : 1 }}>
+            {p.desc}
+          </p>
+          <StatRow stats={p.stats} dark={p.dark} />
+          <div className="flex flex-wrap gap-2 mt-6">
+            {p.tech.map(t => <span className="badge" key={t}>{t}</span>)}
+          </div>
+          <div className="mt-auto pt-8">
+            <span className="panel-cta mono inline-flex items-center gap-2"
+              style={{ fontSize: '.68rem', fontWeight: 600, border: '2px solid currentColor', padding: '.55rem .9rem', minHeight: 40 }}>
+              Open case study →
+            </span>
+          </div>
+        </div>
+      </button>
+    </Reveal>
+  )
+}
+
+/* ── Work grid — uneven manga panels ────────────────────────── */
+export function Work({ onOpen }) {
+  const spans = ['md:col-span-7', 'md:col-span-5', 'md:col-span-5', 'md:col-span-7']
+  return (
+    <section id="work" className="px-5 md:px-14 pt-24 pb-8">
+      <Reveal>
+        <div style={{ borderBottom: '3px solid var(--ink)', paddingBottom: '1.1rem', marginBottom: '2.6rem' }}>
+          <p className="mono flex items-center gap-3" style={{ fontSize: '.72rem', fontWeight: 600 }}>
+            <Sq c="var(--crimson)" />
+            Selected work — read in order
+          </p>
+          <h2 className="disp h-sec text-right" style={{ marginTop: '.6rem' }}>
+            Projects<span style={{ color: 'var(--crimson)' }}>.</span>
+          </h2>
+        </div>
+      </Reveal>
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-5 md:gap-6" style={{ gridAutoRows: '1fr' }}>
+        {PROJECTS.map((p, i) => (
+          <Panel key={p.id} p={p} span={spans[i]} delay={(i % 2) * 70} onOpen={onOpen} />
+        ))}
       </div>
     </section>
   )
 }
 
-/* ── WEIGHTS — SYS.03 (Skills) ──────────────────────────────── */
-function WeightBar({ name, pct }) {
-  const ref = useRef(null)
-  const [w, setW] = useState(0)
+/* ── Letterbox case-study modal ─────────────────────────────── */
+export function Letterbox({ project, onClose }) {
+  const [open, setOpen] = useState(false)
+  const closeRef = useRef(null)
 
   useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setW(pct)
-          obs.disconnect()
-        }
-      },
-      { threshold: 0.4 }
-    )
-    obs.observe(el)
-    return () => obs.disconnect()
-  }, [pct])
+    document.body.style.overflow = 'hidden'
+    const id = requestAnimationFrame(() => setOpen(true))
+    const t = setTimeout(() => closeRef.current && closeRef.current.focus(), 260)
+    const onKey = e => e.key === 'Escape' && onClose()
+    window.addEventListener('keydown', onKey)
+    return () => {
+      cancelAnimationFrame(id)
+      clearTimeout(t)
+      window.removeEventListener('keydown', onKey)
+      document.body.style.overflow = ''
+    }
+  }, [onClose])
+
+  const rows = [
+    ['Problem', project.study.problem],
+    ['Build', project.study.build],
+    ['Result', project.study.result],
+  ]
 
   return (
-    <div className="weight-row" ref={ref}>
-      <span className="weight-name">{name}</span>
-      <span className="weight-val mono">{(pct / 100).toFixed(2)}</span>
-      <div
-        className="weight-bar"
-        role="meter"
-        aria-valuenow={pct}
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-label={`${name} proficiency`}
-      >
-        <div className="weight-fill" style={{ width: `${w}%` }} />
+    <div className={`fixed inset-0 z-50 ${open ? 'lb-open' : ''}`}
+      role="dialog" aria-modal="true" aria-labelledby="lb-title">
+      <div className="absolute inset-0" style={{ background: 'rgba(20,17,21,.55)' }} onClick={onClose} />
+      <div className="lb-bar" style={{ top: 0 }} aria-hidden="true" />
+      <div className="lb-bar" style={{ bottom: 0 }} aria-hidden="true" />
+      <button ref={closeRef} className="lb-close" onClick={onClose} aria-label="Close case study">✕</button>
+
+      <div className="lb-frame">
+        <div className="mx-auto px-5 md:px-10 py-8 md:py-12" style={{ maxWidth: 820 }}>
+          <p className="mono flex items-center justify-between"
+            style={{ fontSize: '.64rem', fontWeight: 600, color: 'var(--crimson)' }}>
+            <span>Case study — {project.num}</span>
+            <span>{project.status}</span>
+          </p>
+          <h3 id="lb-title" className="disp h-modal mt-4"
+            style={{ borderBottom: '3px solid var(--ink)', paddingBottom: '1rem' }}>
+            {project.title}
+          </h3>
+
+          <div className="flex flex-wrap gap-2 mt-5">
+            {project.tech.map(t => <span className="badge" key={t}>{t}</span>)}
+          </div>
+
+          {rows.map(([h, body]) => (
+            <div key={h} className="mt-8">
+              <h4 className="mono" style={{ fontSize: '.68rem', fontWeight: 600, color: 'var(--crimson)', margin: 0 }}>
+                {h}
+              </h4>
+              <p className="mt-2 text-sm md:text-base" style={{ lineHeight: 1.7, margin: '.5rem 0 0' }}>
+                {body}
+              </p>
+            </div>
+          ))}
+
+          {project.stats.length > 0 && (
+            <div className="flex flex-wrap gap-x-10 gap-y-4 mt-10 b3 p-5"
+              style={{ background: 'var(--indigo)', color: 'var(--paper)' }}>
+              {project.stats.map(s => (
+                <div key={s.label}>
+                  <div className="disp" style={{ fontSize: '2.1rem' }}>{s.val}</div>
+                  <div className="mono" style={{ fontSize: '.6rem', opacity: 0.8, fontWeight: 500 }}>{s.label}</div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="flex flex-wrap gap-4 mt-10 pb-4">
+            {project.links.map(l => (
+              <a key={l.url} href={l.url} target="_blank" rel="noreferrer"
+                className={`btn ${l.primary ? 'btn-yellow' : 'btn-ghost'}`}>
+                {l.label} ↗
+              </a>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   )
 }
 
-export function Weights() {
+/* ── About ──────────────────────────────────────────────────── */
+export function About() {
   return (
-    <section className="section" id="weights">
-      <div className="wrap">
-        <StageHead num="SYS.03" name="weights" title="Model weights." />
-        <div className="weights-grid">
-          {SKILL_GROUPS.map((g, gi) => (
-            <Reveal key={g.num} className="weight-group" delay={gi * 80}>
-              <div className="wg-head mono">
-                <span className="wg-num">{g.num}</span>
-                <span>{g.title}</span>
+    <section id="about" className="px-5 md:px-14 pt-24 pb-4">
+      <Reveal>
+        <p className="mono flex items-center gap-3" style={{ fontSize: '.72rem', fontWeight: 600 }}>
+          <Sq />
+          About
+        </p>
+        <h2 className="disp h-sec" style={{ marginTop: '.6rem' }}>
+          The short version<span style={{ color: 'var(--crimson)' }}>.</span>
+        </h2>
+      </Reveal>
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mt-10">
+        <Reveal className="md:col-span-7">
+          <p className="text-base md:text-lg" style={{ lineHeight: 1.7, maxWidth: 600 }}>
+            Computer science graduate working across the stack — Django, PostgreSQL and REST
+            APIs behind the scenes, JavaScript and React in front. Most of my production
+            mileage comes from The Blueprint Brief, a live editorial platform I co-founded
+            and keep running for 1,000+ users.
+          </p>
+          <p className="text-base md:text-lg mt-5" style={{ lineHeight: 1.7, maxWidth: 600 }}>
+            Currently a Mac Engineer at AGK Tech Solutions while interviewing for junior
+            software engineering roles in London. Away from a keyboard: competitive
+            basketball, and an ongoing habit of turning box scores into datasets.
+          </p>
+        </Reveal>
+        <Reveal delay={90} className="md:col-span-5">
+          <div className="b3 shadow-hard halftone-paper p-6" style={{ background: 'var(--indigo)', color: 'var(--paper)' }}>
+            {FACTS.map(([k, v], i) => (
+              <div key={k} className="flex items-baseline justify-between gap-4 py-3"
+                style={{ borderBottom: i < FACTS.length - 1 ? '1px solid rgba(241,237,227,.25)' : 'none' }}>
+                <span className="mono" style={{ fontSize: '.62rem', fontWeight: 600, color: 'var(--yellow)' }}>{k}</span>
+                <span className="text-sm text-right" style={{ fontWeight: 600 }}>{v}</span>
               </div>
-              {g.skills.map(s => <WeightBar key={s.name} {...s} />)}
-            </Reveal>
-          ))}
-        </div>
+            ))}
+          </div>
+        </Reveal>
       </div>
     </section>
   )
 }
 
-/* ── BUFFER — SYS.04 (GitHub archive) ───────────────────────── */
-const GH_USER = 'BenyaminMahamed'
-const HIDDEN_PATTERNS = [/jpmc/i, /forage/i, /blueprint/i]
-
-const FEATURED_REPO = {
-  name: 'The Blueprint Brief',
-  description: 'Production Django + PostgreSQL editorial platform. Private repository — the live site is the demo.',
-  language: 'Django',
-  liveUrl: 'https://theblueprintbrief.com',
-}
-
-export function Buffer() {
-  const [repos, setRepos] = useState(null)
-  const [error, setError] = useState(false)
-  const [search, setSearch] = useState('')
-  const [lang, setLang] = useState('all')
-
-  useEffect(() => {
-    let cancelled = false
-    fetch(`https://api.github.com/users/${GH_USER}/repos?per_page=100&sort=updated`)
-      .then(r => {
-        if (!r.ok) throw new Error(`GitHub API ${r.status}`)
-        return r.json()
-      })
-      .then(data => {
-        if (cancelled) return
-        const cleaned = data
-          .filter(r => !r.fork)
-          .filter(r => !HIDDEN_PATTERNS.some(p => p.test(r.name)))
-          .sort((a, b) =>
-            b.stargazers_count - a.stargazers_count ||
-            new Date(b.pushed_at) - new Date(a.pushed_at)
-          )
-        setRepos(cleaned)
-      })
-      .catch(() => { if (!cancelled) setError(true) })
-    return () => { cancelled = true }
-  }, [])
-
-  const langs = useMemo(
-    () => (repos ? [...new Set(repos.map(r => r.language).filter(Boolean))] : []),
-    [repos]
-  )
-
-  const visible = useMemo(() => {
-    if (!repos) return []
-    const q = search.trim().toLowerCase()
-    return repos.filter(r => {
-      const matchLang = lang === 'all' || r.language === lang
-      const matchQ =
-        !q ||
-        r.name.toLowerCase().includes(q) ||
-        (r.description || '').toLowerCase().includes(q)
-      return matchLang && matchQ
-    })
-  }, [repos, search, lang])
-
-  const showFeatured =
-    lang === 'all' &&
-    (!search.trim() ||
-      FEATURED_REPO.name.toLowerCase().includes(search.trim().toLowerCase()))
-
+/* ── Stack ──────────────────────────────────────────────────── */
+export function Stack() {
   return (
-    <section className="section section--panel" id="buffer">
-      <div className="wrap">
-        <div className="stage-head-row">
-          <div>
-            <StageHead num="SYS.04" name="buffer" title="Frame buffer: repository index." />
-          </div>
-          <Reveal className="buffer-controls" delay={100}>
-            <input
-              type="search"
-              className="buffer-search mono"
-              placeholder="grep repositories…"
-              aria-label="Search repositories"
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-            />
-            <div className="filters" role="group" aria-label="Filter by language">
-              <button
-                className={`filter-btn mono ${lang === 'all' ? 'active' : ''}`}
-                onClick={() => setLang('all')}
-                aria-pressed={lang === 'all'}
-              >
-                All
-              </button>
-              {langs.map(l => (
-                <button
-                  key={l}
-                  className={`filter-btn mono ${lang === l ? 'active' : ''}`}
-                  onClick={() => setLang(l)}
-                  aria-pressed={lang === l}
-                >
-                  {l}
-                </button>
-              ))}
+    <section id="stack" className="px-5 md:px-14 pt-24 pb-24">
+      <Reveal>
+        <p className="mono flex items-center gap-3" style={{ fontSize: '.72rem', fontWeight: 600 }}>
+          <Sq c="var(--crimson)" />
+          Tech stack
+        </p>
+        <h2 className="disp h-sec text-right"
+          style={{ marginTop: '.6rem', borderBottom: '3px solid var(--ink)', paddingBottom: '1.1rem' }}>
+          Tools of the trade<span style={{ color: 'var(--crimson)' }}>.</span>
+        </h2>
+      </Reveal>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
+        {STACK.map((g, gi) => (
+          <Reveal key={g.group} delay={gi * 70}>
+            <div className="b3 p-5 h-full" style={{ background: 'var(--paper)' }}>
+              <h3 className="disp" style={{ fontSize: '1.3rem', borderBottom: '3px solid var(--ink)', paddingBottom: '.6rem' }}>
+                {g.group}
+              </h3>
+              <div className="flex flex-wrap gap-2 mt-5">
+                {g.items.map(s => <span className="badge badge-hot" key={s}>{s}</span>)}
+              </div>
             </div>
           </Reveal>
-        </div>
-
-        <div className="repo-grid" aria-live="polite">
-          {error && (
-            <div className="repo-msg mono">connection refused — open the profile directly below.</div>
-          )}
-          {!error && repos === null && (
-            <div className="repo-msg mono">reading buffer<span className="caret">▮</span></div>
-          )}
-          {!error && repos !== null && (
-            <>
-              {showFeatured && (
-                <article className="repo-card repo-card--featured">
-                  <h3 className="repo-name">
-                    {FEATURED_REPO.name}
-                    <span className="repo-badge mono">featured</span>
-                  </h3>
-                  <p className="repo-desc">{FEATURED_REPO.description}</p>
-                  <div className="repo-meta mono">
-                    <span className="repo-lang">{FEATURED_REPO.language}</span>
-                    <a
-                      href={FEATURED_REPO.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="repo-link repo-link--live"
-                    >
-                      live →
-                    </a>
-                  </div>
-                </article>
-              )}
-              {visible.map(r => (
-                <article key={r.id} className="repo-card">
-                  <h3 className="repo-name">{r.name}</h3>
-                  <p className="repo-desc">{r.description || 'No description provided.'}</p>
-                  <div className="repo-meta mono">
-                    {r.language && <span className="repo-lang">{r.language}</span>}
-                    <a
-                      href={r.html_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="repo-link"
-                    >
-                      view →
-                    </a>
-                    {r.stargazers_count > 0 && (
-                      <span className="repo-stars">★ {r.stargazers_count}</span>
-                    )}
-                  </div>
-                </article>
-              ))}
-              {visible.length === 0 && !showFeatured && (
-                <div className="repo-msg mono">0 results — adjust filter.</div>
-              )}
-            </>
-          )}
-        </div>
-
-        <div className="buffer-foot">
-          <a
-            href={`https://github.com/${GH_USER}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn-ghost"
-          >
-            Full GitHub profile →
-          </a>
-        </div>
+        ))}
       </div>
     </section>
   )
 }
 
-/* ── TRANSMIT — SYS.05 (Contact) ────────────────────────────── */
-export function Transmit() {
+/* ── Contact + footer ───────────────────────────────────────── */
+export function Contact() {
   return (
-    <section className="section" id="transmit">
-      <div className="wrap">
-        <StageHead num="SYS.05" name="transmit" title="Open a channel." />
-        <div className="transmit-grid">
-          <div>
-            <Reveal as="p" className="transmit-sub" delay={80}>
-              Seeking graduate software engineering, AI/ML, and full-stack roles
-              in London. Available immediately — open to hybrid and on-site.
-            </Reveal>
-            <Reveal delay={140}>
-              <a href="mailto:benyaminmahamed@gmail.com" className="btn btn-primary">
-                Transmit message →
-              </a>
-            </Reveal>
-          </div>
-          <Reveal className="channel-list" delay={120}>
-            {CONTACT_LINKS.map(c => (
-              <a
-                key={c.platform}
-                href={c.url}
-                target={c.url.startsWith('mailto') ? undefined : '_blank'}
-                rel={c.url.startsWith('mailto') ? undefined : 'noopener noreferrer'}
-                className="channel-row"
-              >
-                <span className="channel-platform mono">{c.platform}</span>
-                <span className="channel-handle">{c.handle}</span>
-                <span className="channel-arrow" aria-hidden="true">→</span>
-              </a>
-            ))}
-          </Reveal>
-        </div>
-
-        <footer className="endcard">
-          <p className="endcard-line mono">
-            end_of_stream · benyamin_mahamed · software_engineer · london · 2026 <span className="caret caret-idle">▮</span>
+    <section id="contact" style={{ background: 'var(--ink)', color: 'var(--paper)' }}>
+      <div className="px-5 md:px-14 pt-24 pb-10">
+        <Reveal>
+          <p className="mono flex items-center gap-3" style={{ fontSize: '.72rem', fontWeight: 600, color: 'var(--yellow)' }}>
+            <Sq />
+            Contact
           </p>
-        </footer>
+          <h2 className="disp" style={{ fontSize: 'clamp(3rem,11vw,7.5rem)', marginTop: '.8rem' }}>
+            Let&rsquo;s talk<span style={{ color: 'var(--yellow)' }}>.</span>
+          </h2>
+          <p className="mt-6 text-base md:text-lg" style={{ maxWidth: 480, lineHeight: 1.65, opacity: 0.9 }}>
+            Hiring for a junior engineering role, or just want to talk shop? My inbox is open
+            and I answer fast.
+          </p>
+        </Reveal>
+        <Reveal delay={90}>
+          <div className="flex flex-wrap gap-4 mt-10">
+            <a href={LINKS.email} className="btn btn-yellow">Email me</a>
+            <a href={LINKS.linkedin} target="_blank" rel="noreferrer" className="btn btn-paper">LinkedIn ↗</a>
+            <a href={LINKS.github} target="_blank" rel="noreferrer" className="btn btn-paper">GitHub ↗</a>
+          </div>
+          <a href={LINKS.blueprint} target="_blank" rel="noreferrer" className="mono inline-block mt-8"
+            style={{ fontSize: '.72rem', fontWeight: 600, color: 'var(--yellow)', textUnderlineOffset: 5 }}>
+            Latest shipped work → theblueprintbrief.com
+          </a>
+        </Reveal>
+
+        <div className="flex items-center justify-between gap-4 mt-20 pt-6 mono"
+          style={{ borderTop: '1px solid rgba(241,237,227,.25)', fontSize: '.62rem', fontWeight: 500, opacity: 0.85 }}>
+          <span>© 2026 Benyamin Mahamed — London</span>
+          <a href="#top" className="flex items-center justify-center b3p"
+            style={{ width: 48, height: 48, color: 'var(--paper)', textDecoration: 'none', flex: 'none' }}
+            aria-label="Back to top">↑</a>
+        </div>
       </div>
     </section>
   )

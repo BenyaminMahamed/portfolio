@@ -1,137 +1,50 @@
+// src/components/Core.jsx
+// Kinetic Minimalist — shell components: Reveal, SideNav, MobileNav, Hero, Marquee.
 import { useEffect, useRef, useState } from 'react'
-import { STAGES } from '../data/content'
+import { NAV, LINKS } from '../data/content'
 
-/* ── Reveal — bracket-flash frame capture ───────────────────── */
+/* ── Reveal — one fast slide on scroll, no lazy fades ───────── */
 export function Reveal({ children, delay = 0, as: Tag = 'div', className = '', ...rest }) {
   const ref = useRef(null)
+  const [vis, setVis] = useState(false)
   useEffect(() => {
     const el = ref.current
     if (!el) return
     const obs = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => el.classList.add('in'), delay)
-          obs.disconnect()
-        }
+        if (entry.isIntersecting) { setVis(true); obs.disconnect() }
       },
-      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+      { threshold: 0.12 }
     )
     obs.observe(el)
     return () => obs.disconnect()
-  }, [delay])
+  }, [])
   return (
-    <Tag ref={ref} className={`reveal ${className}`} {...rest}>
+    <Tag
+      ref={ref}
+      className={`reveal ${vis ? 'in ' : ''}${className}`}
+      style={{ transitionDelay: `${delay}ms` }}
+      {...rest}
+    >
       {children}
     </Tag>
   )
 }
 
-/* ── Typed text hook ────────────────────────────────────────── */
-function useTyped(lines, { charDelay = 18, lineDelay = 260, start = true } = {}) {
-  const [output, setOutput] = useState(() => lines.map(() => ''))
-  const [done, setDone] = useState(false)
+/* ── Accent square ──────────────────────────────────────────── */
+export const Sq = ({ c = 'var(--yellow)' }) => (
+  <span
+    aria-hidden="true"
+    style={{ width: 12, height: 12, background: c, display: 'inline-block', flex: 'none' }}
+  />
+)
+
+/* ── Side rail nav (desktop) — with scroll-spy ──────────────── */
+export function SideNav() {
+  const [active, setActive] = useState('')
 
   useEffect(() => {
-    if (!start) return
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (reduced) {
-      setOutput(lines)
-      setDone(true)
-      return
-    }
-    let li = 0
-    let ci = 0
-    let cancelled = false
-    const timers = []
-
-    function tick() {
-      if (cancelled) return
-      if (li >= lines.length) { setDone(true); return }
-      ci++
-      const snapshot = lines.map((l, i) =>
-        i < li ? l : i === li ? l.slice(0, ci) : ''
-      )
-      setOutput(snapshot)
-      if (ci >= lines[li].length) {
-        li++; ci = 0
-        timers.push(setTimeout(tick, lineDelay))
-      } else {
-        timers.push(setTimeout(tick, charDelay))
-      }
-    }
-    timers.push(setTimeout(tick, 300))
-    return () => { cancelled = true; timers.forEach(clearTimeout) }
-  }, [start]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  return [output, done]
-}
-
-/* ── Live FPS meter — measures the actual page ──────────────── */
-function useFps() {
-  const [fps, setFps] = useState(60)
-  useEffect(() => {
-    let frames = 0
-    let last = performance.now()
-    let raf
-    const loop = now => {
-      frames++
-      if (now - last >= 500) {
-        setFps(Math.round((frames * 1000) / (now - last)))
-        frames = 0
-        last = now
-      }
-      raf = requestAnimationFrame(loop)
-    }
-    raf = requestAnimationFrame(loop)
-    return () => cancelAnimationFrame(raf)
-  }, [])
-  return fps
-}
-
-/* ── HUD chrome — fixed corner brackets + telemetry ─────────── */
-export function HudChrome() {
-  const fps = useFps()
-  const [clock, setClock] = useState('')
-
-  useEffect(() => {
-    const tick = () => {
-      const n = new Date()
-      setClock(
-        [n.getHours(), n.getMinutes(), n.getSeconds()]
-          .map(v => String(v).padStart(2, '0'))
-          .join(':')
-      )
-    }
-    tick()
-    const id = setInterval(tick, 1000)
-    return () => clearInterval(id)
-  }, [])
-
-  return (
-    <div className="hud" aria-hidden="true">
-      <span className="hud-corner hud-tl" />
-      <span className="hud-corner hud-tr" />
-      <span className="hud-corner hud-bl" />
-      <span className="hud-corner hud-br" />
-      <div className="hud-top-left mono">
-        <span className="rec-dot" /> feed_01 · live
-      </div>
-      <div className="hud-top-right mono">{fps} fps · {clock}</div>
-      <div className="hud-bottom mono">
-        <span>sys: benyamin_mahamed</span>
-        <span>loc: london_uk</span>
-        <span>status: available_now</span>
-      </div>
-    </div>
-  )
-}
-
-/* ── NAV ────────────────────────────────────────────────────── */
-export function Nav() {
-  const [active, setActive] = useState('input')
-
-  useEffect(() => {
-    const sections = STAGES.map(s => document.getElementById(s.id)).filter(Boolean)
+    const sections = NAV.map(n => document.getElementById(n.href.slice(1))).filter(Boolean)
     const obs = new IntersectionObserver(
       entries => entries.forEach(e => e.isIntersecting && setActive(e.target.id)),
       { rootMargin: '-35% 0px -55% 0px' }
@@ -141,144 +54,180 @@ export function Nav() {
   }, [])
 
   return (
-    <header className="nav">
-      <div className="nav-inner">
-        <a href="#top" className="nav-logo mono" aria-label="Benyamin Mahamed — home">
-          BM<span className="nav-logo-cursor">▮</span>
-        </a>
-        <nav className="nav-links" aria-label="Pipeline stages">
-          {STAGES.map(s => (
-            <a
-              key={s.id}
-              href={`#${s.id}`}
-              className={`nav-link mono ${active === s.id ? 'active' : ''}`}
-            >
-              {s.num}
-            </a>
-          ))}
-        </nav>
-        <a href="#transmit" className="nav-status mono">
-          <span className="status-dot" aria-hidden="true" />
-          available
-        </a>
+    <header className="hidden md:flex fixed left-0 top-0 bottom-0 z-40 flex-col items-center justify-between"
+      style={{ width: 64, background: 'var(--paper)', borderRight: '3px solid var(--ink)' }}>
+      <a href="#top" className="disp flex items-center justify-center w-full"
+        style={{ height: 64, fontSize: '1.15rem', borderBottom: '3px solid var(--ink)', color: 'var(--ink)', textDecoration: 'none' }}
+        aria-label="Back to top">
+        BM<span style={{ color: 'var(--crimson)' }}>.</span>
+      </a>
+      <nav className="vert flex items-center gap-1" aria-label="Primary">
+        {NAV.map(n => (
+          <a key={n.href} href={n.href} className={`navlink ${active === n.href.slice(1) ? 'active' : ''}`}>
+            {n.label}
+          </a>
+        ))}
+      </nav>
+      <div className="vert mono flex items-center gap-3 pb-5"
+        style={{ fontSize: '.6rem', color: 'var(--crimson)', fontWeight: 600 }}>
+        <Sq />
+        <span>Open to work — 2026</span>
       </div>
     </header>
   )
 }
 
-/* ── HERO — the detection sequence ──────────────────────────── */
-export function Hero() {
-  const [boxDrawn, setBoxDrawn] = useState(false)
-  const [typedLines, typedDone] = useTyped(
-    [
-      '> role: software_engineer',
-      '> stack: django · opencv · faiss · postgresql',
-      '> education: bsc_computer_science · westminster',
-      '> status: available_now · london',
-    ],
-    { start: boxDrawn }
-  )
+/* ── Top bar + full-screen menu (mobile) ────────────────────── */
+export function MobileNav() {
+  const [open, setOpen] = useState(false)
 
   useEffect(() => {
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const t = setTimeout(() => setBoxDrawn(true), reduced ? 0 : 500)
-    return () => clearTimeout(t)
-  }, [])
+    document.body.style.overflow = open ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [open])
 
-  return (
-    <section className="hero" id="top">
-      <div className="scanline" aria-hidden="true" />
-      <div className="hero-inner">
-        <p className="hero-pre mono">subject acquired</p>
+  useEffect(() => {
+    if (!open) return
+    const onKey = e => e.key === 'Escape' && setOpen(false)
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [open])
 
-        <div className={`det-box ${boxDrawn ? 'drawn' : ''}`}>
-          <span className="det-tick det-tick-tl" aria-hidden="true" />
-          <span className="det-tick det-tick-tr" aria-hidden="true" />
-          <span className="det-tick det-tick-bl" aria-hidden="true" />
-          <span className="det-tick det-tick-br" aria-hidden="true" />
-          <h1 className="hero-title">
-            Benyamin<br />Mahamed
-          </h1>
-        </div>
-
-        <div className="hero-typed mono" aria-label="Profile summary">
-          {typedLines.map((l, i) => (
-            <p key={i}>{l}</p>
-          ))}
-          <span className={`caret ${typedDone ? 'caret-idle' : ''}`} aria-hidden="true">▮</span>
-        </div>
-
-        <div className="hero-ctas">
-          <a href="#detections" className="btn btn-primary">View detections</a>
-          <a href="mailto:benyaminmahamed@gmail.com" className="btn btn-ghost">Transmit →</a>
-        </div>
-
-        <div className="hero-telemetry mono" aria-label="System metrics from final-year vision project">
-          <span><strong>~14</strong> fps_pipeline</span>
-          <span><strong>~10ms</strong> latency</span>
-          <span><strong>10,298</strong> frames_processed</span>
-          <span><strong>1,000+</strong> users_in_prod</span>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-/* ── Stage header ───────────────────────────────────────────── */
-export function StageHead({ num, name, title }) {
   return (
     <>
-      <Reveal className="stage-eyebrow">
-        <span className="mono stage-num">{num}</span>
-        <span className="mono stage-name">/ {name}</span>
-        <span className="stage-rule" aria-hidden="true" />
-      </Reveal>
-      <Reveal as="h2" className="stage-title" delay={60}>{title}</Reveal>
+      <header className="md:hidden fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-4"
+        style={{ height: 64, background: 'var(--paper)', borderBottom: '3px solid var(--ink)' }}>
+        <a href="#top" className="disp" style={{ fontSize: '1.2rem', color: 'var(--ink)', textDecoration: 'none' }}>
+          BM<span style={{ color: 'var(--crimson)' }}>.</span>
+        </a>
+        <button className="btn btn-ghost" style={{ minHeight: 48, padding: '0 1rem' }}
+          onClick={() => setOpen(true)} aria-expanded={open} aria-label="Open menu">
+          Menu
+        </button>
+      </header>
+
+      {open && (
+        <div className="fixed inset-0 z-50 flex flex-col" style={{ background: 'var(--ink)' }}
+          role="dialog" aria-modal="true" aria-label="Menu">
+          <div className="flex items-center justify-between px-4" style={{ height: 64, borderBottom: '3px solid var(--paper)' }}>
+            <span className="disp" style={{ fontSize: '1.2rem', color: 'var(--paper)' }}>
+              BM<span style={{ color: 'var(--yellow)' }}>.</span>
+            </span>
+            <button className="flex items-center justify-center"
+              style={{
+                width: 48, height: 48, border: '3px solid var(--yellow)', color: 'var(--yellow)',
+                background: 'transparent', fontFamily: 'var(--mono)', fontSize: '1rem', cursor: 'pointer',
+              }}
+              onClick={() => setOpen(false)} aria-label="Close menu">
+              ✕
+            </button>
+          </div>
+          <nav className="flex flex-col justify-center flex-1 px-6 gap-2" aria-label="Primary">
+            {NAV.map((n, i) => (
+              <a key={n.href} href={n.href} className="mm-link"
+                style={{ animationDelay: `${60 + i * 55}ms` }} onClick={() => setOpen(false)}>
+                {n.label}
+              </a>
+            ))}
+          </nav>
+          <a href={LINKS.email} className="px-6 pb-8 mono"
+            style={{ fontSize: '.7rem', color: 'var(--yellow)', textDecoration: 'none' }}>
+            {LINKS.email.replace('mailto:', '')}
+          </a>
+        </div>
+      )}
     </>
   )
 }
-
-/* ── INPUT — SYS.01 (About) ─────────────────────────────────── */
-export function Input() {
+/* ── Hero ───────────────────────────────────────────────────── */
+export function Hero() {
   return (
-    <section className="section" id="input">
-      <div className="wrap">
-        <StageHead num="SYS.01" name="input" title="Subject profile." />
-        <div className="input-grid">
-          <Reveal className="profile-panel" delay={100}>
-            <div className="pp-head mono">subject_data</div>
-            <dl className="pp-rows">
-              <div><dt className="mono">name</dt><dd>Benyamin Mahamed</dd></div>
-              <div><dt className="mono">role</dt><dd>Software Engineer</dd></div>
-              <div><dt className="mono">education</dt><dd>BSc Computer Science, University of Westminster</dd></div>
-              <div><dt className="mono">location</dt><dd>London, United Kingdom</dd></div>
-              <div><dt className="mono">languages</dt><dd>7+ spoken · Python primary</dd></div>
-              <div><dt className="mono">availability</dt><dd className="pp-avail">Immediate</dd></div>
-            </dl>
-          </Reveal>
-          <div>
-            <Reveal className="input-copy" delay={140}>
-              <p>
-                I engineer systems that ship. Backend architecture, database design,
-                computer vision pipelines, and AI integration — running in production
-                rather than sitting in a repo.
-              </p>
-              <p>
-                I co-founded <strong>The Blueprint Brief</strong>, a live editorial
-                platform serving over 1,000 registered users, built end-to-end with
-                Django and PostgreSQL. My final-year dissertation produced a real-time
-                autonomous navigation system on a Raspberry Pi 5 — the vision pipeline
-                this site's interface is modelled on.
-              </p>
-            </Reveal>
-            <Reveal className="tag-row" delay={200}>
-              {['Full-stack development', 'AI / ML', 'Computer vision', 'Embedded systems', 'REST APIs', 'Database architecture'].map(t => (
-                <span key={t} className="tag mono">{t}</span>
-              ))}
-            </Reveal>
+    <section
+      id="top"
+      className="relative flex flex-col justify-center overflow-hidden px-5 md:px-14"
+      style={{ minHeight: '100vh', paddingTop: 96, paddingBottom: 88 }}
+    >
+      {/* vertical print-tone rail, desktop only */}
+      <div
+        aria-hidden="true"
+        className="hidden lg:block absolute top-0 bottom-0 right-0 halftone"
+        style={{ width: 104, borderLeft: '3px solid var(--ink)', opacity: 0.28 }}
+      />
+      <div
+        aria-hidden="true"
+        className="hidden lg:flex vert absolute top-0 right-0 items-center gap-4 mono"
+        style={{
+          height: '100%', width: 104, justifyContent: 'center', fontSize: '.62rem',
+          fontWeight: 600, color: 'var(--crimson)', letterSpacing: '.4em',
+        }}
+      >
+        Portfolio — London — 2026
+      </div>
+
+      <div style={{ maxWidth: 1060 }}>
+        <Reveal>
+          <p className="mono flex items-center gap-3" style={{ fontSize: '.72rem', fontWeight: 600 }}>
+            <Sq />
+            Full-stack / frontend developer — London, UK
+          </p>
+        </Reveal>
+
+        <Reveal delay={60}>
+          <h1 className="disp h-hero" style={{ margin: '1.4rem 0 0' }}>
+            <span className="block">Benyamin</span>
+            <span className="inline-block b3 shadow-hard px-3 md:px-6 mt-2 md:mt-3 md:ml-24" style={{ background: 'var(--yellow)' }}>
+              Mahamed
+            </span>
+          </h1>
+        </Reveal>
+
+        <Reveal delay={130}>
+          <p className="mt-10 text-base md:text-lg" style={{ maxWidth: 560, lineHeight: 1.6 }}>
+            I build production web platforms and applied-ML tools — Django and PostgreSQL doing
+            the heavy lifting, fast JavaScript up front. BSc (Hons) Computer Science, University
+            of Westminster.
+          </p>
+        </Reveal>
+
+        <Reveal delay={190}>
+          <div className="flex flex-wrap gap-4 mt-10">
+            <a href="#work" className="btn btn-solid">View selected work ↓</a>
+            <a href={LINKS.github} target="_blank" rel="noreferrer" className="btn btn-ghost">GitHub ↗</a>
           </div>
+        </Reveal>
+      </div>
+
+      <div className="absolute flex items-center gap-3 mono" style={{ bottom: 26, left: 20, fontSize: '.62rem', fontWeight: 600 }}>
+        <span className="b3 flex items-center justify-center" style={{ width: 48, height: 48 }} aria-hidden="true">↓</span>
+        Scroll
+      </div>
+      <div aria-hidden="true" className="absolute" style={{ bottom: 26, right: 130, width: 14, height: 14, background: 'var(--crimson)' }} />
+    </section>
+  )
+}
+
+/* ── Diagonal availability marquee ──────────────────────────── */
+export function Marquee() {
+  const items = Array.from({ length: 8 })
+  const row = key => (
+    <div className="flex" key={key} aria-hidden="true">
+      {items.map((_, i) => (
+        <span className="mq-item" key={i}>
+          <span className="mq-sq" />
+          Open to junior software engineering roles — London, UK
+        </span>
+      ))}
+    </div>
+  )
+  return (
+    <div style={{ margin: '0 -3%', width: '106%' }}>
+      <p className="sr-only">Open to junior software engineering roles — London, UK.</p>
+      <div className="mq-wrap" aria-hidden="true">
+        <div className="mq-track">
+          {row('a')}
+          {row('b')}
         </div>
       </div>
-    </section>
+    </div>
   )
 }
