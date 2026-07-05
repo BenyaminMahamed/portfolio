@@ -109,3 +109,5 @@ Relevant modules: Applied AI, Cyber Security, Applied Robotics, Internet of Thin
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-benyamin--mahamed-blue?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/benyamin-mahamed)
 [![Email](https://img.shields.io/badge/Email-benyaminmahamed%40gmail.com-red?style=for-the-badge&logo=gmail&logoColor=white)](mailto:benyaminmahamed@gmail.com)
+
+BSc (Hons) Computer Science, University of Westminster  
